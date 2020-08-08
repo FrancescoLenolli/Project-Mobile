@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public delegate void UpdateCurrencyText(long value);
+public delegate void EventUpdateCurrencyText(long value);
+public delegate void EventSpawnTextAtInputPosition(Vector3 position);
 public class CurrencyManager : Singleton<CurrencyManager>
 {
-    public event UpdateCurrencyText UpdateCurrencyText;
+    public event EventUpdateCurrencyText UpdateCurrencyText;
+    public event EventSpawnTextAtInputPosition SpawnTextAtInputPosition;
+
     public long currency = 0;
 
     public int currencyIdleGain = 0;
@@ -14,6 +18,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public int modifierIdleGain = 1;
     public int modifierActiveGain = 1;
 
+    private EventSystem eventSystem;
+
     private new void Awake()
     {
         base.Awake();
@@ -21,14 +27,25 @@ public class CurrencyManager : Singleton<CurrencyManager>
     // Start is called before the first frame update
     void Start()
     {
+        eventSystem = EventSystem.current;
         StartCoroutine(UpdateCurrency());
+    }
+
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            if (!EventSystem.current.IsPointerOverGameObject())
+                SpawnTextAtInputPosition?.Invoke(Input.mousePosition);
+                AddCurrency(currencyActiveGain + 666, modifierActiveGain);
+        }
     }
 
     private void AddCurrency(int value, int modifier)
     {
         currency += (value * modifier);
         UpdateCurrencyText?.Invoke(currency);
-        Debug.Log($"Currency: {currency}");
+        //Debug.Log($"Currency: {currency}");
     }
 
     public void AddActiveCurrency()
