@@ -7,10 +7,12 @@ using UnityEngine.UI;
 public class Ship : MonoBehaviour
 {
     private CurrencyManager currencyManager = null;
+    private CanvasBottom canvasBottom = null; 
     private int quantity = 0;
     private int cost = 0;
     private int currencyGain = 0;
     private int additionalCurrencyGain = 0; // CurrencyGain increased if more X units are bought
+    private int quantityMultiplier = 0;
 
     // [!!!] ShipManager passes a list of shipData to the Canvas, the Canvas assign every shipData with isAvailable TRUE, instantiate the Ship UI Prefab, that Initialise his values
     [HideInInspector] public ShipData shipData = null;
@@ -23,9 +25,16 @@ public class Ship : MonoBehaviour
     public TextMeshProUGUI textQuantityMultiplier = null;
     public Button buttonBuy = null;
 
-    private void Start()
+    private void Awake()
     {
         currencyManager = CurrencyManager.Instance;
+    }
+
+    private void Start()
+    {
+        canvasBottom = FindObjectOfType<CanvasBottom>();
+
+        canvasBottom.UpdateModifier += UpdateModifier;
     }
 
     private void Update()
@@ -38,33 +47,37 @@ public class Ship : MonoBehaviour
     public void SetValues(ShipData newShipData)
     {
         shipData = newShipData;
+        quantityMultiplier = currencyManager.ReturnModifierValue();
         quantity = shipData.quantity;
-        cost = shipData.cost;
+        cost = shipData.cost * quantityMultiplier;
         currencyGain = shipData.currencyGain;
-        additionalCurrencyGain = shipData.currencyGain;
+        additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;
 
         textName.text = shipData.shipName;
         imageIcon.sprite = shipData.shipIcon;
-        textCost.text = $"{cost}"; // * MULTIPLIER, as in buy more than one at a time
+        textCost.text = $"{cost}";
         textQuantity.text = $"{quantity}";
+        textQuantityMultiplier.text = $"{quantityMultiplier}";
         textCurrencyGain.text = $"{currencyGain * quantity}/s";
-        textAdditionalCurrencyGain.text = $"{currencyGain}/s"; // * MULTIPLIER, as in buy more than one at a time
+        textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
     }
 
     public void UpdateValues()
     {
 
         quantity = shipData.quantity;
-        cost = shipData.cost;
+        quantityMultiplier = currencyManager.ReturnModifierValue();
+        cost = shipData.cost * quantityMultiplier;
         currencyGain = shipData.currencyGain;
-        additionalCurrencyGain = shipData.currencyGain;
+        additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;
 
         textName.text = shipData.shipName;
         imageIcon.sprite = shipData.shipIcon;
-        textCost.text = $"{cost}"; // * MULTIPLIER, as in buy more than one at a time
+        textCost.text = $"{cost}";
         textQuantity.text = $"{quantity}";
+        textQuantityMultiplier.text = $"{quantityMultiplier}";
         textCurrencyGain.text = $"{currencyGain * quantity}/s";
-        textAdditionalCurrencyGain.text = $"{currencyGain}/s"; // * MULTIPLIER, as in buy more than one at a time
+        textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
     }
 
     public void BuyOne()
@@ -72,7 +85,7 @@ public class Ship : MonoBehaviour
         if (currencyManager.currency >= cost)
         {
             currencyManager.currency -= cost;
-            quantity += 1;
+            quantity += quantityMultiplier;
             currencyManager.ChangeCurrencyIdleGain(currencyGain);
             UpdateSOValues();
             UpdateValues(); // [!!!] No need to Modify some variables, TO MODIFY
@@ -84,6 +97,13 @@ public class Ship : MonoBehaviour
         shipData.quantity = quantity;
         shipData.cost = cost;
         //shipData.currencyGain = currencyGain; // [!!!] Some Upgrades to Improve currencyGain?
+    }
+
+    private void UpdateModifier(int newModifierValue)
+    {
+        quantityMultiplier = newModifierValue;
+        UpdateValues();
+        //Debug.Log($"Modifier is now {quantityMultiplier}");
     }
 
 }

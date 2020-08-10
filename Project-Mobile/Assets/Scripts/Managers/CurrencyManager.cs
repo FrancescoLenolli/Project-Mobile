@@ -11,12 +11,12 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public event EventSpawnTextAtInputPosition SpawnTextAtInputPosition;
 
     public long currency = 0;
-
     public int currencyIdleGain = 0;
     public int currencyActiveGain = 0;
-
     public int modifierIdleGain = 1;
     public int modifierActiveGain = 1;
+    public List<int> listQuantityModifier = new List<int>();
+    [HideInInspector] public int currentModifierIndex = 0;
 
     private EventSystem eventSystem;
 
@@ -81,6 +81,19 @@ public class CurrencyManager : Singleton<CurrencyManager>
         modifierActiveGain += value;
     }
 
+    public int CycleModifierAndReturnValue()
+    {
+        currentModifierIndex++;
+        if (currentModifierIndex > listQuantityModifier.Count - 1) currentModifierIndex = 0;
+
+        return listQuantityModifier[currentModifierIndex];
+
+    }
+
+    public int ReturnModifierValue()
+    {
+        return listQuantityModifier[currentModifierIndex];
+    }
 
 
     IEnumerator UpdateCurrency()

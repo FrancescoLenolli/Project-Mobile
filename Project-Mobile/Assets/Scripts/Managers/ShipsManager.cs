@@ -4,7 +4,7 @@ using UnityEngine;
 public class ShipsManager : MonoBehaviour
 {
     List<ShipData> shipDatas = null;
-    List<int> quantities = null; // How much of a shipData is owned 
+    //List<int> quantities = null; // How much of a shipData is owned 
 
     public Ship prefabShip = null;
     public Transform containerShips = null;
