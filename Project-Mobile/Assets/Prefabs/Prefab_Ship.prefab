@@ -59,13 +59,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f8602dd5ae44de4695deaf018d3df4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageIcon: {fileID: 0}
-  textQuantity: {fileID: 0}
-  textName: {fileID: 0}
-  textCurrencyGain: {fileID: 0}
-  textAdditionalCurrencyGain: {fileID: 0}
-  textCost: {fileID: 0}
-  textQuantityMultiplier: {fileID: 0}
+  shipData: {fileID: 0}
+  imageIcon: {fileID: 2719035708905655552}
+  textQuantity: {fileID: 3451353421411112891}
+  textName: {fileID: 2719035708944609995}
+  textCurrencyGain: {fileID: 2719035709102156241}
+  textAdditionalCurrencyGain: {fileID: 2719035709146628670}
+  textCost: {fileID: 2719035709905159387}
+  textQuantityMultiplier: {fileID: 2719035708929906067}
+  buttonBuy: {fileID: 9174561490011322439}
 --- !u!1 &2719035708905655554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1331,7 +1333,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1086009086785447370}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7333388178354406426}
+        m_MethodName: BuyOne
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5748584133376123362
 GameObject:
   m_ObjectHideFlags: 0

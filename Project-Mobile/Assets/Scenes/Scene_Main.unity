@@ -728,7 +728,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 4.5905e-41, y: -1.757814e-35, z: 4.5905e-41, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -1320,6 +1320,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbed2cf8729f59144b2292c0abff5267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabShip: {fileID: 7333388178354406426, guid: 9ff2b9f3fc854bf4280c5285f8c07b90,
+    type: 3}
+  containerShips: {fileID: 610389828}
 --- !u!4 &1621990216
 Transform:
   m_ObjectHideFlags: 0

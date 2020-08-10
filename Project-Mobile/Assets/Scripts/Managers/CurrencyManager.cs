@@ -36,14 +36,22 @@ public class CurrencyManager : Singleton<CurrencyManager>
         if(Input.GetMouseButtonDown(0))
         {
             if (!EventSystem.current.IsPointerOverGameObject())
+            {
                 SpawnTextAtInputPosition?.Invoke(Input.mousePosition);
                 AddCurrency(currencyActiveGain + 666, modifierActiveGain);
+            }
         }
     }
 
     private void AddCurrency(int value, int modifier)
     {
         currency += (value * modifier);
+
+        if(currency >= long.MaxValue)
+        {
+            currency = long.MaxValue;
+        }
+
         UpdateCurrencyText?.Invoke(currency);
         //Debug.Log($"Currency: {currency}");
     }
