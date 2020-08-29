@@ -1,17 +1,28 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public struct ShipInfo
+{
+    public ShipData shipData;
+    public int shipQuantity;
+
+    public ShipInfo(ShipData data, int quantity)
+    {
+        this.shipData = data;
+        this.shipQuantity = quantity;
+    }
+}
 public class ShipsManager : MonoBehaviour
 {
-    List<ShipData> shipDatas = null;
-    //List<int> quantities = null; // How much of a shipData is owned 
+    List<ShipData> listShipDatas = new List<ShipData>();
+    Dictionary<int, ShipInfo> dctnShipsInfo = new Dictionary<int, ShipInfo>();
 
     public Ship prefabShip = null;
     public Transform containerShips = null;
 
     private void Awake()
     {
-        shipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
+        listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
     }
 
     private void Start()
@@ -21,14 +32,25 @@ public class ShipsManager : MonoBehaviour
 
     private void InstantiateShips()
     {
-        foreach (ShipData ship in shipDatas)
+        // Handles first time the game is played.
+        if(dctnShipsInfo.Count == 0)
         {
-            if (ship.isAvailable)
-            {
-                Ship newShip = Instantiate(prefabShip, containerShips, false);
-                newShip.SetValues(ship);
-            }
-            else break; // When we find a ship with isAvailable = false, all the ships after it are also unavailable, so we can stop the function here
+            dctnShipsInfo.Add(0, new ShipInfo(listShipDatas[0], 0));
         }
+
+        // Spawn all ships currently unlocked.
+        for(int i = 0; i < dctnShipsInfo.Count; ++i)
+        {
+            ShipData newData = dctnShipsInfo[i].shipData;
+            int newQuantity = dctnShipsInfo[i].shipQuantity;
+
+            Ship newShip = Instantiate(prefabShip, containerShips, false);
+            newShip.SetValues(newData, newQuantity);
+        }
+    }
+
+    public void AddShip(int newIndex, ShipData newData)
+    {
+        dctnShipsInfo.Add(newIndex, new ShipInfo(newData, 0));
     }
 }

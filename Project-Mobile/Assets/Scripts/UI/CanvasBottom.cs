@@ -18,6 +18,9 @@ public class CanvasBottom : MonoBehaviour
         currencyManager = CurrencyManager.Instance;
     }
 
+    // Update Modifier for Ship Quantity to buy.
+    // Player can buy one unit of Ship at a time, or more.
+    // Modifiers are stored in currencyManager > listQuantityModifier.
     public void CycleModifiers()
     {
         modifierValue = currencyManager.CycleModifierAndReturnValue();

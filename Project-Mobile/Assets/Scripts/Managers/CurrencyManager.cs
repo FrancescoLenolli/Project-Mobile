@@ -38,7 +38,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 SpawnTextAtInputPosition?.Invoke(Input.mousePosition);
-                AddCurrency(currencyActiveGain + 666, modifierActiveGain);
+                AddCurrency(currencyActiveGain, modifierActiveGain);
             }
         }
     }

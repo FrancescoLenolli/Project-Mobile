@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Ship : MonoBehaviour
 {
     private CurrencyManager currencyManager = null;
-    private CanvasBottom canvasBottom = null; 
+    private CanvasBottom canvasBottom = null;
     private int quantity = 0;
     private int cost = 0;
     private int currencyGain = 0;
@@ -40,15 +38,15 @@ public class Ship : MonoBehaviour
     private void Update()
     {
 
-        buttonBuy.interactable = currencyManager.currency >= cost ? true : false;
+        buttonBuy.interactable = currencyManager.currency >= cost ? true : false; // [!!!] A Sprite change is better, keep that in mind.
 
     }
 
-    public void SetValues(ShipData newShipData)
+    public void SetValues(ShipData newShipData, int newQuantity)
     {
         shipData = newShipData;
+        quantity = newQuantity;
         quantityMultiplier = currencyManager.ReturnModifierValue();
-        quantity = shipData.quantity;
         cost = shipData.cost * quantityMultiplier;
         currencyGain = shipData.currencyGain;
         additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;
@@ -64,15 +62,11 @@ public class Ship : MonoBehaviour
 
     public void UpdateValues()
     {
-
-        quantity = shipData.quantity;
         quantityMultiplier = currencyManager.ReturnModifierValue();
         cost = shipData.cost * quantityMultiplier;
         currencyGain = shipData.currencyGain;
         additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;
 
-        textName.text = shipData.shipName;
-        imageIcon.sprite = shipData.shipIcon;
         textCost.text = $"{cost}";
         textQuantity.text = $"{quantity}";
         textQuantityMultiplier.text = $"{quantityMultiplier}";
@@ -80,6 +74,7 @@ public class Ship : MonoBehaviour
         textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
     }
 
+    // Method called from UI button to buy units of a Ship.
     public void BuyOne()
     {
         if (currencyManager.currency >= cost)
@@ -87,23 +82,20 @@ public class Ship : MonoBehaviour
             currencyManager.currency -= cost;
             quantity += quantityMultiplier;
             currencyManager.ChangeCurrencyIdleGain(currencyGain);
-            UpdateSOValues();
-            UpdateValues(); // [!!!] No need to Modify some variables, TO MODIFY
-        }
-    }
+            UpdateValues();
 
-    private void UpdateSOValues()
-    {
-        shipData.quantity = quantity;
-        shipData.cost = cost;
-        //shipData.currencyGain = currencyGain; // [!!!] Some Upgrades to Improve currencyGain?
+            // Play sound.
+        }
+        else
+        {
+            // Play different sound.
+        }
     }
 
     private void UpdateModifier(int newModifierValue)
     {
         quantityMultiplier = newModifierValue;
         UpdateValues();
-        //Debug.Log($"Modifier is now {quantityMultiplier}");
     }
 
 }

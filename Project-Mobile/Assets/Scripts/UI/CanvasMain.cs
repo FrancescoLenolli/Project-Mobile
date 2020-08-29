@@ -14,12 +14,11 @@ public class CanvasMain : MonoBehaviour
 
     private void Awake()
     {
-        
+        currencyManager = CurrencyManager.Instance;
     }
 
     private void Start()
     {
-        currencyManager = CurrencyManager.Instance; //[!!!] Place in Awake, need "bootstrap" Scene to initialise Managers first
         currencyManager.UpdateCurrencyText += UpdateCurrencyText;
         currencyManager.SpawnTextAtInputPosition += InstantiatePrefab;
     }
