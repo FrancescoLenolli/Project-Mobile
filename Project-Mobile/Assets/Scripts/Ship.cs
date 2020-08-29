@@ -6,6 +6,8 @@ public class Ship : MonoBehaviour
 {
     private CurrencyManager currencyManager = null;
     private CanvasBottom canvasBottom = null;
+    private ShipsManager shipsManager = null;
+
     private int quantity = 0;
     private int cost = 0;
     private int currencyGain = 0;
@@ -26,6 +28,7 @@ public class Ship : MonoBehaviour
     private void Awake()
     {
         currencyManager = CurrencyManager.Instance;
+        shipsManager = FindObjectOfType<ShipsManager>(); // [!!!] ShipsManager Singleton? Or Make it child of something else?
     }
 
     private void Start()
@@ -84,6 +87,8 @@ public class Ship : MonoBehaviour
             currencyManager.ChangeCurrencyIdleGain(currencyGain);
             UpdateValues();
 
+            if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip();
+
             // Play sound.
         }
         else
@@ -96,6 +101,11 @@ public class Ship : MonoBehaviour
     {
         quantityMultiplier = newModifierValue;
         UpdateValues();
+    }
+
+    private void UnlockNextShip()
+    {
+        shipsManager.AddShip(shipData.index + 1);
     }
 
 }

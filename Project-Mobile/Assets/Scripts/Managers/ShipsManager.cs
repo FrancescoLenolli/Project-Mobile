@@ -49,8 +49,18 @@ public class ShipsManager : MonoBehaviour
         }
     }
 
-    public void AddShip(int newIndex, ShipData newData)
+    public void AddShip(int newIndex)
     {
-        dctnShipsInfo.Add(newIndex, new ShipInfo(newData, 0));
+        if (newIndex < listShipDatas.Count)
+        {
+            ShipData newData = listShipDatas[newIndex];
+            int newQuantity = 0;
+
+            Ship newShip = Instantiate(prefabShip, containerShips, false);
+            newShip.SetValues(newData, newQuantity);
+
+            dctnShipsInfo.Add(newIndex, new ShipInfo(newData, newQuantity));
+        }
+        else Debug.Log("CONGRATULATIONS, ALL SHIPS UNLOCKED !!!1111!!!1");
     }
 }

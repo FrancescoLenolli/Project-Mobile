@@ -61,11 +61,19 @@ public class CurrencyManager : Singleton<CurrencyManager>
         AddCurrency(currencyActiveGain, modifierActiveGain);
     }
 
+    /// <summary>
+    /// Increase Currency Idle Gain by value. This determines how much currency is gained in background.
+    /// </summary>
+    /// <param name="value">How much the CurrencyIdleGain is increased.</param>
     public void ChangeCurrencyIdleGain(int value)
     {
         currencyIdleGain += value;
     }
 
+    /// <summary>
+    /// Increase Currency Active Gain by value. This determines how much currency is gained by tapping on the game view.
+    /// </summary>
+    /// <param name="value">How much the CurrencyActiveGain is increased.</param>
     public void ChangeCurrencyActiveGain(int value)
     {
         currencyActiveGain += value;

@@ -11,4 +11,7 @@ public class ShipData : ScriptableObject
     public Sprite shipIcon = null;
     public int cost = 0;
     public int currencyGain = 0;
+
+    [Tooltip("How many units of this ship do I need to unlock the next Type?")]
+    public int qtToUnlockNextShip = 0;
 }

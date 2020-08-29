@@ -10,7 +10,7 @@ public class CanvasMain : MonoBehaviour
     CurrencyManager currencyManager;
 
     public TextMeshProUGUI textCurrency;
-    public GameObject prefabTextMousePosition;
+    public TapObject prefabTextMousePosition;
 
     private void Awake()
     {
@@ -30,7 +30,7 @@ public class CanvasMain : MonoBehaviour
 
     private void InstantiatePrefab(Vector3 mousePosition)
     {
-        GameObject prefab = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
-        prefab.GetComponent<TextMeshProUGUI>().text = mousePosition.ToString();
+        TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
+        newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain);
     }
 }
