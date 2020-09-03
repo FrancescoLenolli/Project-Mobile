@@ -78,16 +78,16 @@ public class Ship : MonoBehaviour
     }
 
     // Method called from UI button to buy units of a Ship.
-    public void BuyOne()
+    public void Buy()
     {
-        if (currencyManager.currency >= cost)
+        if (currencyManager.currency >= cost * quantityMultiplier)
         {
             currencyManager.currency -= cost;
             quantity += quantityMultiplier;
-            currencyManager.ChangeCurrencyIdleGain(currencyGain);
+            currencyManager.ChangeCurrencyIdleGain(currencyGain * quantityMultiplier);
             UpdateValues();
 
-            if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip();
+            if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip(); // [!!!] This will spawn many times the same type of Ship. Do a check in ShipsManager or locally?
 
             // Play sound.
         }

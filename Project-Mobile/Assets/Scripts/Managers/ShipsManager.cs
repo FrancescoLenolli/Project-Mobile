@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public struct ShipInfo
 {
     public ShipData shipData;
@@ -61,6 +62,6 @@ public class ShipsManager : MonoBehaviour
 
             dctnShipsInfo.Add(newIndex, new ShipInfo(newData, newQuantity));
         }
-        else Debug.Log("CONGRATULATIONS, ALL SHIPS UNLOCKED !!!1111!!!1");
+        else Debug.Log("All Ships Unlocked!");
     }
 }

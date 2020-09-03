@@ -28,6 +28,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     void Start()
     {
         eventSystem = EventSystem.current;
+        SaveManager.Instance.Load();
         StartCoroutine(UpdateCurrency());
     }
 
@@ -64,7 +65,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     /// <summary>
     /// Increase Currency Idle Gain by value. This determines how much currency is gained in background.
     /// </summary>
-    /// <param name="value">How much the CurrencyIdleGain is increased.</param>
+    /// <param name="value">How much CurrencyIdleGain is increased.</param>
     public void ChangeCurrencyIdleGain(int value)
     {
         currencyIdleGain += value;
@@ -109,6 +110,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
         while (currency < long.MaxValue)
         {
             AddCurrency(currencyIdleGain, modifierIdleGain);
+            SaveManager.Instance.playerData.playerCurrency = currency;
+            SaveManager.Instance.Save();
             yield return new WaitForSeconds(1);
         }
     }
