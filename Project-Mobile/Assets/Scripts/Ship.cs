@@ -8,7 +8,7 @@ public class Ship : MonoBehaviour
     private CanvasBottom canvasBottom = null;
     private ShipsManager shipsManager = null;
 
-    private int quantity = 0;
+    public int quantity = 0;
     private int cost = 0;
     private int currencyGain = 0;
     private int additionalCurrencyGain = 0; // CurrencyGain increased if more X units are bought
@@ -61,6 +61,8 @@ public class Ship : MonoBehaviour
         textQuantityMultiplier.text = $"{quantityMultiplier}";
         textCurrencyGain.text = $"{currencyGain * quantity}/s";
         textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
+
+        currencyManager.ChangeCurrencyIdleGain(currencyGain * quantity);
     }
 
     public void UpdateValues()

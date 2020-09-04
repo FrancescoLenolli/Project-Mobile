@@ -7,15 +7,11 @@ using UnityEngine;
 [System.Serializable]
 public struct ShipInfo
 {
-    /// <summary>
     /// Generic Data for the Ship.
     /// Things like Name, Sprite, Currency Gain ecc... are all contained here.
-    /// </summary>
     public ShipData shipData;
 
-    /// <summary>
     /// How many ships of the same type the player has.
-    /// </summary>
     public int shipQuantity;
 
     public ShipInfo(ShipData data, int quantity)
@@ -27,12 +23,9 @@ public struct ShipInfo
 public class ShipsManager : Singleton<ShipsManager>
 {
     List<ShipData> listShipDatas = new List<ShipData>();
-    /// <summary>
     /// List of Ship Infos to Save.
-    /// </summary>
     public List<ShipInfo> listShipInfos = new List<ShipInfo>();
     List<Ship> listShips = new List<Ship>();
-    Dictionary<int, ShipInfo> dctnShipsInfo = new Dictionary<int, ShipInfo>();
 
     public Ship prefabShip = null;
     public Transform containerShips = null;
@@ -45,11 +38,15 @@ public class ShipsManager : Singleton<ShipsManager>
 
     private void Start()
     {
-        InstantiateShips();
+        SaveManager.Instance.Load();
+        InitShips();
     }
 
-    private void InstantiateShips()
+    private void InitShips()
     {
+        // Get Saved ShipsInfo.
+        listShipInfos = SaveManager.Instance.playerData.playerShips;
+
         // Handles first time the game is played by adding the first type of Ship.
         if (listShipInfos.Count == 0)
         {
@@ -57,20 +54,19 @@ public class ShipsManager : Singleton<ShipsManager>
             listShipInfos.Add(firstShipInfo);
         }
         // Spawn all ships currently unlocked.
-        for (int i = 0; i < dctnShipsInfo.Count; ++i)
+        for (int i = 0; i < listShipInfos.Count; ++i)
         {
-            ShipData newData = dctnShipsInfo[i].shipData;
-            int newQuantity = dctnShipsInfo[i].shipQuantity;
+            ShipData newData = listShipInfos[i].shipData;
+            int newQuantity = listShipInfos[i].shipQuantity;
 
             Ship newShip = Instantiate(prefabShip, containerShips, false);
             newShip.SetValues(newData, newQuantity);
+
+            listShips.Add(newShip);
         }
     }
 
-    /// <summary>
     /// Add New Ship with ShipData taken from listShipDatas[newShipIndex].
-    /// </summary>
-    /// <param name="newShipIndex"></param>
     public void AddNewShip(int currentShipIndex)
     {
         // If the ship that called this function is the last on the list, unlock the next one.
@@ -87,11 +83,7 @@ public class ShipsManager : Singleton<ShipsManager>
         }
     }
 
-    /// <summary>
-    /// Instantiate new Ship and store a new ShipInfo to Save.
-    /// </summary>
-    /// <param name="newShipData"></param>
-    /// <param name="newQuantity"></param>
+    /// Instantiate new Ship and update Ship and ShipInfo lists.
     private void InstantiateShip(ShipData newShipData, int newQuantity = 0)
     {
         Ship newShip = Instantiate(prefabShip, containerShips, false);
@@ -101,5 +93,14 @@ public class ShipsManager : Singleton<ShipsManager>
 
         listShips.Add(newShip);
         listShipInfos.Add(newShipInfo);
+    }
+
+    // Set Quantities for every ShipInfo to be saved.
+    public void SetQuantities()
+    {
+        for(int i = 0; i < listShipInfos.Count; ++i)
+        {
+            listShipInfos[i] = new ShipInfo(listShipInfos[i].shipData, listShips[i].quantity);
+        }
     }
 }

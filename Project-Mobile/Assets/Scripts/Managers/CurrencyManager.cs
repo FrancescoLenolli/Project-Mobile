@@ -29,6 +29,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     {
         eventSystem = EventSystem.current;
         SaveManager.Instance.Load();
+        currency = SaveManager.Instance.playerData.playerCurrency;
         StartCoroutine(UpdateCurrency());
     }
 
@@ -118,6 +119,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private void OnApplicationQuit()
     {
+        ShipsManager.Instance.SetQuantities(); // [!!!] This is just to make it work, I'll change it later.
         SaveManager.Instance.SaveCurrentData();
     }
 }

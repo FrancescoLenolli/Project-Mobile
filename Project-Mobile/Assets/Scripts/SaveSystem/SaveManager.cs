@@ -19,15 +19,14 @@ public class SaveManager : Singleton<SaveManager>
         playerData.playerShips = ShipsManager.Instance.listShipInfos;
         Save();
     }
+
     public void Save()
     {
         string json = JsonUtility.ToJson(playerData);
         WriteToFile(file, json);
     }
 
-    /// <summary>
     /// Load Saved Data, create new Data if none is found.
-    /// </summary>
     public void Load()
     {
         PlayerData data;
