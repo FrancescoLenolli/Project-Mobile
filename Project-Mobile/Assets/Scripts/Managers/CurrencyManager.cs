@@ -115,4 +115,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
             yield return new WaitForSeconds(1);
         }
     }
+
+    private void OnApplicationQuit()
+    {
+        SaveManager.Instance.SaveCurrentData();
+    }
 }

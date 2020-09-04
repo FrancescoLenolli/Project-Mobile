@@ -87,7 +87,7 @@ public class Ship : MonoBehaviour
             currencyManager.ChangeCurrencyIdleGain(currencyGain * quantityMultiplier);
             UpdateValues();
 
-            if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip(); // [!!!] This will spawn many times the same type of Ship. Do a check in ShipsManager or locally?
+            if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip();
 
             // Play sound.
         }
@@ -105,7 +105,7 @@ public class Ship : MonoBehaviour
 
     private void UnlockNextShip()
     {
-        shipsManager.AddShip(shipData.index + 1);
+        shipsManager.AddNewShip(shipData.index);
     }
 
 }

@@ -12,6 +12,13 @@ public class SaveManager : Singleton<SaveManager>
         base.Awake();
     }
 
+    public void SaveCurrentData()
+    {
+        //playerData.playerName = playerName;
+        playerData.playerCurrency = CurrencyManager.Instance.currency;
+        playerData.playerShips = ShipsManager.Instance.listShipInfos;
+        Save();
+    }
     public void Save()
     {
         string json = JsonUtility.ToJson(playerData);
