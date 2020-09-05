@@ -111,8 +111,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
         while (currency < long.MaxValue)
         {
             AddCurrency(currencyIdleGain, modifierIdleGain);
-            SaveManager.Instance.playerData.playerCurrency = currency;
-            SaveManager.Instance.Save();
             yield return new WaitForSeconds(1);
         }
     }

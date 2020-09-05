@@ -16,19 +16,19 @@ public struct ShipInfo
 
     public ShipInfo(ShipData data, int quantity)
     {
-        this.shipData = data;
-        this.shipQuantity = quantity;
+        shipData = data;
+        shipQuantity = quantity;
     }
 }
 public class ShipsManager : Singleton<ShipsManager>
 {
-    List<ShipData> listShipDatas = new List<ShipData>();
-    /// List of Ship Infos to Save.
-    public List<ShipInfo> listShipInfos = new List<ShipInfo>();
-    List<Ship> listShips = new List<Ship>();
+    private List<ShipData> listShipDatas = new List<ShipData>();
+    private List<Ship> listShips = new List<Ship>();
 
+    /// List that stores the information to be saved.
+    public List<ShipInfo> listShipInfos = new List<ShipInfo>();
     public Ship prefabShip = null;
-    public Transform containerShips = null;
+    public Transform containerShips = null; // [!!!] I don't like this, better to have this in a UIManager and pass it that way?
 
     private new void Awake()
     {
@@ -42,17 +42,20 @@ public class ShipsManager : Singleton<ShipsManager>
         InitShips();
     }
 
+    // When the game start, Instantiate the ships owned by the player.
+    // If this is the first time the game is launched, Instantiate only the first ship with quantity 0.
     private void InitShips()
     {
         // Get Saved ShipsInfo.
         listShipInfos = SaveManager.Instance.playerData.playerShips;
 
-        // Handles first time the game is played by adding the first type of Ship.
+        // Handles first time the game is played by adding the first type of ship.
         if (listShipInfos.Count == 0)
         {
             ShipInfo firstShipInfo = new ShipInfo(listShipDatas[0], 0);
             listShipInfos.Add(firstShipInfo);
         }
+
         // Spawn all ships currently unlocked.
         for (int i = 0; i < listShipInfos.Count; ++i)
         {
@@ -66,14 +69,21 @@ public class ShipsManager : Singleton<ShipsManager>
         }
     }
 
-    /// Add New Ship with ShipData taken from listShipDatas[newShipIndex].
+    // Spawn new type of Ship.
+    // This happens when the previous type of Ship is owned in sufficient quantity.
     public void AddNewShip(int currentShipIndex)
     {
         // If the ship that called this function is the last on the list, unlock the next one.
         if (currentShipIndex + 1 == listShipInfos.Count)
         {
-            // If the two lists have equal count, all ships have been unlocked.
-            if (listShipDatas.Count != listShipInfos.Count)
+            // If the two lists have equal count, all ships have been unlocked...
+            if (listShipInfos.Count == listShipDatas.Count)
+            {
+                Debug.Log("You unlocked every ship!");
+            }
+
+            // ...If not, get the data for the next ship, and spawn it.
+            else
             {
                 ShipData newData = listShipDatas[listShipInfos.Count];
                 int newQuantity = 0;
@@ -95,10 +105,11 @@ public class ShipsManager : Singleton<ShipsManager>
         listShipInfos.Add(newShipInfo);
     }
 
+    // [!!!] I don't see another way to update the quantity for now.
     // Set Quantities for every ShipInfo to be saved.
     public void SetQuantities()
     {
-        for(int i = 0; i < listShipInfos.Count; ++i)
+        for (int i = 0; i < listShipInfos.Count; ++i)
         {
             listShipInfos[i] = new ShipInfo(listShipInfos[i].shipData, listShips[i].quantity);
         }
