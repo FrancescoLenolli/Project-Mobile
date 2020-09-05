@@ -11,7 +11,9 @@ public class CanvasBottom : MonoBehaviour
     private CurrencyManager currencyManager = null;
 
     [HideInInspector] public int modifierValue = 0;
+
     public TextMeshProUGUI textModifier = null;
+    public List<CanvasGroup> listPanels = new List<CanvasGroup>();
 
     private void Start()
     {
@@ -26,5 +28,24 @@ public class CanvasBottom : MonoBehaviour
         modifierValue = currencyManager.CycleModifierAndReturnValue();
         textModifier.text = $"{modifierValue}";
         UpdateModifier?.Invoke(modifierValue);
+    }
+
+    // Open one panel and close the others.
+    public void OpenPanel(int index)
+    {
+        for(int i = 0; i < listPanels.Count; ++i)
+        {
+            if(i == index)
+            {
+                listPanels[i].alpha = 1;
+                listPanels[i].interactable = true;
+            }
+            else
+            {
+
+                listPanels[i].alpha = 0;
+                listPanels[i].interactable = false;
+            }
+        }
     }
 }

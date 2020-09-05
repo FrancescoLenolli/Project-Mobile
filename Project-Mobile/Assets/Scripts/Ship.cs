@@ -2,16 +2,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+public delegate void BoughtShip(string shipName); // [!!!] Use event to unlock upgrades.
 public class Ship : MonoBehaviour
 {
+    public event BoughtShip BoughtShip;
+
     private CurrencyManager currencyManager = null;
     private CanvasBottom canvasBottom = null;
-    private ShipsManager shipsManager = null;
 
     public int quantity = 0;
     private int cost = 0;
     private int currencyGain = 0;
-    private int additionalCurrencyGain = 0; // CurrencyGain increased if more X units are bought
+    // CurrencyGain increased if more X units are bought.
+    private int additionalCurrencyGain = 0;
     private int quantityMultiplier = 0;
 
     // [!!!] ShipManager passes a list of shipData to the Canvas, the Canvas assign every shipData with isAvailable TRUE, instantiate the Ship UI Prefab, that Initialise his values
@@ -28,7 +31,6 @@ public class Ship : MonoBehaviour
     private void Awake()
     {
         currencyManager = CurrencyManager.Instance;
-        shipsManager = FindObjectOfType<ShipsManager>(); // [!!!] ShipsManager Singleton? Or Make it child of something else?
     }
 
     private void Start()
@@ -82,6 +84,8 @@ public class Ship : MonoBehaviour
     // Method called from UI button to buy units of a Ship.
     public void Buy()
     {
+        BoughtShip?.Invoke(shipData.shipName);
+
         if (currencyManager.currency >= cost * quantityMultiplier)
         {
             currencyManager.currency -= cost;
@@ -107,7 +111,7 @@ public class Ship : MonoBehaviour
 
     private void UnlockNextShip()
     {
-        shipsManager.AddNewShip(shipData.index);
+        ShipsManager.Instance.AddNewShip(shipData.index);
     }
 
 }
