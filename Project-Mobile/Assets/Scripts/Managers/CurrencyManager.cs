@@ -10,7 +10,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public event EventUpdateCurrencyText UpdateCurrencyText;
     public event EventSpawnTextAtInputPosition SpawnTextAtInputPosition;
 
-    private SaveManager saveManager = null;
+    private GameManager gameManager = null;
     private int currentQuantityModifierIndex = 0;
 
     public long currency = 0;
@@ -30,10 +30,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private void Start()
     {
         eventSystem = EventSystem.current;
-        saveManager = SaveManager.Instance;
+        gameManager = GameManager.Instance;
 
-        saveManager.Load();
-        currency = saveManager.playerData.playerCurrency;
+        currency = gameManager.playerData.playerCurrency;
 
         StartCoroutine(UpdateCurrency());
     }

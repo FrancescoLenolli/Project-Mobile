@@ -39,7 +39,6 @@ public class ShipsManager : Singleton<ShipsManager>
 
     private void Start()
     {
-        SaveManager.Instance.Load();
         InitShips();
     }
 
@@ -48,7 +47,7 @@ public class ShipsManager : Singleton<ShipsManager>
     private void InitShips()
     {
         // Get Saved ShipsInfo.
-        listShipInfos = SaveManager.Instance.playerData.playerShips;
+        listShipInfos = GameManager.Instance.playerData.playerShips;
 
         // Handles first time the game is played by adding the first type of ship.
         if (listShipInfos.Count == 0)
