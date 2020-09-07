@@ -114,10 +114,4 @@ public class CurrencyManager : Singleton<CurrencyManager>
             yield return new WaitForSeconds(1);
         }
     }
-
-    private void OnApplicationQuit()
-    {
-        ShipsManager.Instance.SetQuantities(); // [!!!] This is just to make it work, I'll change it later.
-        SaveManager.Instance.SaveCurrentData();
-    }
 }

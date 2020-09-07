@@ -8,4 +8,10 @@ public class GameManager : Singleton<GameManager>
     public CurrencyManager currencyManager;
     public ShipsManager shipsManager;
     public InputManager inputManager;
+
+    private void OnApplicationQuit()
+    {
+        //ShipsManager.Instance.SetQuantities(); // [!!!] This is just to make it work, I'll change it later.
+        SaveManager.Instance.SaveCurrentData();
+    }
 }

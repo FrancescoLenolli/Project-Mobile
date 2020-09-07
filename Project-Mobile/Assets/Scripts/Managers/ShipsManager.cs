@@ -25,8 +25,9 @@ public class ShipsManager : Singleton<ShipsManager>
     private List<ShipData> listShipDatas = new List<ShipData>();
     private List<Ship> listShips = new List<Ship>();
 
-    /// List that stores the information to be saved.
-    public List<ShipInfo> listShipInfos = new List<ShipInfo>();
+    /// List that stores the Ships information to be saved.
+    [HideInInspector] public List<ShipInfo> listShipInfos = new List<ShipInfo>();
+
     public Ship prefabShip = null;
     public Transform containerShips = null; // [!!!] I don't like this, better to have this in a UIManager and pass it that way?
 
@@ -65,6 +66,9 @@ public class ShipsManager : Singleton<ShipsManager>
             Ship newShip = Instantiate(prefabShip, containerShips, false);
             newShip.SetValues(newData, newQuantity);
 
+            containerShips.GetComponent<RectTransform>().sizeDelta = UIManager.Instance.ResizeContainer(containerShips, newShip.transform, 10);
+            newShip.transform.SetSiblingIndex(0);
+
             listShips.Add(newShip);
         }
     }
@@ -97,9 +101,12 @@ public class ShipsManager : Singleton<ShipsManager>
     private void InstantiateShip(ShipData newShipData, int newQuantity = 0)
     {
         Ship newShip = Instantiate(prefabShip, containerShips, false);
-        ShipInfo newShipInfo = new ShipInfo(newShipData, newQuantity);
-
         newShip.SetValues(newShipData, newQuantity);
+
+        containerShips.GetComponent<RectTransform>().sizeDelta = UIManager.Instance.ResizeContainer(containerShips, newShip.transform, 10);
+        newShip.transform.SetSiblingIndex(0);
+
+        ShipInfo newShipInfo = new ShipInfo(newShipData, newQuantity);
 
         listShips.Add(newShip);
         listShipInfos.Add(newShipInfo);
@@ -113,5 +120,11 @@ public class ShipsManager : Singleton<ShipsManager>
         {
             listShipInfos[i] = new ShipInfo(listShipInfos[i].shipData, listShips[i].quantity);
         }
+    }
+
+    // Update quantity of Ship in ShipInfo list.
+    public void UpdateQuantityAt(int index, int newQuantity)
+    {
+        listShipInfos[index] = new ShipInfo(listShipInfos[index].shipData, newQuantity);
     }
 }

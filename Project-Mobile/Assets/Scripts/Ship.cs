@@ -8,6 +8,7 @@ public class Ship : MonoBehaviour
     public event BoughtShip BoughtShip;
 
     private CurrencyManager currencyManager = null;
+    private ShipsManager shipsManager = null;
     private CanvasBottom canvasBottom = null;
 
     public int quantity = 0;
@@ -17,7 +18,6 @@ public class Ship : MonoBehaviour
     private int additionalCurrencyGain = 0;
     private int quantityMultiplier = 0;
 
-    // [!!!] ShipManager passes a list of shipData to the Canvas, the Canvas assign every shipData with isAvailable TRUE, instantiate the Ship UI Prefab, that Initialise his values
     [HideInInspector] public ShipData shipData = null;
     public Image imageIcon = null;
     public TextMeshProUGUI textQuantity = null;
@@ -31,6 +31,7 @@ public class Ship : MonoBehaviour
     private void Awake()
     {
         currencyManager = CurrencyManager.Instance;
+        shipsManager = ShipsManager.Instance;
     }
 
     private void Start()
@@ -51,6 +52,7 @@ public class Ship : MonoBehaviour
     {
         shipData = newShipData;
         quantity = newQuantity;
+
         quantityMultiplier = currencyManager.ReturnModifierValue();
         cost = shipData.cost * quantityMultiplier;
         currencyGain = shipData.currencyGain;
@@ -86,14 +88,17 @@ public class Ship : MonoBehaviour
     {
         BoughtShip?.Invoke(shipData.shipName);
 
-        if (currencyManager.currency >= cost * quantityMultiplier)
+        int multiplier = quantityMultiplier;
+
+        if (currencyManager.currency >= cost * multiplier)
         {
             currencyManager.currency -= cost;
-            quantity += quantityMultiplier;
-            currencyManager.ChangeCurrencyIdleGain(currencyGain * quantityMultiplier);
+            quantity += multiplier;
+            currencyManager.ChangeCurrencyIdleGain(currencyGain * multiplier);
             UpdateValues();
+            UpdateQuantity(shipData.index, quantity);
 
-            if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip();
+            if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip(shipData.index);
 
             // Play sound.
         }
@@ -109,9 +114,16 @@ public class Ship : MonoBehaviour
         UpdateValues();
     }
 
-    private void UnlockNextShip()
+    // Unlock next Ship once the right quantity has been reached.
+    private void UnlockNextShip(int index)
     {
-        ShipsManager.Instance.AddNewShip(shipData.index);
+        shipsManager.AddNewShip(index);
+    }
+
+    // Update Quantity of this Ship in ShipInfo, that will be saved.
+    private void UpdateQuantity(int index, int quantity)
+    {
+        shipsManager.UpdateQuantityAt(index, quantity);
     }
 
 }
