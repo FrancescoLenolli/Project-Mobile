@@ -10,13 +10,15 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public event EventUpdateCurrencyText UpdateCurrencyText;
     public event EventSpawnTextAtInputPosition SpawnTextAtInputPosition;
 
+    private SaveManager saveManager = null;
+    private int currentQuantityModifierIndex = 0;
+
     public long currency = 0;
     public int currencyIdleGain = 0;
     public int currencyActiveGain = 0;
     public int modifierIdleGain = 1;
     public int modifierActiveGain = 1;
     public List<int> listQuantityModifier = new List<int>();
-    [HideInInspector] public int currentModifierIndex = 0;
 
     private EventSystem eventSystem;
 
@@ -24,43 +26,61 @@ public class CurrencyManager : Singleton<CurrencyManager>
     {
         base.Awake();
     }
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
         eventSystem = EventSystem.current;
-        SaveManager.Instance.Load();
-        currency = SaveManager.Instance.playerData.playerCurrency;
+        saveManager = SaveManager.Instance;
+
+        saveManager.Load();
+        currency = saveManager.playerData.playerCurrency;
+
         StartCoroutine(UpdateCurrency());
     }
 
     private void Update()
     {
+        // If player tap on the screen...
         if(Input.GetMouseButtonDown(0))
         {
+            //... and if it's not tapping over a UI Object...
             if (!EventSystem.current.IsPointerOverGameObject())
             {
+                //... Spawn object in the tap position, and add currency based on the active modifiers.
                 SpawnTextAtInputPosition?.Invoke(Input.mousePosition);
-                AddCurrency(currencyActiveGain, modifierActiveGain);
+                AddActiveCurrency();
             }
         }
     }
 
+    // Add currency to the current player currency.
     private void AddCurrency(int value, int modifier)
     {
+        // Currenct idle gain.
         currency += (value * modifier);
 
-        if(currency >= long.MaxValue)
+        // If idle gain is 0, there is no point in doing this operations.
+        if (currency != 0)
         {
-            currency = long.MaxValue;
-        }
+            if (currency >= long.MaxValue)
+            {
+                currency = long.MaxValue;
+            }
 
-        UpdateCurrencyText?.Invoke(currency);
-        //Debug.Log($"Currency: {currency}");
+            UpdateCurrencyText?.Invoke(currency);
+        }
     }
 
-    public void AddActiveCurrency()
+    // Add currency based on the ActiveGain and relative modifiers.
+    private void AddActiveCurrency()
     {
         AddCurrency(currencyActiveGain, modifierActiveGain);
+    }
+
+    // Add currency based on the IdleGain and relative modifiers.
+    private void AddIdleCurrency()
+    {
+        AddCurrency(currencyIdleGain, modifierIdleGain);
     }
 
     /// <summary>
@@ -91,26 +111,30 @@ public class CurrencyManager : Singleton<CurrencyManager>
         modifierActiveGain += value;
     }
 
+    // Change current quantity modifier.
     public int CycleModifierAndReturnValue()
     {
-        currentModifierIndex++;
-        if (currentModifierIndex > listQuantityModifier.Count - 1) currentModifierIndex = 0;
+        currentQuantityModifierIndex++;
+        if (currentQuantityModifierIndex > listQuantityModifier.Count - 1) currentQuantityModifierIndex = 0;
 
-        return listQuantityModifier[currentModifierIndex];
+        return listQuantityModifier[currentQuantityModifierIndex];
 
     }
 
+    // Return the current Quantity of Ships that will be bought.
+    // Ships can be bought one at a time, or more.
     public int ReturnModifierValue()
     {
-        return listQuantityModifier[currentModifierIndex];
+        return listQuantityModifier[currentQuantityModifierIndex];
     }
 
 
+    // Add currency based on idle values every second.
     IEnumerator UpdateCurrency()
     {
         while (currency < long.MaxValue)
         {
-            AddCurrency(currencyIdleGain, modifierIdleGain);
+            AddIdleCurrency();
             yield return new WaitForSeconds(1);
         }
     }
