@@ -3091,6 +3091,7 @@ GameObject:
   - component: {fileID: 1552144050}
   - component: {fileID: 1552144049}
   - component: {fileID: 1552144052}
+  - component: {fileID: 1552144053}
   m_Layer: 5
   m_Name: Scroll View_Ships
   m_TagString: Untagged
@@ -3196,6 +3197,22 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1552144053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552144047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69216dd404590f14aa9f8a92b2d690ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listShipInfos: []
+  prefabShip: {fileID: 7333388178354406426, guid: 9ff2b9f3fc854bf4280c5285f8c07b90,
+    type: 3}
+  containerShips: {fileID: 610389828}
 --- !u!1 &1651955121
 GameObject:
   m_ObjectHideFlags: 0

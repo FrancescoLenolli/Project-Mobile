@@ -10,11 +10,11 @@ public class UIManager : Singleton<UIManager>
     }
 
     // Set if a Canvas is visible or not based on his CanvasGroup.
-    private void ChangeStatus(CanvasGroup canvasGroup, bool isVisible)
+    public void ChangeStatus(CanvasGroup canvasGroup, bool isVisible)
     {
-        int alphaValue = isVisible ? 1 : 0;
+        int newAlphaValue = isVisible ? 1 : 0;
 
-        canvasGroup.alpha = alphaValue;
+        canvasGroup.alpha = newAlphaValue;
         canvasGroup.interactable = isVisible;
         canvasGroup.blocksRaycasts = isVisible;
     }

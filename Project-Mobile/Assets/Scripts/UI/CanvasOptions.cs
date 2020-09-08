@@ -14,9 +14,8 @@ public class CanvasOptions : UIElement
     public Image imageMusic = null;
     public Image imageVibration = null;
 
-    private new void Start()
+    private void Start()
     {
-        base.Start();
         gameManager = GameManager.Instance;
 
         isSFXVolumeOn = gameManager.isSFXVolumeOn;
@@ -46,6 +45,7 @@ public class CanvasOptions : UIElement
     {
         isVibrationOn = !isVibrationOn;
         gameManager.isVibrationOn = isVibrationOn;
+        StatusVibration(isVibrationOn);
     }
 
     private void StatusSFX(bool isOn)
@@ -62,6 +62,7 @@ public class CanvasOptions : UIElement
 
     private void StatusVibration(bool isOn)
     {
+        // Vibrate when condition is true.
         imageVibration.sprite = ChangeSprite(isOn);
     }
 

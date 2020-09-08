@@ -41,7 +41,15 @@ public class GameManager : Singleton<GameManager>
         playerData.SFXVolume = isSFXVolumeOn;
         playerData.MusicVolume = isMusicVolumeOn;
         playerData.VibrationOn = isVibrationOn;
-        playerData.playerShips = ShipsManager.Instance.listShipInfos;
+        //playerData.playerShips = ShipsManager.Instance.listShipInfos;
+        Save();
+    }
+
+    // Doesn't seems like a good idea, but I'll leave it for now.
+    // Maybe have a list directly in GameManager?
+    public void SaveShipInfos(List<ShipInfo> newList)
+    {
+        playerData.playerShips = newList;
         Save();
     }
 

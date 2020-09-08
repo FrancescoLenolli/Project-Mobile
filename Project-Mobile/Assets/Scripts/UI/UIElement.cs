@@ -7,7 +7,7 @@ public class UIElement : MonoBehaviour
     [HideInInspector] public CanvasGroup canvasGroup;
     [HideInInspector] public RectTransform rectTransform;
 
-    public void Start()
+    public void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
         rectTransform = GetComponent<RectTransform>();

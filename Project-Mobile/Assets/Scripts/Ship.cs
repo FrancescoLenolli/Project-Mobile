@@ -8,8 +8,8 @@ public class Ship : MonoBehaviour
     public event BoughtShip BoughtShip;
 
     private CurrencyManager currencyManager = null;
-    private ShipsManager shipsManager = null;
     private CanvasBottom canvasBottom = null;
+    private PanelShips panelShips = null;
 
     public int quantity = 0;
     private int cost = 0;
@@ -31,7 +31,6 @@ public class Ship : MonoBehaviour
     private void Awake()
     {
         currencyManager = CurrencyManager.Instance;
-        shipsManager = ShipsManager.Instance;
     }
 
     private void Start()
@@ -44,12 +43,16 @@ public class Ship : MonoBehaviour
     private void Update()
     {
 
-        buttonBuy.interactable = currencyManager.currency >= cost ? true : false; // [!!!] A Sprite change is better, keep that in mind.
+        // [!!!] Add a sprite change.
+        // Call this with an event. 
+        // When idle currency is updated, when active currency is updated, when buying new ships.
+        buttonBuy.interactable = currencyManager.currency >= cost;
 
     }
 
-    public void SetValues(ShipData newShipData, int newQuantity)
+    public void SetValues(ShipData newShipData, int newQuantity, PanelShips refPanelShips)
     {
+        panelShips = refPanelShips;
         shipData = newShipData;
         quantity = newQuantity;
 
@@ -117,13 +120,13 @@ public class Ship : MonoBehaviour
     // Unlock next Ship once the right quantity has been reached.
     private void UnlockNextShip(int index)
     {
-        shipsManager.AddNewShip(index);
+        panelShips.AddNewShip(index);
     }
 
     // Update Quantity of this Ship in ShipInfo, that will be saved.
     private void UpdateQuantity(int index, int quantity)
     {
-        shipsManager.UpdateQuantityAt(index, quantity);
+        panelShips.UpdateQuantityAt(index, quantity);
     }
 
 }

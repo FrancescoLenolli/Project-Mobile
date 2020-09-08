@@ -9,6 +9,7 @@ public class CanvasBottom : MonoBehaviour
     public event UpdateModifier UpdateModifier;
 
     private CurrencyManager currencyManager = null;
+    private UIManager uiManager = null;
 
     [HideInInspector] public int modifierValue = 0;
 
@@ -18,6 +19,7 @@ public class CanvasBottom : MonoBehaviour
     private void Start()
     {
         currencyManager = CurrencyManager.Instance;
+        uiManager = UIManager.Instance;
     }
 
     // Update Modifier for Ship Quantity to buy.
@@ -37,32 +39,12 @@ public class CanvasBottom : MonoBehaviour
         {
             if(i == index)
             {
-                ChangeStatus(listPanels[i], true);
+                uiManager.ChangeStatus(listPanels[i], true);
             }
             else
             {
-
-                ChangeStatus(listPanels[i], false);
+                uiManager.ChangeStatus(listPanels[i], false);
             }
         }
-    }
-
-    // Set if a Canvas is visible or not based on his CanvasGroup.
-    private void ChangeStatus(CanvasGroup canvasGroup, bool isVisible)
-    {
-        int alphaValue = isVisible ? 1 : 0;
-
-        canvasGroup.alpha = alphaValue;
-        canvasGroup.interactable = isVisible;
-        canvasGroup.blocksRaycasts = isVisible;
-    }
-
-    Vector2 ResizeContainer(Transform container, Transform additionalElement, float additionalSpace)
-    {
-        RectTransform additionalElementRect = additionalElement.GetComponent<RectTransform>();
-        RectTransform containerRect = container.GetComponent<RectTransform>();
-
-        Vector2 containerUpdatedSize = new Vector2(containerRect.sizeDelta.x, containerRect.sizeDelta.y + additionalElementRect.sizeDelta.y + additionalSpace);
-        return containerUpdatedSize;
     }
 }
