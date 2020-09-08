@@ -12,8 +12,10 @@ public class Ship : MonoBehaviour
     private PanelShips panelShips = null;
 
     public int quantity = 0;
+    private ShipData.ShipType shipType = ShipData.ShipType.Patrol;
     private int cost = 0;
     private int currencyGain = 0;
+    private int currencyGainMultiplier = 0;
     // CurrencyGain increased if more X units are bought.
     private int additionalCurrencyGain = 0;
     private int quantityMultiplier = 0;
@@ -59,6 +61,9 @@ public class Ship : MonoBehaviour
         quantityMultiplier = currencyManager.ReturnModifierValue();
         cost = shipData.cost * quantityMultiplier;
         currencyGain = shipData.currencyGain;
+
+        // Multiplier expressed in percentages.
+        currencyGainMultiplier = shipData.currencyGainMultiplier / 100;
         additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;
 
         textName.text = shipData.shipName;
@@ -89,7 +94,6 @@ public class Ship : MonoBehaviour
     // Method called from UI button to buy units of a Ship.
     public void Buy()
     {
-        BoughtShip?.Invoke(shipData.shipName);
 
         int multiplier = quantityMultiplier;
 
@@ -100,6 +104,9 @@ public class Ship : MonoBehaviour
             currencyManager.ChangeCurrencyIdleGain(currencyGain * multiplier);
             UpdateValues();
             UpdateQuantity(shipData.index, quantity);
+
+            // Notify UpgradesPanel.
+            BoughtShip?.Invoke(shipData.shipName);
 
             if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip(shipData.index);
 
