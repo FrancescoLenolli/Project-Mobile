@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,7 +17,7 @@ public class CanvasBottom : MonoBehaviour
     public TextMeshProUGUI textModifier = null;
     public List<CanvasGroup> listPanels = new List<CanvasGroup>();
 
-    private void Start()
+    private void Awake()
     {
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;

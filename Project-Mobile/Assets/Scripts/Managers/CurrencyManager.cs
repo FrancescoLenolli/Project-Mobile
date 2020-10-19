@@ -14,6 +14,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private int currentQuantityModifierIndex = 0;
 
     public long currency = 0;
+    public int premiumCurrency = 0;
     public int currencyIdleGain = 0;
     public int currencyActiveGain = 0;
     public int modifierIdleGain = 1;
@@ -53,7 +54,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     }
 
     // Add currency to the current player currency.
-    private void AddCurrency(int value, int modifier)
+    private void AddCurrency(long value, int modifier = 1)
     {
         // Currenct idle gain.
         currency += (value * modifier);
@@ -127,6 +128,23 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return listQuantityModifier[currentQuantityModifierIndex];
     }
 
+    /************** Functions called from PanelExtra ***********/
+    public void AddMoreCurrency(long currency)
+    {
+        AddCurrency(currency);
+    }
+
+    public void AddMorePremiumCurrency(int premiumCurrency)
+    {
+        Debug.Log("TODO: Premium Currency");
+    }
+
+    public void MultiplyIdleGain(float multiplierTime)
+    {
+        StartCoroutine(MultiplyIdleGainFor(multiplierTime));
+    }
+    /**********************************************************/
+
 
     // Add currency based on idle values every second.
     IEnumerator UpdateCurrency()
@@ -136,5 +154,12 @@ public class CurrencyManager : Singleton<CurrencyManager>
             AddIdleCurrency();
             yield return new WaitForSeconds(1);
         }
+    }
+
+    IEnumerator MultiplyIdleGainFor(float time)
+    {
+        modifierIdleGain *= 2;
+        yield return new WaitForSeconds(time);
+        modifierIdleGain /= 2;
     }
 }

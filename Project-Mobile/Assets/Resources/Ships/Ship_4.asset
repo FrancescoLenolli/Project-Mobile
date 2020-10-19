@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shipType: 4
   index: 4
-  shipName: TItan
+  shipName: Titan
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   cost: 80
   currencyGain: 200

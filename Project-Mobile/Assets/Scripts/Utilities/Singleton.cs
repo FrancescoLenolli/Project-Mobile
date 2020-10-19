@@ -11,7 +11,14 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            //Debug.Assert(instance != null);
+            // Avoid returning a null instance of the Singleton.
+            // FindObjectOfType has a big cost, but it will be done only once at the start of the game.
+            // [!!!] Consider modifying the Awake script order in the Unity Settings.
+            if(instance == null)
+            {
+                instance = FindObjectOfType<T>();
+            }
+
             return instance;
         }
     }

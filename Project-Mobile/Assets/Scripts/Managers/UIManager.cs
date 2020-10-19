@@ -19,6 +19,7 @@ public class UIManager : Singleton<UIManager>
         canvasGroup.blocksRaycasts = isVisible;
     }
 
+    // Increase size of a container to fit more elements
     public Vector2 ResizeContainer(Transform container, Transform additionalElement, float additionalSpace)
     {
         RectTransform additionalElementRect = additionalElement.GetComponent<RectTransform>();

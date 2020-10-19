@@ -1,11 +1,18 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public delegate void BoughtShip(string shipName); // [!!!] Use event to unlock upgrades.
+public delegate void UnlockShip(int index); // Unlock new ship when certain requirements are met.
+public delegate void UpdateShipQuantity(int index, int quantity); // Update this ship's quantity when buying one or more.
+
 public class Ship : MonoBehaviour
 {
     public event BoughtShip BoughtShip;
+    public event UnlockShip UnlockShip;
+    public event UpdateShipQuantity UpdateShipQuantity;
 
     private CurrencyManager currencyManager = null;
     private CanvasBottom canvasBottom = null;
@@ -30,33 +37,33 @@ public class Ship : MonoBehaviour
     public TextMeshProUGUI textQuantityMultiplier = null;
     public Button buttonBuy = null;
 
-    private void Awake()
-    {
-        currencyManager = CurrencyManager.Instance;
-    }
-
-    private void Start()
-    {
-        canvasBottom = FindObjectOfType<CanvasBottom>();
-
-        canvasBottom.UpdateModifier += UpdateModifier;
-    }
-
     private void Update()
     {
 
         // [!!!] Add a sprite change.
         // Call this with an event. 
         // When idle currency is updated, when active currency is updated, when buying new ships.
+        if(currencyManager)
         buttonBuy.interactable = currencyManager.currency >= cost;
 
     }
 
     public void SetValues(ShipData newShipData, int newQuantity, PanelShips refPanelShips)
     {
+        currencyManager = CurrencyManager.Instance;
+
+        //[!!!] Use a UI Manager to pass reference to canvasBottom?
+        canvasBottom = FindObjectOfType<CanvasBottom>();
+
+        canvasBottom.UpdateModifier += UpdateModifier;
+        UnlockShip += refPanelShips.AddNewShip;
+        UpdateShipQuantity += refPanelShips.UpdateQuantityAt;
+
+
         panelShips = refPanelShips;
         shipData = newShipData;
         quantity = newQuantity;
+        shipType = newShipData.shipType;
 
         quantityMultiplier = currencyManager.ReturnModifierValue();
         cost = shipData.cost * quantityMultiplier;
@@ -77,6 +84,7 @@ public class Ship : MonoBehaviour
         currencyManager.ChangeCurrencyIdleGain(currencyGain * quantity);
     }
 
+    // Update Values when the Player change the quantity of ships to buy.
     public void UpdateValues()
     {
         quantityMultiplier = currencyManager.ReturnModifierValue();
@@ -94,7 +102,6 @@ public class Ship : MonoBehaviour
     // Method called from UI button to buy units of a Ship.
     public void Buy()
     {
-
         int multiplier = quantityMultiplier;
 
         if (currencyManager.currency >= cost * multiplier)
@@ -127,13 +134,13 @@ public class Ship : MonoBehaviour
     // Unlock next Ship once the right quantity has been reached.
     private void UnlockNextShip(int index)
     {
-        panelShips.AddNewShip(index);
+        UnlockShip?.Invoke(index);
     }
 
     // Update Quantity of this Ship in ShipInfo, that will be saved.
     private void UpdateQuantity(int index, int quantity)
     {
-        panelShips.UpdateQuantityAt(index, quantity);
+        UpdateShipQuantity?.Invoke(index, quantity);
     }
 
 }
