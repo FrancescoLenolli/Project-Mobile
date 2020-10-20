@@ -67,6 +67,8 @@ public class GameManager : Singleton<GameManager>
         playerData.MusicVolume = isMusicVolumeOn;
         playerData.VibrationOn = isVibrationOn;
         //playerData.playerShips = ShipsManager.Instance.listShipInfos;
+        playerData.lastCurrencyIdleGain = CurrencyManager.Instance.currencyIdleGain;
+        playerData.lastModifierIdleGain = CurrencyManager.Instance.modifierIdleGain;
         playerData.lastPlayedTime = lastPlayedTime.ToString();
         Save();
     }

@@ -22,6 +22,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public int modifierActiveGain = 1;
     public List<int> listQuantityModifier = new List<int>();
 
+    private int lastCurrencyIdleGain = 0;
+    private int lastModifierIdleGain = 0;
     private EventSystem eventSystem;
 
     private new void Awake()
@@ -35,6 +37,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         gameManager = GameManager.Instance;
 
         currency = gameManager.playerData.playerCurrency;
+        lastCurrencyIdleGain = gameManager.playerData.lastCurrencyIdleGain;
 
         StartCoroutine(UpdateCurrency());
     }
@@ -173,7 +176,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     {
         yield return new WaitForSeconds(5);
 
-        int backgroundIdleGain = (currencyIdleGain * modifierIdleGain) * seconds;
+        int backgroundIdleGain = (lastCurrencyIdleGain * lastModifierIdleGain) * seconds;
         currency += backgroundIdleGain;
 
         UpdateCurrencyText?.Invoke(currency);
