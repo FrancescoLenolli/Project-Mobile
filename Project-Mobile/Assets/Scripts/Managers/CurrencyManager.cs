@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -139,6 +140,11 @@ public class CurrencyManager : Singleton<CurrencyManager>
         Debug.Log("TODO: Premium Currency");
     }
 
+    public void GetIdleGainSinceLastGame(int seconds)
+    {
+        StartCoroutine(CalculateIdleGainSinceLastGame(seconds));
+    }
+
     public void MultiplyIdleGain(float multiplierTime)
     {
         StartCoroutine(MultiplyIdleGainFor(multiplierTime));
@@ -161,5 +167,19 @@ public class CurrencyManager : Singleton<CurrencyManager>
         modifierIdleGain *= 2;
         yield return new WaitForSeconds(time);
         modifierIdleGain /= 2;
+    }
+
+    IEnumerator CalculateIdleGainSinceLastGame(int seconds)
+    {
+        yield return new WaitForSeconds(5);
+
+        int backgroundIdleGain = (currencyIdleGain * modifierIdleGain) * seconds;
+        currency += backgroundIdleGain;
+
+        UpdateCurrencyText?.Invoke(currency);
+
+        Debug.Log($"Background Idle Gain is {backgroundIdleGain}");
+
+        yield return new WaitForEndOfFrame();
     }
 }

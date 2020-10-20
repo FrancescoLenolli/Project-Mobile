@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class PlayerData
 {
@@ -8,4 +9,5 @@ public class PlayerData
     public bool MusicVolume = true;
     public bool VibrationOn = true;
     public List<ShipInfo> playerShips = new List<ShipInfo>();
+    public string lastPlayedTime;
 }

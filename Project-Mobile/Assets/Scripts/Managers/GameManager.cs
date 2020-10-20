@@ -5,8 +5,11 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 
+public delegate void SendTimeFromLastGame(int seconds);
 public class GameManager : Singleton<GameManager>
 {
+    public SendTimeFromLastGame eventSendTimeFromLastGame;
+
     [HideInInspector] public PlayerData playerData = null;
     [HideInInspector] public string file = "PlayerData.json";
 
@@ -15,6 +18,8 @@ public class GameManager : Singleton<GameManager>
     public bool isSFXVolumeOn = true;
     public bool isMusicVolumeOn = true;
     public bool isVibrationOn = true;
+
+    private DateTime lastPlayedTime;
 
     private new void Awake()
     {
@@ -26,11 +31,29 @@ public class GameManager : Singleton<GameManager>
         isSFXVolumeOn = playerData.SFXVolume;
         isMusicVolumeOn = playerData.MusicVolume;
         isVibrationOn = playerData.VibrationOn;
+
+        lastPlayedTime = Convert.ToDateTime(playerData.lastPlayedTime);
+    }
+
+    private void Start()
+    {
+        eventSendTimeFromLastGame += CurrencyManager.Instance.GetIdleGainSinceLastGame;
+
+        eventSendTimeFromLastGame?.Invoke(GetSecondsFromLastGame());
     }
 
     private void OnApplicationQuit()
     {
+        lastPlayedTime = DateTime.Now;
         SaveCurrentData();
+    }
+
+    private int GetSecondsFromLastGame()
+    {
+        DateTime currentTime = DateTime.Now;
+        TimeSpan timeSpan = currentTime.Subtract(lastPlayedTime);
+        int seconds = (int)timeSpan.TotalSeconds;
+        return seconds;
     }
 
     #region Save System
@@ -44,6 +67,7 @@ public class GameManager : Singleton<GameManager>
         playerData.MusicVolume = isMusicVolumeOn;
         playerData.VibrationOn = isVibrationOn;
         //playerData.playerShips = ShipsManager.Instance.listShipInfos;
+        playerData.lastPlayedTime = lastPlayedTime.ToString();
         Save();
     }
 
