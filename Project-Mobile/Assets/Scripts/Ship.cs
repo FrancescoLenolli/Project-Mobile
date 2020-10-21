@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,18 +8,19 @@ using UnityEngine.UI;
 public delegate void BoughtShip(string shipName); // [!!!] Use event to unlock upgrades.
 public delegate void UnlockShip(int index); // Unlock new ship when certain requirements are met.
 public delegate void UpdateShipQuantity(int index, int quantity); // Update this ship's quantity when buying one or more.
+public delegate void UnlockUpgrades(int shipIndex);
 
 public class Ship : MonoBehaviour
 {
-    public event BoughtShip BoughtShip;
-    public event UnlockShip UnlockShip;
-    public event UpdateShipQuantity UpdateShipQuantity;
+    public event BoughtShip eventBoughtShip;
+    public event UnlockShip eventUnlockShip;
+    public event UpdateShipQuantity eventUpdateShipQuantity;
+    public event UnlockUpgrades eventUnlockUpgrades;
 
     private CurrencyManager currencyManager = null;
     private CanvasBottom canvasBottom = null;
-    private PanelShips panelShips = null;
 
-    public int quantity = 0;
+    private List<ShipUpgradesData> listMyUpgrades = new List<ShipUpgradesData>();
     private ShipData.ShipType shipType = ShipData.ShipType.Patrol;
     private int cost = 0;
     private int currencyGain = 0;
@@ -28,6 +30,7 @@ public class Ship : MonoBehaviour
     private int quantityMultiplier = 0;
 
     [HideInInspector] public ShipData shipData = null;
+    public int quantity = 0;
     public Image imageIcon = null;
     public TextMeshProUGUI textQuantity = null;
     public TextMeshProUGUI textName = null;
@@ -48,7 +51,7 @@ public class Ship : MonoBehaviour
 
     }
 
-    public void SetValues(ShipData newShipData, int newQuantity, PanelShips refPanelShips)
+    public void SetValues(ShipData newShipData, int newQuantity)
     {
         currencyManager = CurrencyManager.Instance;
 
@@ -56,11 +59,10 @@ public class Ship : MonoBehaviour
         canvasBottom = FindObjectOfType<CanvasBottom>();
 
         canvasBottom.UpdateModifier += UpdateModifier;
-        UnlockShip += refPanelShips.AddNewShip;
-        UpdateShipQuantity += refPanelShips.UpdateQuantityAt;
+        eventUnlockShip += canvasBottom.panelShips.AddNewShip;
+        eventUpdateShipQuantity += canvasBottom.panelShips.UpdateQuantityAt;
+        //eventUnlockUpgrades += canvasBottom.panelShipsUpgrades
 
-
-        panelShips = refPanelShips;
         shipData = newShipData;
         quantity = newQuantity;
         shipType = newShipData.shipType;
@@ -107,13 +109,20 @@ public class Ship : MonoBehaviour
         if (currencyManager.currency >= cost * multiplier)
         {
             currencyManager.currency -= cost;
+
+            // If this is the first time buying this ship, unlock his upgrades.
+            if(quantity == 0)
+            {
+                eventUnlockUpgrades?.Invoke(shipData.index);
+            }
+
             quantity += multiplier;
             currencyManager.ChangeCurrencyIdleGain(currencyGain * multiplier);
             UpdateValues();
             UpdateQuantity(shipData.index, quantity);
 
             // Notify UpgradesPanel.
-            BoughtShip?.Invoke(shipData.shipName);
+            eventBoughtShip?.Invoke(shipData.shipName);
 
             if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip(shipData.index);
 
@@ -134,13 +143,13 @@ public class Ship : MonoBehaviour
     // Unlock next Ship once the right quantity has been reached.
     private void UnlockNextShip(int index)
     {
-        UnlockShip?.Invoke(index);
+        eventUnlockShip?.Invoke(index);
     }
 
     // Update Quantity of this Ship in ShipInfo, that will be saved.
     private void UpdateQuantity(int index, int quantity)
     {
-        UpdateShipQuantity?.Invoke(index, quantity);
+        eventUpdateShipQuantity?.Invoke(index, quantity);
     }
 
 }

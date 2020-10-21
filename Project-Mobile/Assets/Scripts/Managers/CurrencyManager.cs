@@ -13,6 +13,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private GameManager gameManager = null;
     private int currentQuantityModifierIndex = 0;
+    private int lastCurrencyIdleGain = 0;
+    private int lastModifierIdleGain = 0;
+    private EventSystem eventSystem;
 
     public long currency = 0;
     public int premiumCurrency = 0;
@@ -21,10 +24,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public int modifierIdleGain = 1;
     public int modifierActiveGain = 1;
     public List<int> listQuantityModifier = new List<int>();
-
-    private int lastCurrencyIdleGain = 0;
-    private int lastModifierIdleGain = 0;
-    private EventSystem eventSystem;
 
     private new void Awake()
     {
@@ -38,6 +37,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         currency = gameManager.playerData.playerCurrency;
         lastCurrencyIdleGain = gameManager.playerData.lastCurrencyIdleGain;
+        lastModifierIdleGain = gameManager.playerData.lastModifierIdleGain;
 
         StartCoroutine(UpdateCurrency());
     }
@@ -174,7 +174,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     IEnumerator CalculateIdleGainSinceLastGame(int seconds)
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
 
         int backgroundIdleGain = (lastCurrencyIdleGain * lastModifierIdleGain) * seconds;
         currency += backgroundIdleGain;

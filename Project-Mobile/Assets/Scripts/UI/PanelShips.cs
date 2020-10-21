@@ -18,6 +18,7 @@ public struct ShipInfo
         shipQuantity = quantity;
     }
 }
+
 public class PanelShips : MonoBehaviour
 {
     private GameManager gameManager = null;
@@ -61,7 +62,7 @@ public class PanelShips : MonoBehaviour
             int newQuantity = listShipInfos[i].shipQuantity;
 
             Ship newShip = Instantiate(prefabShip, containerShips, false);
-            newShip.SetValues(newData, newQuantity, this); // [!!!] ADD "this" to SetValues parameters to pass reference to PanelShips.
+            newShip.SetValues(newData, newQuantity); // [!!!] ADD "this" to SetValues parameters to pass reference to PanelShips.
 
             listShips.Add(newShip);
 
@@ -96,7 +97,7 @@ public class PanelShips : MonoBehaviour
         int newQuantity = 0;
 
         Ship newShip = Instantiate(prefabShip, containerShips, false);
-        newShip.SetValues(newShipData, newQuantity, this);
+        newShip.SetValues(newShipData, newQuantity);
         ShipInfo newShipInfo = new ShipInfo(newShipData, newQuantity);
 
         listShips.Add(newShip);

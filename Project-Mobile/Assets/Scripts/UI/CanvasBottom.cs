@@ -13,6 +13,8 @@ public class CanvasBottom : MonoBehaviour
     private UIManager uiManager = null;
 
     [HideInInspector] public int modifierValue = 0;
+    [HideInInspector] public PanelShips panelShips = null;
+    [HideInInspector] public PanelShipsUpgrades panelShipsUpgrades = null;
 
     public TextMeshProUGUI textModifier = null;
     public List<CanvasGroup> listPanels = new List<CanvasGroup>();
@@ -21,6 +23,8 @@ public class CanvasBottom : MonoBehaviour
     {
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
+        panelShips = GetComponentInChildren<PanelShips>();
+        panelShipsUpgrades = GetComponentInChildren<PanelShipsUpgrades>();
     }
 
     // Update Modifier for Ship Quantity to buy.
