@@ -1903,7 +1903,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.031e-42, y: 1.906959e-18, z: 4.5904e-41, w: 1.9067837e-18}
+  m_BoundingSphereOverride: {x: 7.88e-43, y: -0.00000002005011, z: 7.88e-43, w: -4.1633527e+21}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -2231,6 +2231,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifierValue: 0
+  panelShips: {fileID: 0}
+  panelShipsUpgrades: {fileID: 0}
   textModifier: {fileID: 186865344}
   listPanels:
   - {fileID: 1552144052}

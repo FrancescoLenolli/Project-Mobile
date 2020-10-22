@@ -91,7 +91,16 @@ public class CurrencyManager : Singleton<CurrencyManager>
     /// Increase Currency Idle Gain by value. This determines how much currency is gained in background.
     /// </summary>
     /// <param name="value">How much CurrencyIdleGain is increased.</param>
-    public void ChangeCurrencyIdleGain(int value)
+    public void IncreaseCurrencyIdleGain(int value)
+    {
+        currencyIdleGain += value;
+    }
+
+    /// <summary>
+    /// Decrease Currency Idle Gain by value. Used when recalculating production multiplier of a ship, after buying an upgrade.
+    /// </summary>
+    /// <param name="value"></param>
+    public void DecreaseCurrencyIdleGain(int value)
     {
         currencyIdleGain += value;
     }

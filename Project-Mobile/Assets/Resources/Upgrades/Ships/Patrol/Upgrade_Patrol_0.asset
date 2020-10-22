@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b7ac2dc311630542ba30c0d380280f2, type: 3}
-  m_Name: Patrol_PassiveUpgrade_1
+  m_Script: {fileID: 11500000, guid: 7967b43b2fcd0f14492b3f4d5d4c38b4, type: 3}
+  m_Name: Upgrade_Patrol_0
   m_EditorClassIdentifier: 
   shipType: 0
-  index: 1
-  upgradeName: Upgrade 2
-  description: Second Upgrade
+  index: 0
+  upgradeName: Engine
+  description: Description Engine
   upgradeSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  cost: 100000
-  productionMultiplier: 15
+  cost: 34500
+  productionMultiplier: 12

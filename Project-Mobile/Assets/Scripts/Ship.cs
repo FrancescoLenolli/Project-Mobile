@@ -20,7 +20,7 @@ public class Ship : MonoBehaviour
     private CurrencyManager currencyManager = null;
     private CanvasBottom canvasBottom = null;
 
-    private List<ShipUpgradesData> listMyUpgrades = new List<ShipUpgradesData>();
+    private List<ShipUpgradeData> listMyUpgrades = new List<ShipUpgradeData>();
     private ShipData.ShipType shipType = ShipData.ShipType.Patrol;
     private int cost = 0;
     private int currencyGain = 0;
@@ -28,6 +28,8 @@ public class Ship : MonoBehaviour
     // CurrencyGain increased if more X units are bought.
     private int additionalCurrencyGain = 0;
     private int quantityMultiplier = 0;
+    // CurrencyGain is increased by this percentage when buying upgrades.
+    private int productionMultiplier = 1;
 
     [HideInInspector] public ShipData shipData = null;
     public int quantity = 0;
@@ -83,7 +85,7 @@ public class Ship : MonoBehaviour
         textCurrencyGain.text = $"{currencyGain * quantity}/s";
         textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
 
-        currencyManager.ChangeCurrencyIdleGain(currencyGain * quantity);
+        currencyManager.IncreaseCurrencyIdleGain(currencyGain * quantity + ((currencyGain * productionMultiplier) / 100));
     }
 
     // Update Values when the Player change the quantity of ships to buy.
@@ -97,7 +99,7 @@ public class Ship : MonoBehaviour
         textCost.text = $"{cost}";
         textQuantity.text = $"{quantity}";
         textQuantityMultiplier.text = $"{quantityMultiplier}";
-        textCurrencyGain.text = $"{currencyGain * quantity}/s";
+        textCurrencyGain.text = $"{currencyGain * quantity + ((currencyGain * productionMultiplier) / 100)}/s";
         textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
     }
 
@@ -117,7 +119,7 @@ public class Ship : MonoBehaviour
             }
 
             quantity += multiplier;
-            currencyManager.ChangeCurrencyIdleGain(currencyGain * multiplier);
+            currencyManager.IncreaseCurrencyIdleGain(currencyGain * multiplier + ((currencyGain * productionMultiplier) / 100));
             UpdateValues();
             UpdateQuantity(shipData.index, quantity);
 
@@ -132,6 +134,13 @@ public class Ship : MonoBehaviour
         {
             // Play different sound.
         }
+    }
+
+    public void UpdateProductionMultiplier(int multiplier)
+    {
+        currencyManager.DecreaseCurrencyIdleGain(currencyGain * quantity + ((currencyGain * productionMultiplier) / 100));
+        productionMultiplier += multiplier;
+        currencyManager.IncreaseCurrencyIdleGain(currencyGain * quantity + ((currencyGain * productionMultiplier) / 100));
     }
 
     private void UpdateModifier(int newModifierValue)

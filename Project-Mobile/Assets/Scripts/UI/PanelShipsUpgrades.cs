@@ -3,28 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[System.Serializable]
+public struct UpgradeInfo
+{
+    /// Generic Data for the Ship.
+    /// Things like Name, Sprite, Currency Gain ecc... are all contained here.
+    public ShipUpgradeData upgradeData;
+
+    /// How many ships of the same type the player has.
+    public bool isOwned;
+
+    public UpgradeInfo(ShipUpgradeData newUpgradeData, bool newStatus)
+    {
+        upgradeData = newUpgradeData;
+        isOwned = newStatus;
+    }
+}
+
 public class PanelShipsUpgrades : MonoBehaviour
 {
-    private List<ShipUpgradesData> listShipUpgrades = new List<ShipUpgradesData>();
+    private List<ShipUpgradeData> listShipUpgrades = new List<ShipUpgradeData>();
 
     private void Awake()
     {
-        listShipUpgrades = new List<ShipUpgradesData>(Resources.LoadAll<ShipUpgradesData>("Upgrades"));
+        listShipUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades"));
     }
 
     public void UnlockUpgrades(int shipIndex)
     {
-        //List<ShipUpgradesData> listUpgradesToSpawn = new List<ShipUpgradesData>();
+        List<ShipUpgradeData> listUpgradesToSpawn = new List<ShipUpgradeData>();
 
-        //foreach (ShipUpgradesData upgradesData in listShipUpgrades.Where(x => x.index == shipIndex))
-        //{
-        //    listUpgradesToSpawn.Add(upgradesData);
-        //}
+        foreach (ShipUpgradeData upgradesData in listShipUpgrades.Where(x => x.index == shipIndex))
+        {
+            listUpgradesToSpawn.Add(upgradesData);
+        }
 
-        //int listCount = listShipUpgrades.Count;
-        //for(int i = 0; i < listCount; ++i)
-        //{
-        //    if
-        //}
+        int listCount = listShipUpgrades.Count;
+        for (int i = 0; i < listCount; ++i)
+        {
+
+        }
     }
 }
