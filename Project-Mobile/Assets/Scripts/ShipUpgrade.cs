@@ -4,12 +4,14 @@ using UnityEngine.UI;
 
 public class ShipUpgrade : MonoBehaviour
 {
-    public ShipUpgradeData shipUpgradeData = null;
-    public Ship myShip = null;
-    public int productionMultiplier = 0;
-    public int cost = 0;
+    private ShipUpgradeData shipUpgradeData = null;
+    private Ship myShip = null;
+    private int productionMultiplier = 0;
+    private int cost = 0;
+    CurrencyManager currencyManager;
+
     // Was this Upgrade already bought?
-    public bool isOwned = false;
+    [HideInInspector] public bool isOwned = false;
 
     public Image imageIcon = null;
     public TextMeshProUGUI textName = null;
@@ -17,9 +19,23 @@ public class ShipUpgrade : MonoBehaviour
     public TextMeshProUGUI textCost = null;
     public Button buttonBuy = null;
 
-    private void SetValues(Ship ship)
+    private void Awake()
     {
-        myShip = ship;
+        currencyManager = CurrencyManager.Instance;
+    }
+
+    private void Update()
+    {
+        buttonBuy.interactable = currencyManager.currency >= cost ? true : false;
+    }
+
+    private void SetValues(ShipUpgradeData newData)
+    {
+        shipUpgradeData = newData;
+
+        // [!!!] UIManager with reference to CanvasBottom?
+        myShip = FindObjectOfType<CanvasBottom>().panelShips.ReturnShipOfType(shipUpgradeData.shipType);
+
         imageIcon.sprite = shipUpgradeData.upgradeSprite;
         textName.text = shipUpgradeData.upgradeName;
         textProductionMultiplier.text = shipUpgradeData.productionMultiplier.ToString();

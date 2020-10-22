@@ -114,4 +114,20 @@ public class PanelShips : MonoBehaviour
     {
         listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipData, newQuantity);
     }
+
+    public Ship ReturnShipOfType(ShipData.ShipType type)
+    {
+        Ship ship = null;
+
+        for (int i = 0; i < listShips.Count; ++i)
+        {
+            if(listShips[i].shipData.shipType == type)
+            {
+                ship = listShips[i];
+                break;
+            }
+        }
+
+        return ship;
+    }
 }

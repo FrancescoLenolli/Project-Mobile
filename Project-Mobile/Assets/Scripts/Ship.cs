@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public delegate void BoughtShip(string shipName); // [!!!] Use event to unlock upgrades.
 public delegate void UnlockShip(int index); // Unlock new ship when certain requirements are met.
 public delegate void UpdateShipQuantity(int index, int quantity); // Update this ship's quantity when buying one or more.
-public delegate void UnlockUpgrades(int shipIndex);
+public delegate void UnlockUpgrades(ShipData.ShipType myType);
 
 public class Ship : MonoBehaviour
 {
@@ -20,7 +20,6 @@ public class Ship : MonoBehaviour
     private CurrencyManager currencyManager = null;
     private CanvasBottom canvasBottom = null;
 
-    private List<ShipUpgradeData> listMyUpgrades = new List<ShipUpgradeData>();
     private ShipData.ShipType shipType = ShipData.ShipType.Patrol;
     private int cost = 0;
     private int currencyGain = 0;
@@ -115,7 +114,7 @@ public class Ship : MonoBehaviour
             // If this is the first time buying this ship, unlock his upgrades.
             if(quantity == 0)
             {
-                eventUnlockUpgrades?.Invoke(shipData.index);
+                eventUnlockUpgrades?.Invoke(shipType);
             }
 
             quantity += multiplier;

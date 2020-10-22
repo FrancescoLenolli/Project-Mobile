@@ -24,24 +24,17 @@ public class PanelShipsUpgrades : MonoBehaviour
 {
     private List<ShipUpgradeData> listShipUpgrades = new List<ShipUpgradeData>();
 
+    public ShipUpgrade prefabShipUpgrade = null;
+
+
     private void Awake()
     {
         listShipUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades"));
     }
 
-    public void UnlockUpgrades(int shipIndex)
+    public void UnlockUpgrades(ShipData.ShipType type)
     {
-        List<ShipUpgradeData> listUpgradesToSpawn = new List<ShipUpgradeData>();
+        List<ShipUpgradeData> listUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades").Where(x => x.shipType == type));
 
-        foreach (ShipUpgradeData upgradesData in listShipUpgrades.Where(x => x.index == shipIndex))
-        {
-            listUpgradesToSpawn.Add(upgradesData);
-        }
-
-        int listCount = listShipUpgrades.Count;
-        for (int i = 0; i < listCount; ++i)
-        {
-
-        }
     }
 }
