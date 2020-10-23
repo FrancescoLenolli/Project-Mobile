@@ -10,16 +10,20 @@ public class GameManager : Singleton<GameManager>
 {
     public SendTimeFromLastGame eventSendTimeFromLastGame;
 
+    private DateTime lastPlayedTime;
+
     [HideInInspector] public PlayerData playerData = null;
     [HideInInspector] public string file = "PlayerData.json";
 
     public string playerName = "";
+    [Min(0)]
     public long playerCurrency = 0;
     public bool isSFXVolumeOn = true;
     public bool isMusicVolumeOn = true;
     public bool isVibrationOn = true;
 
-    private DateTime lastPlayedTime;
+    [Header("DEBUG")]
+    public bool canSave = true;
 
     private new void Awake()
     {
@@ -84,8 +88,11 @@ public class GameManager : Singleton<GameManager>
     // Convert data to JSON, then save it.
     public void Save()
     {
-        string json = JsonUtility.ToJson(playerData);
-        WriteToFile(file, json);
+        if (canSave)
+        {
+            string json = JsonUtility.ToJson(playerData);
+            WriteToFile(file, json);
+        }
     }
 
     /// Load Saved Data, create new Data if none is found.
@@ -101,7 +108,7 @@ public class GameManager : Singleton<GameManager>
             data = JsonUtility.FromJson<PlayerData>(_json);
         }
         // ...if no File is found, create a new one.
-        catch (System.IO.FileNotFoundException)
+        catch (FileNotFoundException)
         {
             data = new PlayerData { };
         }

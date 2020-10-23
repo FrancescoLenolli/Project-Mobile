@@ -25,16 +25,22 @@ public class PanelShipsUpgrades : MonoBehaviour
     private List<ShipUpgradeData> listShipUpgrades = new List<ShipUpgradeData>();
 
     public ShipUpgrade prefabShipUpgrade = null;
+    public Transform panelShipUpgrades = null;
 
 
     private void Awake()
     {
-        listShipUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades"));
+        //listShipUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades"));
     }
 
     public void UnlockUpgrades(ShipData.ShipType type)
     {
         List<ShipUpgradeData> listUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades").Where(x => x.shipType == type));
 
+        foreach(ShipUpgradeData shipUpgradeData in listUpgrades)
+        {
+            ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
+            newUpgrade.SetValues(shipUpgradeData);
+        }
     }
 }

@@ -9,6 +9,7 @@ public delegate void BoughtShip(string shipName); // [!!!] Use event to unlock u
 public delegate void UnlockShip(int index); // Unlock new ship when certain requirements are met.
 public delegate void UpdateShipQuantity(int index, int quantity); // Update this ship's quantity when buying one or more.
 public delegate void UnlockUpgrades(ShipData.ShipType myType);
+public delegate void UpdateIdleGain();
 
 public class Ship : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Ship : MonoBehaviour
     public event UnlockShip eventUnlockShip;
     public event UpdateShipQuantity eventUpdateShipQuantity;
     public event UnlockUpgrades eventUnlockUpgrades;
+    public event UpdateIdleGain eventUpdateIdleGain;
 
     private CurrencyManager currencyManager = null;
     private CanvasBottom canvasBottom = null;
@@ -24,11 +26,13 @@ public class Ship : MonoBehaviour
     private int cost = 0;
     private int currencyGain = 0;
     private int currencyGainMultiplier = 0;
+    // How much currency does this ship gain every second.
+    private int idleGain = 0;
     // CurrencyGain increased if more X units are bought.
     private int additionalCurrencyGain = 0;
     private int quantityMultiplier = 0;
     // CurrencyGain is increased by this percentage when buying upgrades.
-    private int productionMultiplier = 1;
+    private int productionMultiplier = 0;
 
     [HideInInspector] public ShipData shipData = null;
     public int quantity = 0;
@@ -62,7 +66,8 @@ public class Ship : MonoBehaviour
         canvasBottom.UpdateModifier += UpdateModifier;
         eventUnlockShip += canvasBottom.panelShips.AddNewShip;
         eventUpdateShipQuantity += canvasBottom.panelShips.UpdateQuantityAt;
-        //eventUnlockUpgrades += canvasBottom.panelShipsUpgrades
+        eventUnlockUpgrades += canvasBottom.panelShipsUpgrades.UnlockUpgrades;
+        eventUpdateIdleGain += UpdateIdleGain;
 
         shipData = newShipData;
         quantity = newQuantity;
@@ -83,8 +88,6 @@ public class Ship : MonoBehaviour
         textQuantityMultiplier.text = $"{quantityMultiplier}";
         textCurrencyGain.text = $"{currencyGain * quantity}/s";
         textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
-
-        currencyManager.IncreaseCurrencyIdleGain(currencyGain * quantity + ((currencyGain * productionMultiplier) / 100));
     }
 
     // Update Values when the Player change the quantity of ships to buy.
@@ -94,11 +97,12 @@ public class Ship : MonoBehaviour
         cost = shipData.cost * quantityMultiplier;
         currencyGain = shipData.currencyGain;
         additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;
+        UpdateIdleGain();
 
         textCost.text = $"{cost}";
         textQuantity.text = $"{quantity}";
         textQuantityMultiplier.text = $"{quantityMultiplier}";
-        textCurrencyGain.text = $"{currencyGain * quantity + ((currencyGain * productionMultiplier) / 100)}/s";
+        textCurrencyGain.text = $"{ReturnIdleGain()}/s";
         textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
     }
 
@@ -117,8 +121,8 @@ public class Ship : MonoBehaviour
                 eventUnlockUpgrades?.Invoke(shipType);
             }
 
-            quantity += multiplier;
-            currencyManager.IncreaseCurrencyIdleGain(currencyGain * multiplier + ((currencyGain * productionMultiplier) / 100));
+            // Recalculate IdleGain according to new Quantity.
+            UpdateIdleGainForQuantity(multiplier);
             UpdateValues();
             UpdateQuantity(shipData.index, quantity);
 
@@ -135,11 +139,26 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void UpdateProductionMultiplier(int multiplier)
+    public void UpdateIdleGain(int multiplier)
     {
-        currencyManager.DecreaseCurrencyIdleGain(currencyGain * quantity + ((currencyGain * productionMultiplier) / 100));
+        currencyManager.DecreaseCurrencyIdleGain(idleGain);
+
         productionMultiplier += multiplier;
-        currencyManager.IncreaseCurrencyIdleGain(currencyGain * quantity + ((currencyGain * productionMultiplier) / 100));
+        eventUpdateIdleGain?.Invoke();
+
+        currencyManager.IncreaseCurrencyIdleGain(idleGain);
+
+        UpdateValues();
+    }
+
+    public void UpdateIdleGainForQuantity(int additionalQuantity)
+    {
+        currencyManager.DecreaseCurrencyIdleGain(idleGain);
+
+        quantity += additionalQuantity;
+        eventUpdateIdleGain?.Invoke();
+
+        currencyManager.IncreaseCurrencyIdleGain(idleGain);
     }
 
     private void UpdateModifier(int newModifierValue)
@@ -158,6 +177,18 @@ public class Ship : MonoBehaviour
     private void UpdateQuantity(int index, int quantity)
     {
         eventUpdateShipQuantity?.Invoke(index, quantity);
+    }
+
+    // Recalculate the idleGain of this Ship;
+    private void UpdateIdleGain()
+    {
+        idleGain = currencyGain * quantity + ((currencyGain * quantity * productionMultiplier) / 100);
+    }
+
+    private int ReturnIdleGain()
+    {
+        idleGain = currencyGain * quantity + ((currencyGain * quantity * productionMultiplier) / 100);
+        return idleGain;
     }
 
 }

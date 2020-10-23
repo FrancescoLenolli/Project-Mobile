@@ -117,7 +117,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8866492521963945071}
         m_MethodName: Buy
         m_Mode: 1
         m_Arguments:
@@ -483,10 +483,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab55d1217399fc94090ae472b8e59e4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shipUpgradeData: {fileID: 0}
-  myShip: {fileID: 0}
-  productionMultiplier: 0
-  cost: 0
   isOwned: 0
   imageIcon: {fileID: 6044852134777817897}
   textName: {fileID: 6044852134806287586}

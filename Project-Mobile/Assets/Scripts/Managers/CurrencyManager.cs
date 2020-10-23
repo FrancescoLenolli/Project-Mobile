@@ -102,7 +102,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     /// <param name="value"></param>
     public void DecreaseCurrencyIdleGain(int value)
     {
-        currencyIdleGain += value;
+        currencyIdleGain -= value;
     }
 
     /// <summary>
@@ -170,6 +170,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         while (currency < long.MaxValue)
         {
             AddIdleCurrency();
+            Debug.Log(currencyIdleGain * modifierIdleGain);
             yield return new WaitForSeconds(1);
         }
     }
@@ -190,7 +191,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         UpdateCurrencyText?.Invoke(currency);
 
-        Debug.Log($"Background Idle Gain is {backgroundIdleGain}");
+        //Debug.Log($"Background Idle Gain is {backgroundIdleGain}");
 
         yield return new WaitForEndOfFrame();
     }

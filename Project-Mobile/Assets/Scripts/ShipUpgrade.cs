@@ -2,13 +2,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+public delegate void BoughtUpgrade(int currencyGainModifier);
 public class ShipUpgrade : MonoBehaviour
 {
+    public event BoughtUpgrade eventBoughtUpgrade;
+
     private ShipUpgradeData shipUpgradeData = null;
     private Ship myShip = null;
     private int productionMultiplier = 0;
     private int cost = 0;
-    CurrencyManager currencyManager;
+    private CurrencyManager currencyManager;
 
     // Was this Upgrade already bought?
     [HideInInspector] public bool isOwned = false;
@@ -29,34 +32,43 @@ public class ShipUpgrade : MonoBehaviour
         buttonBuy.interactable = currencyManager.currency >= cost ? true : false;
     }
 
-    private void SetValues(ShipUpgradeData newData)
+    public void SetValues(ShipUpgradeData newData)
     {
         shipUpgradeData = newData;
 
         // [!!!] UIManager with reference to CanvasBottom?
         myShip = FindObjectOfType<CanvasBottom>().panelShips.ReturnShipOfType(shipUpgradeData.shipType);
 
+        eventBoughtUpgrade += myShip.UpdateIdleGain;
+
+        cost = shipUpgradeData.cost;
+        productionMultiplier = shipUpgradeData.productionMultiplier;
+
         imageIcon.sprite = shipUpgradeData.upgradeSprite;
         textName.text = shipUpgradeData.upgradeName;
-        textProductionMultiplier.text = shipUpgradeData.productionMultiplier.ToString();
-        cost = shipUpgradeData.cost;
+        textProductionMultiplier.text = productionMultiplier.ToString();
         textCost.text = cost.ToString();
         buttonBuy = GetComponentInChildren<Button>();
     }
 
     public void Buy()
     {
-        if (CurrencyManager.Instance.currency >= cost)
+        if (!isOwned)
         {
-            buttonBuy.interactable = false;
-            myShip.UpdateProductionMultiplier(productionMultiplier);
-            isOwned = true;
+            if (currencyManager.currency >= cost)
+            {
+                currencyManager.currency -= cost;
 
-            // Make Sound
-        }
-        else
-        {
-            // Make Another Sound
+                buttonBuy.interactable = false;
+                eventBoughtUpgrade?.Invoke(productionMultiplier);
+                isOwned = true;
+
+                // Make Sound
+            }
+            else
+            {
+                // Make Another Sound
+            }
         }
     }
 }

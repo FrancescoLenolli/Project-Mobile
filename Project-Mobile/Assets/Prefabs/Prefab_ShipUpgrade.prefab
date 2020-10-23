@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3259970952831658344}
+  - component: {fileID: 5545074355310525485}
   m_Layer: 5
   m_Name: Prefab_ShipUpgrade
   m_TagString: Untagged
@@ -41,6 +42,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1080, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5545074355310525485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3259970952831658351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab55d1217399fc94090ae472b8e59e4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOwned: 0
+  imageIcon: {fileID: 3259970952836145291}
+  textName: {fileID: 3259970952841240384}
+  textProductionMultiplier: {fileID: 3259970953825483940}
+  textCost: {fileID: 3259970953701009744}
+  buttonBuy: {fileID: 8634770262192362956}
 --- !u!1 &3259970952836145289
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +788,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 5545074355310525485}
         m_MethodName: Buy
         m_Mode: 1
         m_Arguments:
