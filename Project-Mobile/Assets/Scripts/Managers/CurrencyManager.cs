@@ -170,7 +170,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         while (currency < long.MaxValue)
         {
             AddIdleCurrency();
-            Debug.Log(currencyIdleGain * modifierIdleGain);
+            Debug.Log($"Idle Gain is {currencyIdleGain * modifierIdleGain}");
             yield return new WaitForSeconds(1);
         }
     }

@@ -85,6 +85,12 @@ public class GameManager : Singleton<GameManager>
         Save();
     }
 
+    public void SaveUpgradesUnlocked(List<UpgradeInfo> newList)
+    {
+        playerData.playerUpgrades = newList;
+        Save();
+    }
+
     // Convert data to JSON, then save it.
     public void Save()
     {

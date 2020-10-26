@@ -2,10 +2,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public delegate void BoughtUpgrade(int currencyGainModifier);
+public delegate void BoughtUpgrade(int myCurrencyGainModifier);
+public delegate void ChangeOwnedStatus(ShipUpgradeData myData);
 public class ShipUpgrade : MonoBehaviour
 {
     public event BoughtUpgrade eventBoughtUpgrade;
+    public event ChangeOwnedStatus eventChangeOwnedStatus;
 
     private ShipUpgradeData shipUpgradeData = null;
     private Ship myShip = null;
@@ -32,14 +34,16 @@ public class ShipUpgrade : MonoBehaviour
         buttonBuy.interactable = currencyManager.currency >= cost ? true : false;
     }
 
-    public void SetValues(ShipUpgradeData newData)
+    public void SetValues(ShipUpgradeData newData, PanelShipsUpgrades newPanel)
     {
         shipUpgradeData = newData;
+        PanelShipsUpgrades panelShipsUpgrades = newPanel;
 
         // [!!!] UIManager with reference to CanvasBottom?
         myShip = FindObjectOfType<CanvasBottom>().panelShips.ReturnShipOfType(shipUpgradeData.shipType);
 
         eventBoughtUpgrade += myShip.UpdateIdleGain;
+        eventChangeOwnedStatus += panelShipsUpgrades.SetOwnedStatus;
 
         cost = shipUpgradeData.cost;
         productionMultiplier = shipUpgradeData.productionMultiplier;
@@ -59,11 +63,15 @@ public class ShipUpgrade : MonoBehaviour
             {
                 currencyManager.currency -= cost;
 
-                buttonBuy.interactable = false;
                 eventBoughtUpgrade?.Invoke(productionMultiplier);
+                eventChangeOwnedStatus?.Invoke(shipUpgradeData);
                 isOwned = true;
 
+                buttonBuy.interactable = false;
+
                 // Make Sound
+
+                Destroy(gameObject);
             }
             else
             {

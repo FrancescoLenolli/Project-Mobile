@@ -23,14 +23,39 @@ public struct UpgradeInfo
 public class PanelShipsUpgrades : MonoBehaviour
 {
     private List<ShipUpgradeData> listShipUpgrades = new List<ShipUpgradeData>();
+    private List<UpgradeInfo> listUpgradesUnlocked = new List<UpgradeInfo>();
 
     public ShipUpgrade prefabShipUpgrade = null;
     public Transform panelShipUpgrades = null;
 
-
-    private void Awake()
+    private void Start()
     {
-        //listShipUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades"));
+        listUpgradesUnlocked = GameManager.Instance.playerData.playerUpgrades;
+        //InitUpgrades();
+    }
+
+    public void InitUpgrades()
+    {
+        List<ShipUpgradeData> listUpgradesOwned = new List<ShipUpgradeData>();
+        List<ShipUpgradeData> listUpgradesNotOwned = new List<ShipUpgradeData>();
+
+        foreach(UpgradeInfo upgradeInfo in listUpgradesUnlocked)
+        {
+            if(upgradeInfo.isOwned)
+            {
+                listUpgradesOwned.Add(upgradeInfo.upgradeData);
+            }
+            else
+            {
+                listUpgradesNotOwned.Add(upgradeInfo.upgradeData);
+            }
+        }
+
+        foreach(ShipUpgradeData upgradeData in listUpgradesNotOwned)
+        {
+            ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
+            newUpgrade.SetValues(upgradeData, this);
+        }
     }
 
     public void UnlockUpgrades(ShipData.ShipType type)
@@ -40,7 +65,24 @@ public class PanelShipsUpgrades : MonoBehaviour
         foreach(ShipUpgradeData shipUpgradeData in listUpgrades)
         {
             ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
-            newUpgrade.SetValues(shipUpgradeData);
+            newUpgrade.SetValues(shipUpgradeData, this);
+
+            UpgradeInfo upgradeBought = new UpgradeInfo(shipUpgradeData, false);
+            listUpgradesUnlocked.Add(upgradeBought);
+
+            GameManager.Instance.SaveUpgradesUnlocked(listUpgradesUnlocked);
+        }
+    }
+
+    public void SetOwnedStatus(ShipUpgradeData upgradeData)
+    {
+        for(int i = 0; i < listUpgradesUnlocked.Count; ++i)
+        {
+            if(listUpgradesUnlocked[i].upgradeData == upgradeData)
+            {
+                listUpgradesUnlocked[i] = new UpgradeInfo(listUpgradesUnlocked[i].upgradeData, true);
+                break;
+            }
         }
     }
 }

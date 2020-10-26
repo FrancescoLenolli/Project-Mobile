@@ -12,10 +12,15 @@ public struct ShipInfo
     /// How many ships of the same type the player has.
     public int shipQuantity;
 
-    public ShipInfo(ShipData data, int quantity)
+    // Modifier expressed in percentage, modify the Ship's Currency Gain.
+    public int shipIdleGainModifier;
+
+    public ShipInfo(ShipData data, int quantity, int multiplier)
     {
         shipData = data;
         shipQuantity = quantity;
+        shipIdleGainModifier = multiplier;
+
     }
 }
 
@@ -38,6 +43,8 @@ public class PanelShips : MonoBehaviour
 
         listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
         InitShips();
+        // [!!!] I need to Instantiate the Ships before the Upgrades.
+        FindObjectOfType<CanvasBottom>().panelShipsUpgrades.InitUpgrades();
     }
 
     // ONLY AT LAUNCH.
@@ -51,7 +58,7 @@ public class PanelShips : MonoBehaviour
         // If the player has no ships, add the first type to list.
         if (listShipInfos.Count == 0)
         {
-            ShipInfo firstShipInfo = new ShipInfo(listShipDatas[0], 0);
+            ShipInfo firstShipInfo = new ShipInfo(listShipDatas[0], 0, 0);
             listShipInfos.Add(firstShipInfo);
         }
 
@@ -60,9 +67,10 @@ public class PanelShips : MonoBehaviour
         {
             ShipData newData = listShipInfos[i].shipData;
             int newQuantity = listShipInfos[i].shipQuantity;
+            int newMultiplier = listShipInfos[i].shipIdleGainModifier;
 
             Ship newShip = Instantiate(prefabShip, containerShips, false);
-            newShip.SetValues(newData, newQuantity); // [!!!] ADD "this" to SetValues parameters to pass reference to PanelShips.
+            newShip.SetValues(newData, newQuantity, newMultiplier); // [!!!] ADD "this" to SetValues parameters to pass reference to PanelShips.
 
             listShips.Add(newShip);
 
@@ -72,6 +80,26 @@ public class PanelShips : MonoBehaviour
             containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
             newShip.transform.SetSiblingIndex(0);
         }
+    }
+
+    // Instantiate new ship, add it to listShips and listShipInfos, and update shipsContainer.
+    private void InitAndAddShip(ShipData newShipData)
+    {
+        // Starting quantity and multiplier will always be 0.
+        int newQuantity = 0;
+        int newMultiplier = 0;
+
+        Ship newShip = Instantiate(prefabShip, containerShips, false);
+        newShip.SetValues(newShipData, newQuantity, newMultiplier);
+        ShipInfo newShipInfo = new ShipInfo(newShipData, newQuantity, newMultiplier);
+
+        listShips.Add(newShip);
+        listShipInfos.Add(newShipInfo);
+
+        // [!!!] This can also be useful in Upgrades Panel, consider making it a function in UIManager.
+        RectTransform containerShipsRect = containerShips.GetComponent<RectTransform>();
+        containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
+        newShip.transform.SetSiblingIndex(0);
     }
 
     // If conditions are met, unlock new type of ship.
@@ -89,30 +117,16 @@ public class PanelShips : MonoBehaviour
 
         gameManager.SaveShipInfos(listShipInfos);
     }
-    
-    // Instantiate new ship, add it to listShips and listShipInfos, and update shipsContainer.
-    private void InitAndAddShip(ShipData newShipData)
-    {
-        // Starting quantity will always be 0.
-        int newQuantity = 0;
-
-        Ship newShip = Instantiate(prefabShip, containerShips, false);
-        newShip.SetValues(newShipData, newQuantity);
-        ShipInfo newShipInfo = new ShipInfo(newShipData, newQuantity);
-
-        listShips.Add(newShip);
-        listShipInfos.Add(newShipInfo);
-
-        // [!!!] This can also be useful in Upgrades Panel, consider making it a function in UIManager.
-        RectTransform containerShipsRect = containerShips.GetComponent<RectTransform>();
-        containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
-        newShip.transform.SetSiblingIndex(0);
-    }
 
     // Update quantity of specific ship.
     public void UpdateQuantityAt(int shipIndex, int newQuantity)
     {
-        listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipData, newQuantity);
+        listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipData, newQuantity, listShipInfos[shipIndex].shipIdleGainModifier);
+    }
+
+    public void UpdateModifierAt(int shipIndex, int newModifier)
+    {
+        listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipData, listShipInfos[shipIndex].shipQuantity, newModifier);
     }
 
     public Ship ReturnShipOfType(ShipData.ShipType type)

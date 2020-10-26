@@ -5,10 +5,10 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public delegate void UpdateModifier(int newModifierValue);
+public delegate void UpdateQuantityModifier(int newModifierValue);
 public class CanvasBottom : MonoBehaviour
 {
-    public event UpdateModifier UpdateModifier;
+    public event UpdateQuantityModifier eventUpdateQuantityModifier;
 
     private CurrencyManager currencyManager = null;
     private UIManager uiManager = null;
@@ -35,7 +35,7 @@ public class CanvasBottom : MonoBehaviour
     {
         modifierValue = currencyManager.CycleModifierAndReturnValue();
         textModifier.text = $"{modifierValue}";
-        UpdateModifier?.Invoke(modifierValue);
+        eventUpdateQuantityModifier?.Invoke(modifierValue);
     }
 
     // Open one panel and close the others.

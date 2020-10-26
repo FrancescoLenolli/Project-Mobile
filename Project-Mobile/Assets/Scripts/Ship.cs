@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public delegate void BoughtShip(string shipName); // [!!!] Use event to unlock upgrades.
 public delegate void UnlockShip(int index); // Unlock new ship when certain requirements are met.
 public delegate void UpdateShipQuantity(int index, int quantity); // Update this ship's quantity when buying one or more.
+public delegate void UpdateShipModifier(int index, int modifier); // Update this ship's idleGain modifier when buying an upgrade.
 public delegate void UnlockUpgrades(ShipData.ShipType myType);
 public delegate void UpdateIdleGain();
 
@@ -16,6 +17,7 @@ public class Ship : MonoBehaviour
     public event BoughtShip eventBoughtShip;
     public event UnlockShip eventUnlockShip;
     public event UpdateShipQuantity eventUpdateShipQuantity;
+    public event UpdateShipModifier eventUpdateShipModifier;
     public event UnlockUpgrades eventUnlockUpgrades;
     public event UpdateIdleGain eventUpdateIdleGain;
 
@@ -56,22 +58,24 @@ public class Ship : MonoBehaviour
 
     }
 
-    public void SetValues(ShipData newShipData, int newQuantity)
+    public void SetValues(ShipData newShipData, int newQuantity, int newMultiplier)
     {
         currencyManager = CurrencyManager.Instance;
 
         //[!!!] Use a UI Manager to pass reference to canvasBottom?
         canvasBottom = FindObjectOfType<CanvasBottom>();
 
-        canvasBottom.UpdateModifier += UpdateModifier;
+        canvasBottom.eventUpdateQuantityModifier += UpdateQuantityModifier;
         eventUnlockShip += canvasBottom.panelShips.AddNewShip;
         eventUpdateShipQuantity += canvasBottom.panelShips.UpdateQuantityAt;
+        eventUpdateShipModifier += canvasBottom.panelShips.UpdateModifierAt;
         eventUnlockUpgrades += canvasBottom.panelShipsUpgrades.UnlockUpgrades;
         eventUpdateIdleGain += UpdateIdleGain;
 
         shipData = newShipData;
         quantity = newQuantity;
         shipType = newShipData.shipType;
+        productionMultiplier = newMultiplier;
 
         quantityMultiplier = currencyManager.ReturnModifierValue();
         cost = shipData.cost * quantityMultiplier;
@@ -81,12 +85,14 @@ public class Ship : MonoBehaviour
         currencyGainMultiplier = shipData.currencyGainMultiplier / 100;
         additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;
 
+        currencyManager.IncreaseCurrencyIdleGain(ReturnIdleGain());
+
         textName.text = shipData.shipName;
         imageIcon.sprite = shipData.shipIcon;
         textCost.text = $"{cost}";
         textQuantity.text = $"{quantity}";
         textQuantityMultiplier.text = $"{quantityMultiplier}";
-        textCurrencyGain.text = $"{currencyGain * quantity}/s";
+        textCurrencyGain.text = $"{ReturnIdleGain()}/s";
         textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
     }
 
@@ -149,6 +155,7 @@ public class Ship : MonoBehaviour
         currencyManager.IncreaseCurrencyIdleGain(idleGain);
 
         UpdateValues();
+        UpdateMultiplier(shipData.index, productionMultiplier);
     }
 
     public void UpdateIdleGainForQuantity(int additionalQuantity)
@@ -161,7 +168,8 @@ public class Ship : MonoBehaviour
         currencyManager.IncreaseCurrencyIdleGain(idleGain);
     }
 
-    private void UpdateModifier(int newModifierValue)
+    // Update how many units of this ship the player want to buy
+    private void UpdateQuantityModifier(int newModifierValue)
     {
         quantityMultiplier = newModifierValue;
         UpdateValues();
@@ -177,6 +185,11 @@ public class Ship : MonoBehaviour
     private void UpdateQuantity(int index, int quantity)
     {
         eventUpdateShipQuantity?.Invoke(index, quantity);
+    }
+
+    private void UpdateMultiplier(int index, int multiplier)
+    {
+        eventUpdateShipModifier?.Invoke(index, multiplier);
     }
 
     // Recalculate the idleGain of this Ship;
