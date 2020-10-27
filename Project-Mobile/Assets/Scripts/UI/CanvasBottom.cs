@@ -6,9 +6,11 @@ using TMPro;
 using UnityEngine;
 
 public delegate void UpdateQuantityModifier(int newModifierValue);
+public delegate void ShowOptionsPanel();
 public class CanvasBottom : MonoBehaviour
 {
     public event UpdateQuantityModifier eventUpdateQuantityModifier;
+    public event ShowOptionsPanel eventShowOptionsPanel;
 
     private CurrencyManager currencyManager = null;
     private UIManager uiManager = null;
@@ -52,5 +54,10 @@ public class CanvasBottom : MonoBehaviour
                 uiManager.ChangeStatus(listPanels[i], false);
             }
         }
+    }
+
+    public void ShowOptionsPanel()
+    {
+        eventShowOptionsPanel?.Invoke();
     }
 }

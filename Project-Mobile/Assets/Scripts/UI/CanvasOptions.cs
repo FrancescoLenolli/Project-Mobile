@@ -16,15 +16,21 @@ public class CanvasOptions : UIElement
     private bool isVolumeSFXOn = true;
     private bool isVolumeMusicOn = true;
     private bool isVibrationOn = true;
+    private Vector3 originalPosition = Vector3.zero;
 
     public List<Sprite> listSpritesToggle = new List<Sprite>();
     public Image imageSFX = null;
     public Image imageMusic = null;
     public Image imageVibration = null;
+    [Min(0)]
+    public Transform panelOptions = null;
+    public Transform newPosition = null;
+    public float animationTime = 0;
 
     private void Start()
     {
         gameManager = GameManager.Instance;
+        originalPosition = panelOptions.transform.localPosition;
 
         eventChangeVolumeSFX += StatusSFX;
         eventChangeVolumeSFX += gameManager.SetVolumeSFX;
@@ -40,6 +46,15 @@ public class CanvasOptions : UIElement
         imageSFX.sprite = ChangeSprite(isVolumeSFXOn);
         imageMusic.sprite = ChangeSprite(isVolumeMusicOn);
         imageVibration.sprite = ChangeSprite(isVibrationOn);
+
+        FindObjectOfType<CanvasBottom>().eventShowOptionsPanel += MoveToPosition;
+    }
+
+    private void MoveToPosition()
+    {
+        Vector3 targetPosition = panelOptions.localPosition == newPosition.localPosition ? originalPosition : newPosition.localPosition;
+
+        UIManager.Instance.MoveObject(animationTime, panelOptions, targetPosition);
     }
 
     public void ToggleSFX()
