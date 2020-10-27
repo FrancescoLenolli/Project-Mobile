@@ -25,9 +25,11 @@ public class Ship : MonoBehaviour
     private CanvasBottom canvasBottom = null;
 
     private ShipData.ShipType shipType = ShipData.ShipType.Patrol;
+    private int index = 0;
+    private string shipName = "";
+    private Sprite shipIcon = null;
     private int cost = 0;
     private int currencyGain = 0;
-    private int currencyGainMultiplier = 0;
     // How much currency does this ship gain every second.
     private int idleGain = 0;
     // CurrencyGain increased if more X units are bought.
@@ -35,6 +37,7 @@ public class Ship : MonoBehaviour
     private int quantityMultiplier = 0;
     // CurrencyGain is increased by this percentage when buying upgrades.
     private int productionMultiplier = 0;
+    private int qtToUnlockNextShip = 0;
 
     [HideInInspector] public ShipData shipData = null;
     public int quantity = 0;
@@ -61,7 +64,6 @@ public class Ship : MonoBehaviour
     public void SetValues(ShipData newShipData, int newQuantity, int newMultiplier)
     {
         currencyManager = CurrencyManager.Instance;
-
         //[!!!] Use a UI Manager to pass reference to canvasBottom?
         canvasBottom = FindObjectOfType<CanvasBottom>();
 
@@ -72,23 +74,26 @@ public class Ship : MonoBehaviour
         eventUnlockUpgrades += canvasBottom.panelShipsUpgrades.UnlockUpgrades;
         eventUpdateIdleGain += UpdateIdleGain;
 
-        shipData = newShipData;
         quantity = newQuantity;
-        shipType = newShipData.shipType;
         productionMultiplier = newMultiplier;
-
-        quantityMultiplier = currencyManager.ReturnModifierValue();
-        cost = shipData.cost * quantityMultiplier;
+        shipData = newShipData;
+        shipType = shipData.shipType;
+        index = shipData.index;
+        shipName = shipData.shipName;
+        shipIcon = shipData.shipIcon;
+        cost = shipData.cost;
         currencyGain = shipData.currencyGain;
+        qtToUnlockNextShip = shipData.qtToUnlockNextShip;
 
-        // Multiplier expressed in percentages.
-        currencyGainMultiplier = shipData.currencyGainMultiplier / 100;
-        additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;
+        quantityMultiplier = currencyManager.GetQuantityToBuy();
+        cost *= quantityMultiplier;
+
+        additionalCurrencyGain = currencyGain * quantityMultiplier;
 
         currencyManager.IncreaseCurrencyIdleGain(ReturnIdleGain());
 
-        textName.text = shipData.shipName;
-        imageIcon.sprite = shipData.shipIcon;
+        textName.text = shipName;
+        imageIcon.sprite = shipIcon;
         textCost.text = $"{cost}";
         textQuantity.text = $"{quantity}";
         textQuantityMultiplier.text = $"{quantityMultiplier}";
@@ -99,10 +104,11 @@ public class Ship : MonoBehaviour
     // Update Values when the Player change the quantity of ships to buy.
     public void UpdateValues()
     {
-        quantityMultiplier = currencyManager.ReturnModifierValue();
+        quantityMultiplier = currencyManager.GetQuantityToBuy();
         cost = shipData.cost * quantityMultiplier;
         currencyGain = shipData.currencyGain;
         additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;
+
         UpdateIdleGain();
 
         textCost.text = $"{cost}";
@@ -130,12 +136,12 @@ public class Ship : MonoBehaviour
             // Recalculate IdleGain according to new Quantity.
             UpdateIdleGainForQuantity(multiplier);
             UpdateValues();
-            UpdateQuantity(shipData.index, quantity);
+            UpdateQuantity(index, quantity);
 
             // Notify UpgradesPanel.
-            eventBoughtShip?.Invoke(shipData.shipName);
+            eventBoughtShip?.Invoke(shipName);
 
-            if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip(shipData.index);
+            if (quantity >= shipData.qtToUnlockNextShip) UnlockNextShip(index);
 
             // Play sound.
         }

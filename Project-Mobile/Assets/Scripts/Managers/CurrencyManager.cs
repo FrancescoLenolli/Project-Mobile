@@ -136,7 +136,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     // Return the current Quantity of Ships that will be bought.
     // Ships can be bought one at a time, or more.
-    public int ReturnModifierValue()
+    public int GetQuantityToBuy()
     {
         return listQuantityModifier[currentQuantityModifierIndex];
     }

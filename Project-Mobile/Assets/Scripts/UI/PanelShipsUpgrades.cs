@@ -22,8 +22,9 @@ public struct UpgradeInfo
 
 public class PanelShipsUpgrades : MonoBehaviour
 {
-    private List<ShipUpgradeData> listShipUpgrades = new List<ShipUpgradeData>();
     private List<UpgradeInfo> listUpgradesUnlocked = new List<UpgradeInfo>();
+    // Have a List in GameManager to save the bought upgrades, maybe add a panel to see all of them?
+    private List<ShipUpgradeData> listUpgradesBought = new List<ShipUpgradeData>();
 
     public ShipUpgrade prefabShipUpgrade = null;
     public Transform panelShipUpgrades = null;
@@ -31,7 +32,6 @@ public class PanelShipsUpgrades : MonoBehaviour
     private void Start()
     {
         listUpgradesUnlocked = GameManager.Instance.playerData.playerUpgrades;
-        //InitUpgrades();
     }
 
     public void InitUpgrades()
@@ -74,6 +74,7 @@ public class PanelShipsUpgrades : MonoBehaviour
         }
     }
 
+    // When buying an Upgrade, set his status to Owned so it won't be displayed in the Upgrades Panel when reloading the game.
     public void SetOwnedStatus(ShipUpgradeData upgradeData)
     {
         for(int i = 0; i < listUpgradesUnlocked.Count; ++i)
@@ -81,6 +82,8 @@ public class PanelShipsUpgrades : MonoBehaviour
             if(listUpgradesUnlocked[i].upgradeData == upgradeData)
             {
                 listUpgradesUnlocked[i] = new UpgradeInfo(listUpgradesUnlocked[i].upgradeData, true);
+                listUpgradesBought.Add(upgradeData);
+
                 break;
             }
         }

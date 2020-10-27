@@ -2,11 +2,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+public delegate void ChangeVolumeSFX(bool isOn);
+public delegate void ChangeVolumeMusic(bool isOn);
+public delegate void ChangeVibration(bool isOn);
+
 public class CanvasOptions : UIElement
 {
+    public event ChangeVolumeSFX eventChangeVolumeSFX;
+    public event ChangeVolumeMusic eventChangeVolumeMusic;
+    public event ChangeVibration eventChangeVibration;
+
     private GameManager gameManager = null;
-    private bool isSFXVolumeOn = true;
-    private bool isMusicVolumeOn = true;
+    private bool isVolumeSFXOn = true;
+    private bool isVolumeMusicOn = true;
     private bool isVibrationOn = true;
 
     public List<Sprite> listSpritesToggle = new List<Sprite>();
@@ -18,34 +26,38 @@ public class CanvasOptions : UIElement
     {
         gameManager = GameManager.Instance;
 
-        isSFXVolumeOn = gameManager.isSFXVolumeOn;
-        isMusicVolumeOn = gameManager.isMusicVolumeOn;
+        eventChangeVolumeSFX += StatusSFX;
+        eventChangeVolumeSFX += gameManager.SetVolumeSFX;
+        eventChangeVolumeMusic += StatusMusic;
+        eventChangeVolumeMusic += gameManager.SetVolumeMusic;
+        eventChangeVibration += StatusVibration;
+        eventChangeVibration += gameManager.SetVibration;
+
+        isVolumeSFXOn = gameManager.isVolumeSFXOn;
+        isVolumeMusicOn = gameManager.isVolumeMusicOn;
         isVibrationOn = gameManager.isVibrationOn;
 
-        imageSFX.sprite = ChangeSprite(isSFXVolumeOn);
-        imageMusic.sprite = ChangeSprite(isMusicVolumeOn);
+        imageSFX.sprite = ChangeSprite(isVolumeSFXOn);
+        imageMusic.sprite = ChangeSprite(isVolumeMusicOn);
         imageVibration.sprite = ChangeSprite(isVibrationOn);
     }
 
     public void ToggleSFX()
     {
-        isSFXVolumeOn = !isSFXVolumeOn;
-        gameManager.isSFXVolumeOn = isSFXVolumeOn;
-        StatusSFX(isSFXVolumeOn);
+        isVolumeSFXOn = !isVolumeSFXOn;
+        eventChangeVolumeSFX?.Invoke(isVolumeSFXOn);
     }
 
     public void ToggleMusic()
     {
-        isMusicVolumeOn = !isMusicVolumeOn;
-        gameManager.isMusicVolumeOn = isSFXVolumeOn;
-        StatusMusic(isMusicVolumeOn);
+        isVolumeMusicOn = !isVolumeMusicOn;
+        eventChangeVolumeMusic(isVolumeMusicOn);
     }
 
     public void ToggleVibration()
     {
         isVibrationOn = !isVibrationOn;
-        gameManager.isVibrationOn = isVibrationOn;
-        StatusVibration(isVibrationOn);
+        eventChangeVibration?.Invoke(isVibrationOn);
     }
 
     private void StatusSFX(bool isOn)

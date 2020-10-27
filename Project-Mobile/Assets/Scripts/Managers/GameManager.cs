@@ -18,8 +18,8 @@ public class GameManager : Singleton<GameManager>
     public string playerName = "";
     [Min(0)]
     public long playerCurrency = 0;
-    public bool isSFXVolumeOn = true;
-    public bool isMusicVolumeOn = true;
+    public bool isVolumeSFXOn = true;
+    public bool isVolumeMusicOn = true;
     public bool isVibrationOn = true;
 
     [Header("DEBUG")]
@@ -32,8 +32,8 @@ public class GameManager : Singleton<GameManager>
         // Load Saved data.
         playerData = Load();
 
-        isSFXVolumeOn = playerData.SFXVolume;
-        isMusicVolumeOn = playerData.MusicVolume;
+        isVolumeSFXOn = playerData.SFXVolume;
+        isVolumeMusicOn = playerData.MusicVolume;
         isVibrationOn = playerData.VibrationOn;
 
         lastPlayedTime = Convert.ToDateTime(playerData.lastPlayedTime);
@@ -60,15 +60,30 @@ public class GameManager : Singleton<GameManager>
         return seconds;
     }
 
-    #region Save System
+    public void SetVolumeSFX(bool isOn)
+    {
+        isVolumeSFXOn = isOn;
+    }
+
+    public void SetVolumeMusic(bool isOn)
+    {
+        isVolumeMusicOn = isOn;
+    }
+
+    public void SetVibration(bool isOn)
+    {
+        isVibrationOn = isOn;
+    }
+
+    /***********  SAVE SYSTEM  ***********/
 
     // Store new data in case something changed during the game.
     public void SaveCurrentData()
     {
         playerData.playerName = playerName;
         playerData.playerCurrency = CurrencyManager.Instance.currency;
-        playerData.SFXVolume = isSFXVolumeOn;
-        playerData.MusicVolume = isMusicVolumeOn;
+        playerData.SFXVolume = isVolumeSFXOn;
+        playerData.MusicVolume = isVolumeMusicOn;
         playerData.VibrationOn = isVibrationOn;
         //playerData.playerShips = ShipsManager.Instance.listShipInfos;
         playerData.lastCurrencyIdleGain = CurrencyManager.Instance.currencyIdleGain;
@@ -152,5 +167,4 @@ public class GameManager : Singleton<GameManager>
     {
         return Application.persistentDataPath + "/" + fileName;
     }
-    #endregion
 }
