@@ -24,10 +24,15 @@ public struct ShipInfo
     }
 }
 
+public delegate void ShipsInitialised();
+
 public class PanelShips : MonoBehaviour
 {
+    public event ShipsInitialised eventShipsInitialised;
+
     private GameManager gameManager = null;
     private UIManager uiManager = null;
+    private CanvasBottom canvasBottom = null;
     private List<ShipData> listShipDatas = new List<ShipData>();
     private List<Ship> listShips = new List<Ship>();
 
@@ -40,11 +45,12 @@ public class PanelShips : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         uiManager = UIManager.Instance;
-
+        canvasBottom = FindObjectOfType<CanvasBottom>();
         listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
+
+        eventShipsInitialised += canvasBottom.panelShipsUpgrades.InitUpgrades;
+
         InitShips();
-        // [!!!] I need to Instantiate the Ships before the Upgrades.
-        FindObjectOfType<CanvasBottom>().panelShipsUpgrades.InitUpgrades();
     }
 
     // ONLY AT LAUNCH.
@@ -80,6 +86,9 @@ public class PanelShips : MonoBehaviour
             containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
             newShip.transform.SetSiblingIndex(0);
         }
+
+        // Send a message when every Ship owned by the Player has been spawned.
+        eventShipsInitialised?.Invoke();
     }
 
     // Instantiate new ship, add it to listShips and listShipInfos, and update shipsContainer.

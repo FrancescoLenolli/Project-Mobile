@@ -9,7 +9,8 @@ public class PlayerData
     public bool MusicVolume = true;
     public bool VibrationOn = true;
     public List<ShipInfo> playerShips = new List<ShipInfo>();
-    public List<UpgradeInfo> playerUpgrades = new List<UpgradeInfo>();
+    public List<UpgradeInfo> playerUpgradesUnlocked = new List<UpgradeInfo>();
+    public List<UpgradeInfo> playerUpgradesBought = new List<UpgradeInfo>();
     public int lastCurrencyIdleGain = 0;
     public int lastModifierIdleGain = 0;
     public string lastPlayedTime;

@@ -22,16 +22,18 @@ public struct UpgradeInfo
 
 public class PanelShipsUpgrades : MonoBehaviour
 {
+    private GameManager gameManager = null;
     private List<UpgradeInfo> listUpgradesUnlocked = new List<UpgradeInfo>();
     // Have a List in GameManager to save the bought upgrades, maybe add a panel to see all of them?
-    private List<ShipUpgradeData> listUpgradesBought = new List<ShipUpgradeData>();
+    private List<UpgradeInfo> listUpgradesBought = new List<UpgradeInfo>();
 
     public ShipUpgrade prefabShipUpgrade = null;
     public Transform panelShipUpgrades = null;
 
     private void Start()
     {
-        listUpgradesUnlocked = GameManager.Instance.playerData.playerUpgrades;
+        gameManager = GameManager.Instance;
+        listUpgradesUnlocked = gameManager.playerData.playerUpgradesUnlocked;
     }
 
     public void InitUpgrades()
@@ -70,19 +72,21 @@ public class PanelShipsUpgrades : MonoBehaviour
             UpgradeInfo upgradeBought = new UpgradeInfo(shipUpgradeData, false);
             listUpgradesUnlocked.Add(upgradeBought);
 
-            GameManager.Instance.SaveUpgradesUnlocked(listUpgradesUnlocked);
+            gameManager.SaveUpgradesUnlocked(listUpgradesUnlocked);
         }
     }
 
     // When buying an Upgrade, set his status to Owned so it won't be displayed in the Upgrades Panel when reloading the game.
     public void SetOwnedStatus(ShipUpgradeData upgradeData)
     {
-        for(int i = 0; i < listUpgradesUnlocked.Count; ++i)
+        for (int i = 0; i < listUpgradesUnlocked.Count; ++i)
         {
-            if(listUpgradesUnlocked[i].upgradeData == upgradeData)
+            if (listUpgradesUnlocked[i].upgradeData == upgradeData)
             {
                 listUpgradesUnlocked[i] = new UpgradeInfo(listUpgradesUnlocked[i].upgradeData, true);
-                listUpgradesBought.Add(upgradeData);
+                listUpgradesBought.Add(listUpgradesUnlocked[i]);
+
+                gameManager.SaveUpgradesBought(listUpgradesBought);
 
                 break;
             }

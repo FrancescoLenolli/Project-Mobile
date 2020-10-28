@@ -126,6 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textCurrency: {fileID: 4791931958784527884}
   spriteCurrency: {fileID: 7293050689660269883}
+  movementSpeed: 15
 --- !u!225 &5598361450973633205
 CanvasGroup:
   m_ObjectHideFlags: 0

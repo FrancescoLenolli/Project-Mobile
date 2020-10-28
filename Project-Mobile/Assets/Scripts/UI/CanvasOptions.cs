@@ -77,13 +77,11 @@ public class CanvasOptions : UIElement
 
     private void StatusSFX(bool isOn)
     {
-        // SFXVolume = isOn? 1 : 0;
         imageSFX.sprite = ChangeSprite(isOn);
     }
 
     private void StatusMusic(bool isOn)
     {
-        //MusicVolume = isOn ? 1 : 0;
         imageMusic.sprite = ChangeSprite(isOn);
     }
 

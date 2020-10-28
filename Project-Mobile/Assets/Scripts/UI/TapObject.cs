@@ -6,13 +6,17 @@ using UnityEngine.UI;
 
 public class TapObject : MonoBehaviour
 {
+    private CanvasGroup canvasGroup = null;
     public TextMeshProUGUI textCurrency = null;
     public Image spriteCurrency = null;
+    [Min(0)]
+    public float movementSpeed = 1;
 
     void Start()
     {
+        canvasGroup = GetComponent<CanvasGroup>();
         // [!!!] Enumerator StartAnimation
-        StartCoroutine(DelayDestroy(2));
+        StartCoroutine(Animation());
     }
 
     public void SetValues(int currency /* Sprite currencySprite */)
@@ -20,9 +24,24 @@ public class TapObject : MonoBehaviour
         textCurrency.text = $"+{currency}";
     }
 
-    IEnumerator DelayDestroy(int newDelay)
+    IEnumerator DelayDestroy(int delay)
     {
-        yield return new WaitForSeconds(newDelay);
+        yield return new WaitForSeconds(delay);
         Destroy(gameObject);
+    }
+
+    IEnumerator Animation()
+    {
+        while (canvasGroup.alpha > 0)
+        {
+            transform.Translate(Vector3.up * Time.deltaTime * (movementSpeed * 10), Space.Self);
+
+            canvasGroup.alpha -= Time.deltaTime;
+
+            yield return null;
+        }
+
+        Destroy(gameObject);
+        yield return null;
     }
 }

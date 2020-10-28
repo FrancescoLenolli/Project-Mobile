@@ -102,7 +102,13 @@ public class GameManager : Singleton<GameManager>
 
     public void SaveUpgradesUnlocked(List<UpgradeInfo> newList)
     {
-        playerData.playerUpgrades = newList;
+        playerData.playerUpgradesUnlocked = newList;
+        Save();
+    }
+
+    public void SaveUpgradesBought(List<UpgradeInfo> newList)
+    {
+        playerData.playerUpgradesBought = newList;
         Save();
     }
 
