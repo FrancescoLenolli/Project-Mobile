@@ -6,15 +6,19 @@ using UnityEngine.EventSystems;
 
 public delegate void EventUpdateCurrencyText(long value);
 public delegate void EventSpawnTextAtInputPosition(Vector3 position);
+public delegate void EventBackgroundGainCalculated(int currency);
+
 public class CurrencyManager : Singleton<CurrencyManager>
 {
-    public event EventUpdateCurrencyText UpdateCurrencyText;
-    public event EventSpawnTextAtInputPosition SpawnTextAtInputPosition;
+    public event EventUpdateCurrencyText eventUpdateCurrencyText;
+    public event EventSpawnTextAtInputPosition eventSpawnTextAtInputPosition;
+    public event EventBackgroundGainCalculated eventBackgroundGainCalculated;
 
     private GameManager gameManager = null;
     private int currentQuantityModifierIndex = 0;
     private int lastCurrencyIdleGain = 0;
     private int lastModifierIdleGain = 0;
+    private int backgroundGain = 0;
     private EventSystem eventSystem;
 
     public long currency = 0;
@@ -51,7 +55,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 //... Spawn object in the tap position, and add currency based on the active modifiers.
-                SpawnTextAtInputPosition?.Invoke(Input.mousePosition);
+                eventSpawnTextAtInputPosition?.Invoke(Input.mousePosition);
                 AddActiveCurrency();
             }
         }
@@ -71,7 +75,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
                 currency = long.MaxValue;
             }
 
-            UpdateCurrencyText?.Invoke(currency);
+            eventUpdateCurrencyText?.Invoke(currency);
         }
     }
 
@@ -154,7 +158,30 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     public void GetIdleGainSinceLastGame(int seconds)
     {
-        StartCoroutine(CalculateIdleGainSinceLastGame(seconds));
+        backgroundGain = (lastCurrencyIdleGain * lastModifierIdleGain) * seconds;
+        eventBackgroundGainCalculated?.Invoke(backgroundGain);
+    }
+
+    public void AddBackgroundGain(CanvasBackgroundGain.CollectionType collectionType)
+    {
+        switch(collectionType)
+        {
+            case CanvasBackgroundGain.CollectionType.Normal:
+                currency += backgroundGain;
+                break;
+            case CanvasBackgroundGain.CollectionType.DoublePremium:
+                currency += backgroundGain * 2;
+                // Decrease premiumCurrency;
+                break;
+            case CanvasBackgroundGain.CollectionType.DoubleAd:
+                currency += backgroundGain * 2;
+                break;
+            default:
+                Debug.Log("Something Wrong when collecting Background Gain");
+                break;
+        }
+
+        eventUpdateCurrencyText?.Invoke(currency);
     }
 
     public void MultiplyIdleGain(float multiplierTime)
@@ -180,19 +207,5 @@ public class CurrencyManager : Singleton<CurrencyManager>
         modifierIdleGain *= 2;
         yield return new WaitForSeconds(time);
         modifierIdleGain /= 2;
-    }
-
-    IEnumerator CalculateIdleGainSinceLastGame(int seconds)
-    {
-        yield return new WaitForSeconds(2);
-
-        int backgroundIdleGain = (lastCurrencyIdleGain * lastModifierIdleGain) * seconds;
-        currency += backgroundIdleGain;
-
-        UpdateCurrencyText?.Invoke(currency);
-
-        //Debug.Log($"Background Idle Gain is {backgroundIdleGain}");
-
-        yield return new WaitForEndOfFrame();
     }
 }

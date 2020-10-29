@@ -43,7 +43,7 @@ public class GameManager : Singleton<GameManager>
     {
         eventSendTimeFromLastGame += CurrencyManager.Instance.GetIdleGainSinceLastGame;
 
-        eventSendTimeFromLastGame?.Invoke(GetSecondsFromLastGame());
+        StartCoroutine(WaitToCalculateOfflineGain(3));
     }
 
     private void OnApplicationQuit()
@@ -74,6 +74,17 @@ public class GameManager : Singleton<GameManager>
     {
         isVibrationOn = isOn;
     }
+
+    private IEnumerator WaitToCalculateOfflineGain(float waitTime)
+    {
+        int secondsFromLastGame = GetSecondsFromLastGame();
+
+        yield return new WaitForSeconds(waitTime);
+        eventSendTimeFromLastGame?.Invoke(secondsFromLastGame);
+
+        yield return null;
+    }
+
 
     /***********  SAVE SYSTEM  ***********/
 
@@ -173,4 +184,6 @@ public class GameManager : Singleton<GameManager>
     {
         return Application.persistentDataPath + "/" + fileName;
     }
+
+    /*********************************************************+*/
 }

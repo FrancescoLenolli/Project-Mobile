@@ -21,8 +21,8 @@ public class CanvasMain : MonoBehaviour
     {
         textCurrency.text = CurrencyManager.Instance.currency.ToString();
 
-        currencyManager.UpdateCurrencyText += UpdateCurrencyText;
-        currencyManager.SpawnTextAtInputPosition += InstantiatePrefab;
+        currencyManager.eventUpdateCurrencyText += UpdateCurrencyText;
+        currencyManager.eventSpawnTextAtInputPosition += InstantiatePrefab;
     }
 
     private void UpdateCurrencyText(long value)
