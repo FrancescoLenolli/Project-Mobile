@@ -2,17 +2,85 @@
 using UnityEngine;
 using UnityEngine.Advertisements;
 
-public class AdsManager : MonoBehaviour
+public delegate void AdBaseCurrency();
+public delegate void AdPremiumCurrency();
+public delegate void AdDoubleEarnings();
+public class AdsManager : MonoBehaviour, IUnityAdsListener
 {
-    IEnumerator Start()
+    public event AdBaseCurrency EventAdBaseCurrency;
+    public event AdPremiumCurrency EventAdPremiumCurrency;
+    public event AdDoubleEarnings EventAdDoubleEarnings;
+
+    public enum AdType { BaseCurrency, PremiumCurrency, DoubleEarnings }
+
+    private string placement = "rewardedVideo";
+    private AdType watchedAdType;
+
+    private void Start()
+    {
+        Advertisement.AddListener(this);
+        EventAdBaseCurrency += CurrencyManager.Instance.AddCurrencyAdvertisement;
+    }
+
+    private void SetAdWatchedType(AdType newType)
+    {
+        watchedAdType = newType;
+    }
+
+    public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
+    {
+        if (showResult == ShowResult.Finished)
+        {
+            switch (watchedAdType)
+            {
+                case AdType.BaseCurrency:
+                    EventAdBaseCurrency?.Invoke();
+                    break;
+
+                case AdType.PremiumCurrency:
+                    EventAdPremiumCurrency?.Invoke();
+                    break;
+
+                case AdType.DoubleEarnings:
+                    EventAdDoubleEarnings?.Invoke();
+                    break;
+
+                default:
+                    Debug.Log("Something went wrong with Ad rewards.");
+                    break;
+            }
+        }
+    }
+
+    public void OnUnityAdsReady(string placementId)
+    {
+    }
+
+    public void OnUnityAdsDidStart(string placementId)
+    {
+    }
+
+    public void OnUnityAdsDidError(string message)
+    {
+    }
+
+    // Subscribe this to some UI Event
+    public void ShowAd(AdType adType)
+    {
+        StartCoroutine(StartAd(adType));
+    }
+
+    private IEnumerator StartAd(AdType adType)
     {
         Advertisement.Initialize("3884039", true);
 
-        while (!Advertisement.IsReady())
+        while (!Advertisement.IsReady(placement))
         {
             yield return null;
         }
 
-        Advertisement.Show(); // Neat.
+        SetAdWatchedType(adType);
+
+        Advertisement.Show(placement);
     }
 }

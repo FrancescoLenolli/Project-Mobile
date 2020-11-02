@@ -21,6 +21,8 @@ public class GameManager : Singleton<GameManager>
     public bool isVolumeSFXOn = true;
     public bool isVolumeMusicOn = true;
     public bool isVibrationOn = true;
+    [Space(10)]
+    public AdsManager adsManager = null;
 
     [Header("DEBUG")]
     public bool canSave = true;

@@ -8,9 +8,9 @@ public delegate void ChangeVibration(bool isOn);
 
 public class CanvasOptions : UIElement
 {
-    public event ChangeVolumeSFX eventChangeVolumeSFX;
-    public event ChangeVolumeMusic eventChangeVolumeMusic;
-    public event ChangeVibration eventChangeVibration;
+    public event ChangeVolumeSFX EventChangeVolumeSFX;
+    public event ChangeVolumeMusic EventChangeVolumeMusic;
+    public event ChangeVibration EventChangeVibration;
 
     private GameManager gameManager = null;
     private bool isVolumeSFXOn = true;
@@ -32,12 +32,12 @@ public class CanvasOptions : UIElement
         gameManager = GameManager.Instance;
         originalPosition = panelOptions.transform.localPosition;
 
-        eventChangeVolumeSFX += StatusSFX;
-        eventChangeVolumeSFX += gameManager.SetVolumeSFX;
-        eventChangeVolumeMusic += StatusMusic;
-        eventChangeVolumeMusic += gameManager.SetVolumeMusic;
-        eventChangeVibration += StatusVibration;
-        eventChangeVibration += gameManager.SetVibration;
+        EventChangeVolumeSFX += StatusSFX;
+        EventChangeVolumeSFX += gameManager.SetVolumeSFX;
+        EventChangeVolumeMusic += StatusMusic;
+        EventChangeVolumeMusic += gameManager.SetVolumeMusic;
+        EventChangeVibration += StatusVibration;
+        EventChangeVibration += gameManager.SetVibration;
 
         isVolumeSFXOn = gameManager.isVolumeSFXOn;
         isVolumeMusicOn = gameManager.isVolumeMusicOn;
@@ -54,25 +54,25 @@ public class CanvasOptions : UIElement
     {
         Vector3 targetPosition = panelOptions.localPosition == newPosition.localPosition ? originalPosition : newPosition.localPosition;
 
-        UIManager.Instance.MoveObject(animationTime, panelOptions, targetPosition);
+        UIManager.Instance.MoveRectObject(animationTime, panelOptions, targetPosition);
     }
 
     public void ToggleSFX()
     {
         isVolumeSFXOn = !isVolumeSFXOn;
-        eventChangeVolumeSFX?.Invoke(isVolumeSFXOn);
+        EventChangeVolumeSFX?.Invoke(isVolumeSFXOn);
     }
 
     public void ToggleMusic()
     {
         isVolumeMusicOn = !isVolumeMusicOn;
-        eventChangeVolumeMusic(isVolumeMusicOn);
+        EventChangeVolumeMusic(isVolumeMusicOn);
     }
 
     public void ToggleVibration()
     {
         isVibrationOn = !isVibrationOn;
-        eventChangeVibration?.Invoke(isVibrationOn);
+        EventChangeVibration?.Invoke(isVibrationOn);
     }
 
     private void StatusSFX(bool isOn)

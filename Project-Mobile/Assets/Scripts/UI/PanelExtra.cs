@@ -7,11 +7,15 @@ public delegate void AddCurrency(long value);
 public delegate void AddPremiumCurrency(int value);
 public delegate void MultiplyIdleGain(float time);
 
+public delegate void WatchAd(AdsManager.AdType adType);
+
 public class PanelExtra : MonoBehaviour
 {
-    public event AddCurrency eventAddCurrency;
-    public event AddPremiumCurrency eventAddPremiumCurrency;
-    public event MultiplyIdleGain eventMultiplyIdleGain;
+    public event AddCurrency EventAddCurrency;
+    public event AddPremiumCurrency EventAddPremiumCurrency;
+    public event MultiplyIdleGain EventMultiplyIdleGain;
+
+    public event WatchAd EventWatchCurrencyAd;
 
     private CurrencyManager currencyManager = null;
 
@@ -27,25 +31,34 @@ public class PanelExtra : MonoBehaviour
     {
         currencyManager = CurrencyManager.Instance;
 
-        eventAddCurrency += currencyManager.AddMoreCurrency;
-        eventAddPremiumCurrency += currencyManager.AddMorePremiumCurrency;
-        eventMultiplyIdleGain += currencyManager.MultiplyIdleGain;
+        EventAddCurrency += currencyManager.AddMoreCurrency;
+        EventAddPremiumCurrency += currencyManager.AddMorePremiumCurrency;
+        EventMultiplyIdleGain += currencyManager.MultiplyIdleGain;
+
+        EventWatchCurrencyAd += GameManager.Instance.adsManager.ShowAd;
     }
 
     // Add a percentage of currency to the actual value.
-    public void AddCurrency()
+    public void WatchAdCurrency()
     {
-        long value = Mathf.RoundToInt((currencyManager.currency * extraCurrencyPercentage) / 100);
-        eventAddCurrency?.Invoke(value);
+        EventWatchCurrencyAd?.Invoke(AdsManager.AdType.BaseCurrency);
+    }
 
-        StartCoroutine(ButtonCooldown(listButtons[0]));
+    public void WatchAdPremium()
+    {
+        EventWatchCurrencyAd?.Invoke(AdsManager.AdType.PremiumCurrency);
+    }
+
+    public void WatchAdDoubleEarnings()
+    {
+        EventWatchCurrencyAd?.Invoke(AdsManager.AdType.DoubleEarnings);
     }
 
     // Add a percentage of premiumCurrency to the actual value.
     public void AddPremiumCurrency()
     {
         int value = Mathf.RoundToInt((currencyManager.premiumCurrency * extraCurrencyPercentage) / 100);
-        eventAddPremiumCurrency?.Invoke(value);
+        EventAddPremiumCurrency?.Invoke(value);
         StartCoroutine(ButtonCooldown(listButtons[1]));
     }
 
@@ -53,7 +66,7 @@ public class PanelExtra : MonoBehaviour
     // CURRENTLY HARD CODED TO DOUBLE IT.
     public void MultiplyIdleGain()
     {
-        eventMultiplyIdleGain?.Invoke(multiplierTime);
+        EventMultiplyIdleGain?.Invoke(multiplierTime);
         StartCoroutine(ButtonCooldown(listButtons[2], multiplierTime));
     }
 

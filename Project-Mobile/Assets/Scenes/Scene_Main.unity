@@ -938,7 +938,7 @@ GameObject:
   - component: {fileID: 215150739}
   - component: {fileID: 215150741}
   m_Layer: 5
-  m_Name: Panel_BackgroundGain
+  m_Name: Panel_OfflineEarning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4366,7 +4366,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2065786912}
-        m_MethodName: AddPremiumCurrency
+        m_MethodName: WatchAdPremium
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4439,7 +4439,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2065786912}
-        m_MethodName: MultiplyIdleGain
+        m_MethodName: WatchAdDoubleEarnings
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5625,7 +5625,7 @@ GameObject:
   - component: {fileID: 1654456465}
   - component: {fileID: 1654456469}
   m_Layer: 5
-  m_Name: Canvas_BackgroundGain
+  m_Name: Canvas_OfflineEarning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5724,7 +5724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee8dfe7369af7e2409b12721016868be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelOfflineGain: {fileID: 215150738}
+  panelOfflineEarning: {fileID: 215150738}
   newPosition: {fileID: 713264306}
   animationTime: 0.2
   listPanelButtons:
@@ -6358,6 +6358,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2006981167 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1376736384890412709, guid: 233070f8bc3d08f48a069039ee5c077c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1756084651285695611}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51873e13f70bdfa428788764eb4ef45a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2025124990
 GameObject:
   m_ObjectHideFlags: 0
@@ -6750,6 +6762,11 @@ PrefabInstance:
       propertyPath: currencyActiveGain
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 8945366616641214000, guid: bc54ac72d05f2a44d8cc87e821d69fe7,
+        type: 3}
+      propertyPath: adGainPercentage
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 8945366616641214001, guid: bc54ac72d05f2a44d8cc87e821d69fe7,
         type: 3}
       propertyPath: m_Name
@@ -6980,7 +6997,7 @@ GameObject:
   - component: {fileID: 2124300441}
   - component: {fileID: 2124300443}
   m_Layer: 5
-  m_Name: Button_MoreCurrency
+  m_Name: Button_Ad_MoreCurrency
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7086,7 +7103,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2065786912}
-        m_MethodName: AddCurrency
+        m_MethodName: WatchAdCurrency
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7258,6 +7275,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
+        type: 3}
+      propertyPath: canSave
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
+        type: 3}
+      propertyPath: adsManager
+      value: 
+      objectReference: {fileID: 2006981167}
     - target: {fileID: 1756084651835812196, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
       propertyPath: m_LocalPosition.x

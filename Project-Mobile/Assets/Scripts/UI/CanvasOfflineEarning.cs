@@ -4,20 +4,20 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public delegate void CollectBackgroundGain(CanvasBackgroundGain.CollectionType collectionType);
+public delegate void CollectOfflineEarning(CanvasOfflineEarning.CollectionType collectionType);
 
-public class CanvasBackgroundGain : MonoBehaviour
+public class CanvasOfflineEarning : MonoBehaviour
 {
     public enum CollectionType { Normal, DoubleAd, DoublePremium }
 
-    public event CollectBackgroundGain eventCollectBackgroundGain;
+    public event CollectOfflineEarning EventCollectOfflineEarning;
 
     private UIManager uIManager = null;
     private Vector3 originalPosition = Vector3.zero;
     private CanvasGroup panelCanvasGroup = null;
-    private int backgroundGain = 0;
+    private int offlineEarning = 0;
 
-    public Transform panelOfflineGain = null;
+    public Transform panelOfflineEarning = null;
     public Transform newPosition = null;
     [Min(0)]
     public float animationTime = 0;
@@ -27,23 +27,23 @@ public class CanvasBackgroundGain : MonoBehaviour
     private void Start()
     {
         uIManager = UIManager.Instance;
-        panelCanvasGroup = panelOfflineGain.GetComponent<CanvasGroup>();
-        originalPosition = panelOfflineGain.localPosition;
+        panelCanvasGroup = panelOfflineEarning.GetComponent<CanvasGroup>();
+        originalPosition = panelOfflineEarning.localPosition;
 
-        eventCollectBackgroundGain += CurrencyManager.Instance.AddBackgroundGain;
-        CurrencyManager.Instance.eventBackgroundGainCalculated += ShowPanel;
+        EventCollectOfflineEarning += CurrencyManager.Instance.AddBackgroundGain;
+        CurrencyManager.Instance.EventBackgroundGainCalculated += ShowPanel;
     }
 
     private void HidePanel()
     {
-        uIManager.MoveObjectAndFade(animationTime, panelOfflineGain, originalPosition, UIManager.Fade.Out);
+        uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, originalPosition, UIManager.Fade.Out);
     }
 
     public void ShowPanel(int currencyGained)
     {
-        uIManager.MoveObjectAndFade(animationTime, panelOfflineGain, newPosition.localPosition, UIManager.Fade.In);
-        backgroundGain = currencyGained;
-        textCurrencyGained.text = backgroundGain.ToString();
+        uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
+        offlineEarning = currencyGained;
+        textCurrencyGained.text = offlineEarning.ToString();
     }
 
     public void DoubleWithPremium()
@@ -63,7 +63,7 @@ public class CanvasBackgroundGain : MonoBehaviour
 
     private void InvokeEventAndClose(CollectionType collectionType)
     {
-        eventCollectBackgroundGain?.Invoke(collectionType);
+        EventCollectOfflineEarning?.Invoke(collectionType);
         HidePanel();
         uIManager.ChangeAllButtons(listPanelButtons, false);
     }

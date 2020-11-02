@@ -10,9 +10,9 @@ public delegate void EventBackgroundGainCalculated(int currency);
 
 public class CurrencyManager : Singleton<CurrencyManager>
 {
-    public event EventUpdateCurrencyText eventUpdateCurrencyText;
-    public event EventSpawnTextAtInputPosition eventSpawnTextAtInputPosition;
-    public event EventBackgroundGainCalculated eventBackgroundGainCalculated;
+    public event EventUpdateCurrencyText EventUpdateCurrencyText;
+    public event EventSpawnTextAtInputPosition EventSpawnTextAtInputPosition;
+    public event EventBackgroundGainCalculated EventBackgroundGainCalculated;
 
     private GameManager gameManager = null;
     private int currentQuantityModifierIndex = 0;
@@ -23,10 +23,16 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     public long currency = 0;
     public int premiumCurrency = 0;
+    [Space(10)]
     public int currencyIdleGain = 0;
     public int currencyActiveGain = 0;
     public int modifierIdleGain = 1;
     public int modifierActiveGain = 1;
+    [Space(10)]
+    [Min(1)]
+    [Tooltip("When watching an Ad, gain this percentage of the current Currency")]
+    public int adGainPercentage = 1;
+    [Space(10)]
     public List<int> listQuantityModifier = new List<int>();
 
     private new void Awake()
@@ -55,7 +61,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 //... Spawn object in the tap position, and add currency based on the active modifiers.
-                eventSpawnTextAtInputPosition?.Invoke(Input.mousePosition);
+                EventSpawnTextAtInputPosition?.Invoke(Input.mousePosition);
                 AddActiveCurrency();
             }
         }
@@ -75,7 +81,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
                 currency = long.MaxValue;
             }
 
-            eventUpdateCurrencyText?.Invoke(currency);
+            EventUpdateCurrencyText?.Invoke(currency);
         }
     }
 
@@ -145,6 +151,14 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return listQuantityModifier[currentQuantityModifierIndex];
     }
 
+    // Add a percentage of the current Currency to the total Currency after watching an Ad.
+    public void AddCurrencyAdvertisement()
+    {
+        long bonus = (currency * adGainPercentage) / 100;
+        AddCurrency(bonus);
+        Debug.Log($"Ad Watched, gained {bonus}");
+    }
+
     /************** Functions called from PanelExtra ***********/
     public void AddMoreCurrency(long currency)
     {
@@ -159,21 +173,21 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public void GetIdleGainSinceLastGame(int seconds)
     {
         backgroundGain = (lastCurrencyIdleGain * lastModifierIdleGain) * seconds;
-        eventBackgroundGainCalculated?.Invoke(backgroundGain);
+        EventBackgroundGainCalculated?.Invoke(backgroundGain);
     }
 
-    public void AddBackgroundGain(CanvasBackgroundGain.CollectionType collectionType)
+    public void AddBackgroundGain(CanvasOfflineEarning.CollectionType collectionType)
     {
         switch(collectionType)
         {
-            case CanvasBackgroundGain.CollectionType.Normal:
+            case CanvasOfflineEarning.CollectionType.Normal:
                 currency += backgroundGain;
                 break;
-            case CanvasBackgroundGain.CollectionType.DoublePremium:
+            case CanvasOfflineEarning.CollectionType.DoublePremium:
                 currency += backgroundGain * 2;
                 // Decrease premiumCurrency;
                 break;
-            case CanvasBackgroundGain.CollectionType.DoubleAd:
+            case CanvasOfflineEarning.CollectionType.DoubleAd:
                 currency += backgroundGain * 2;
                 break;
             default:
@@ -181,7 +195,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
                 break;
         }
 
-        eventUpdateCurrencyText?.Invoke(currency);
+        EventUpdateCurrencyText?.Invoke(currency);
     }
 
     public void MultiplyIdleGain(float multiplierTime)
