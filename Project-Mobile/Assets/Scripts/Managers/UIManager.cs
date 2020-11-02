@@ -154,7 +154,7 @@ public class UIManager : Singleton<UIManager>
             yield return null;
         }
         animatedObject.localPosition = newPosition;
-        ChangeStatus(canvasGroup, fadeType == Fade.In ? true : false);
+        ChangeStatus(canvasGroup, fadeType == Fade.In);
 
         canAnimate = true;
 
@@ -179,7 +179,7 @@ public class UIManager : Singleton<UIManager>
             yield return null;
         }
         animatedObject.localPosition = endPosition;
-        ChangeStatus(canvasGroup, fadeType == Fade.In ? true : false);
+        ChangeStatus(canvasGroup, fadeType == Fade.In);
 
         canAnimate = true;
 
