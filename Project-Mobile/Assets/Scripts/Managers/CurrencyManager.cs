@@ -5,12 +5,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public delegate void EventUpdateCurrencyText(long value);
+public delegate void EventUpdateIdleGainText(int value);
+public delegate void EventUpdateDoubleGainTimeText(int value);
 public delegate void EventSpawnTextAtInputPosition(Vector3 position);
 public delegate void EventBackgroundGainCalculated(int currency);
 
 public class CurrencyManager : Singleton<CurrencyManager>
 {
     public event EventUpdateCurrencyText EventUpdateCurrencyText;
+    public event EventUpdateIdleGainText EventUpdateIdleGainText;
+    public event EventUpdateDoubleGainTimeText EventUpdateDoubleGainTimeText;
     public event EventSpawnTextAtInputPosition EventSpawnTextAtInputPosition;
     public event EventBackgroundGainCalculated EventBackgroundGainCalculated;
 
@@ -19,7 +23,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private int lastCurrencyIdleGain = 0;
     private int lastModifierIdleGain = 0;
     private int backgroundGain = 0;
-    private EventSystem eventSystem;
+    private bool isIdleGainDoubled = false;
+    private int timeIdleGainDoubled = 0;
 
     public long currency = 0;
     public int premiumCurrency = 0;
@@ -32,6 +37,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
     [Min(1)]
     [Tooltip("When watching an Ad, gain this percentage of the current Currency")]
     public int adGainPercentage = 1;
+    [Min(60)]
+    [Tooltip("When watching an Ad, double the IdleGain by n Time expressed in seconds")]
+    public int adDoubleGainTime = 1;
     [Space(10)]
     public List<int> listQuantityModifier = new List<int>();
 
@@ -42,7 +50,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private void Start()
     {
-        eventSystem = EventSystem.current;
         gameManager = GameManager.Instance;
 
         currency = gameManager.playerData.playerCurrency;
@@ -55,7 +62,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private void Update()
     {
         // If player tap on the screen...
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             //... and if it's not tapping over a UI Object...
             if (!EventSystem.current.IsPointerOverGameObject())
@@ -70,8 +77,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
     // Add currency to the current player currency.
     private void AddCurrency(long value, int modifier = 1)
     {
-        // Currenct idle gain.
-        currency += (value * modifier);
+        // Currenct idle gain. Double it if the Player watches Ad that doubles IdleGain.
+        currency += isIdleGainDoubled ? (value * modifier) * 2 : (value * modifier);
 
         // If idle gain is 0, there is no point in doing this operations.
         if (currency != 0)
@@ -95,6 +102,14 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private void AddIdleCurrency()
     {
         AddCurrency(currencyIdleGain, modifierIdleGain);
+    }
+
+    /// <summary>
+    /// Start coroutine that doubles the amount of Idle currency gained.
+    /// </summary>
+    private void EnableDoubleIdleGain()
+    {
+        StartCoroutine(DoubleIdleGain());
     }
 
     /// <summary>
@@ -159,6 +174,24 @@ public class CurrencyManager : Singleton<CurrencyManager>
         Debug.Log($"Ad Watched, gained {bonus}");
     }
 
+    /// <summary>
+    /// Add time in seconds to timer that double Idle currency gained.
+    /// Once the timer is at zero, Double Gain is disabled.
+    /// </summary>
+    /// <param name="moreTime"></param>
+    public void AddDoubleIdleGainTime()
+    {
+        if(timeIdleGainDoubled == 0)
+        {
+            timeIdleGainDoubled += adDoubleGainTime;
+            EnableDoubleIdleGain();
+        }
+        else
+        {
+            timeIdleGainDoubled += adDoubleGainTime;
+        }
+    }
+
     /************** Functions called from PanelExtra ***********/
     public void AddMoreCurrency(long currency)
     {
@@ -178,7 +211,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     public void AddBackgroundGain(CanvasOfflineEarning.CollectionType collectionType)
     {
-        switch(collectionType)
+        switch (collectionType)
         {
             case CanvasOfflineEarning.CollectionType.Normal:
                 currency += backgroundGain;
@@ -211,7 +244,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         while (currency < long.MaxValue)
         {
             AddIdleCurrency();
-            Debug.Log($"Idle Gain is {currencyIdleGain * modifierIdleGain}");
+            EventUpdateIdleGainText?.Invoke(currencyIdleGain * modifierIdleGain);
             yield return new WaitForSeconds(1);
         }
     }
@@ -221,5 +254,19 @@ public class CurrencyManager : Singleton<CurrencyManager>
         modifierIdleGain *= 2;
         yield return new WaitForSeconds(time);
         modifierIdleGain /= 2;
+    }
+
+    IEnumerator DoubleIdleGain()
+    {
+        isIdleGainDoubled = true;
+
+        while (timeIdleGainDoubled > 0)
+        {
+            yield return new WaitForSeconds(1);
+            --timeIdleGainDoubled;
+            EventUpdateDoubleGainTimeText?.Invoke(timeIdleGainDoubled);
+        }
+
+        isIdleGainDoubled = false;
     }
 }

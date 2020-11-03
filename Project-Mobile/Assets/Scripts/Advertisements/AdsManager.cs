@@ -20,6 +20,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     {
         Advertisement.AddListener(this);
         EventAdBaseCurrency += CurrencyManager.Instance.AddCurrencyAdvertisement;
+        EventAdDoubleEarnings += CurrencyManager.Instance.AddDoubleIdleGainTime;
     }
 
     private void SetAdWatchedType(AdType newType)
