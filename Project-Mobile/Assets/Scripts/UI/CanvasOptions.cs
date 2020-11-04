@@ -6,7 +6,7 @@ public delegate void ChangeVolumeSFX(bool isOn);
 public delegate void ChangeVolumeMusic(bool isOn);
 public delegate void ChangeVibration(bool isOn);
 
-public class CanvasOptions : UIElement
+public class CanvasOptions : MonoBehaviour
 {
     public event ChangeVolumeSFX EventChangeVolumeSFX;
     public event ChangeVolumeMusic EventChangeVolumeMusic;

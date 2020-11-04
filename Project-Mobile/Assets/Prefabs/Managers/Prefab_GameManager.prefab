@@ -52,7 +52,8 @@ MonoBehaviour:
   isVolumeSFXOn: 1
   isVolumeMusicOn: 1
   isVibrationOn: 1
-  canSave: 1
+  adsManager: {fileID: 1376736384890412709}
+  canSave: 0
 --- !u!1 &3845930959953032987
 GameObject:
   m_ObjectHideFlags: 0

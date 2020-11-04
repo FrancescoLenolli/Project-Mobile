@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Events;
 
 public delegate void SendTimeFromLastGame(int seconds);
 public class GameManager : Singleton<GameManager>
@@ -52,6 +51,15 @@ public class GameManager : Singleton<GameManager>
     {
         lastPlayedTime = DateTime.Now;
         SaveCurrentData();
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            lastPlayedTime = DateTime.Now;
+            SaveCurrentData();
+        }
     }
 
     private int GetSecondsFromLastGame()

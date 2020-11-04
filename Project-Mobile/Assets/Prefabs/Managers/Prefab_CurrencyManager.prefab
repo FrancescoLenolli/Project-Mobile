@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8945366616641214003}
   - component: {fileID: 8945366616641214000}
   m_Layer: 0
-  m_Name: CurrencyManager
+  m_Name: Prefab_CurrencyManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,8 +47,9 @@ MonoBehaviour:
   additiveSingleton: 0
   currency: 0
   currencyIdleGain: 0
-  currencyActiveGain: 10000
+  currencyActiveGain: 1000
   modifierIdleGain: 1
   modifierActiveGain: 1
+  adGainPercentage: 25
+  adDoubleGainTime: 1800
   listQuantityModifier: 010000000a00000064000000
-  currentModifierIndex: 0

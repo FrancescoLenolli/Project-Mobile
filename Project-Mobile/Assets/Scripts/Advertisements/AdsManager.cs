@@ -3,15 +3,13 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 
 public delegate void AdBaseCurrency();
-public delegate void AdPremiumCurrency();
 public delegate void AdDoubleEarnings();
 public class AdsManager : MonoBehaviour, IUnityAdsListener
 {
     public event AdBaseCurrency EventAdBaseCurrency;
-    public event AdPremiumCurrency EventAdPremiumCurrency;
     public event AdDoubleEarnings EventAdDoubleEarnings;
 
-    public enum AdType { BaseCurrency, PremiumCurrency, DoubleEarnings }
+    public enum AdType { BaseCurrency, DoubleEarnings }
 
     private string placement = "rewardedVideo";
     private AdType watchedAdType;
@@ -36,10 +34,6 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
             {
                 case AdType.BaseCurrency:
                     EventAdBaseCurrency?.Invoke();
-                    break;
-
-                case AdType.PremiumCurrency:
-                    EventAdPremiumCurrency?.Invoke();
                     break;
 
                 case AdType.DoubleEarnings:

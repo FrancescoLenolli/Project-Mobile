@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -27,7 +26,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private int timeIdleGainDoubled = 0;
 
     public long currency = 0;
-    public int premiumCurrency = 0;
     [Space(10)]
     public int currencyIdleGain = 0;
     public int currencyActiveGain = 0;
@@ -74,7 +72,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
         }
     }
 
-    // Add currency to the current player currency.
+
+    // Add currency to the Player's current currency value.
     private void AddCurrency(long value, int modifier = 1)
     {
         // Currenct idle gain. Double it if the Player watches Ad that doubles IdleGain.
@@ -88,9 +87,11 @@ public class CurrencyManager : Singleton<CurrencyManager>
                 currency = long.MaxValue;
             }
 
+            // Update UI to show the current Currency.
             EventUpdateCurrencyText?.Invoke(currency);
         }
     }
+
 
     // Add currency based on the ActiveGain and relative modifiers.
     private void AddActiveCurrency()
@@ -104,9 +105,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         AddCurrency(currencyIdleGain, modifierIdleGain);
     }
 
-    /// <summary>
-    /// Start coroutine that doubles the amount of Idle currency gained.
-    /// </summary>
+    // Start coroutine that doubles the amount of Idle currency gained.
     private void EnableDoubleIdleGain()
     {
         StartCoroutine(DoubleIdleGain());
@@ -139,17 +138,29 @@ public class CurrencyManager : Singleton<CurrencyManager>
         currencyActiveGain += value;
     }
 
+    /// <summary>
+    /// Add value to modifierIdleGain.
+    /// </summary>
+    /// <param name="value"></param>
     public void ChangeModifierIdleGain(int value)
     {
         modifierIdleGain += value;
     }
 
+    /// <summary>
+    /// Add value to modifierActiveGain.
+    /// </summary>
+    /// <param name="value"></param>
     public void ChangeModifierActiveGain(int value)
     {
         modifierActiveGain += value;
     }
 
-    // Change current quantity modifier.
+    /// <summary>
+    /// Change current quantity modifier.
+    /// Determines how many ships will be bought next.
+    /// </summary>
+    /// <returns></returns>
     public int CycleModifierAndReturnValue()
     {
         currentQuantityModifierIndex++;
@@ -159,14 +170,18 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     }
 
-    // Return the current Quantity of Ships that will be bought.
-    // Ships can be bought one at a time, or more.
+    /// <summary>
+    /// Return the current quantity of ships that will be bought.
+    /// </summary>
+    /// <returns></returns>
     public int GetQuantityToBuy()
     {
         return listQuantityModifier[currentQuantityModifierIndex];
     }
 
-    // Add a percentage of the current Currency to the total Currency after watching an Ad.
+    /// <summary>
+    /// Add a percentage of the current Currency to the total Currency after watching an Ad.
+    /// </summary>
     public void AddCurrencyAdvertisement()
     {
         long bonus = (currency * adGainPercentage) / 100;
@@ -181,89 +196,78 @@ public class CurrencyManager : Singleton<CurrencyManager>
     /// <param name="moreTime"></param>
     public void AddDoubleIdleGainTime()
     {
-        if(timeIdleGainDoubled == 0)
+        if (timeIdleGainDoubled == 0)
         {
+            // if time is set to 0, start doubling IdleGain....
             timeIdleGainDoubled += adDoubleGainTime;
             EnableDoubleIdleGain();
         }
         else
         {
+            //....if not, just add more time.
             timeIdleGainDoubled += adDoubleGainTime;
         }
     }
 
-    /************** Functions called from PanelExtra ***********/
-    public void AddMoreCurrency(long currency)
-    {
-        AddCurrency(currency);
-    }
-
-    public void AddMorePremiumCurrency(int premiumCurrency)
-    {
-        Debug.Log("TODO: Premium Currency");
-    }
-
+    /// <summary>
+    ///  Use values from last game to calculate how much currency was gained since then. 
+    /// </summary>
+    /// <param name="seconds"></param>
     public void GetIdleGainSinceLastGame(int seconds)
     {
         backgroundGain = (lastCurrencyIdleGain * lastModifierIdleGain) * seconds;
+
         EventBackgroundGainCalculated?.Invoke(backgroundGain);
     }
 
-    public void AddBackgroundGain(CanvasOfflineEarning.CollectionType collectionType)
+    /// <summary>
+    /// Add offline earnings to current Player's currency.
+    /// </summary>
+    /// <param name="collectionType"></param>
+    public void AddOfflineEarnings(CanvasOfflineEarning.CollectionType collectionType)
     {
+        // Player can simply collect offline earnings or double it by watching an ad.
         switch (collectionType)
         {
             case CanvasOfflineEarning.CollectionType.Normal:
                 currency += backgroundGain;
                 break;
-            case CanvasOfflineEarning.CollectionType.DoublePremium:
-                currency += backgroundGain * 2;
-                // Decrease premiumCurrency;
-                break;
+
             case CanvasOfflineEarning.CollectionType.DoubleAd:
                 currency += backgroundGain * 2;
                 break;
+
             default:
-                Debug.Log("Something Wrong when collecting Background Gain");
+                Debug.LogWarning("Currency Manager : Something wrong when collecting Offline Earnings");
                 break;
         }
 
         EventUpdateCurrencyText?.Invoke(currency);
     }
 
-    public void MultiplyIdleGain(float multiplierTime)
-    {
-        StartCoroutine(MultiplyIdleGainFor(multiplierTime));
-    }
-    /**********************************************************/
-
-
     // Add currency based on idle values every second.
-    IEnumerator UpdateCurrency()
+    private IEnumerator UpdateCurrency()
     {
         while (currency < long.MaxValue)
         {
             AddIdleCurrency();
+
             EventUpdateIdleGainText?.Invoke(currencyIdleGain * modifierIdleGain);
+
             yield return new WaitForSeconds(1);
         }
     }
 
-    IEnumerator MultiplyIdleGainFor(float time)
-    {
-        modifierIdleGain *= 2;
-        yield return new WaitForSeconds(time);
-        modifierIdleGain /= 2;
-    }
-
-    IEnumerator DoubleIdleGain()
+    private IEnumerator DoubleIdleGain()
     {
         isIdleGainDoubled = true;
 
         while (timeIdleGainDoubled > 0)
         {
             yield return new WaitForSeconds(1);
+
             --timeIdleGainDoubled;
+
             EventUpdateDoubleGainTimeText?.Invoke(timeIdleGainDoubled);
         }
 

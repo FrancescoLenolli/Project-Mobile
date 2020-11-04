@@ -27,11 +27,6 @@ public class PanelExtra : MonoBehaviour
         EventWatchCurrencyAd?.Invoke(AdsManager.AdType.BaseCurrency);
     }
 
-    public void WatchAdPremium()
-    {
-        EventWatchCurrencyAd?.Invoke(AdsManager.AdType.PremiumCurrency);
-    }
-
     public void WatchAdDoubleEarnings()
     {
         EventWatchCurrencyAd?.Invoke(AdsManager.AdType.DoubleEarnings);

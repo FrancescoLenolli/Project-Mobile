@@ -8,13 +8,12 @@ public delegate void CollectOfflineEarning(CanvasOfflineEarning.CollectionType c
 
 public class CanvasOfflineEarning : MonoBehaviour
 {
-    public enum CollectionType { Normal, DoubleAd, DoublePremium }
+    public enum CollectionType { Normal, DoubleAd }
 
     public event CollectOfflineEarning EventCollectOfflineEarning;
 
     private UIManager uIManager = null;
     private Vector3 originalPosition = Vector3.zero;
-    private CanvasGroup panelCanvasGroup = null;
     private int offlineEarning = 0;
 
     public Transform panelOfflineEarning = null;
@@ -27,10 +26,9 @@ public class CanvasOfflineEarning : MonoBehaviour
     private void Start()
     {
         uIManager = UIManager.Instance;
-        panelCanvasGroup = panelOfflineEarning.GetComponent<CanvasGroup>();
         originalPosition = panelOfflineEarning.localPosition;
 
-        EventCollectOfflineEarning += CurrencyManager.Instance.AddBackgroundGain;
+        EventCollectOfflineEarning += CurrencyManager.Instance.AddOfflineEarnings;
         CurrencyManager.Instance.EventBackgroundGainCalculated += ShowPanel;
     }
 
@@ -44,11 +42,6 @@ public class CanvasOfflineEarning : MonoBehaviour
         uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
         offlineEarning = currencyGained;
         textCurrencyGained.text = offlineEarning.ToString();
-    }
-
-    public void DoubleWithPremium()
-    {
-        InvokeEventAndClose(CollectionType.DoublePremium);
     }
 
     public void DoubleWithAd()
