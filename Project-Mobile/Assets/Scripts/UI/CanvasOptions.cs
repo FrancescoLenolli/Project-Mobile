@@ -16,12 +16,14 @@ public class CanvasOptions : MonoBehaviour
     private bool isVolumeSFXOn = true;
     private bool isVolumeMusicOn = true;
     private bool isVibrationOn = true;
+    private bool canDebug = false;
     private Vector3 originalPosition = Vector3.zero;
 
     public List<Sprite> listSpritesToggle = new List<Sprite>();
     public Image imageSFX = null;
     public Image imageMusic = null;
     public Image imageVibration = null;
+    public Image imageDebug = null;
     [Min(0)]
     public Transform panelOptions = null;
     public Transform newPosition = null;
@@ -42,6 +44,7 @@ public class CanvasOptions : MonoBehaviour
         isVolumeSFXOn = gameManager.isVolumeSFXOn;
         isVolumeMusicOn = gameManager.isVolumeMusicOn;
         isVibrationOn = gameManager.isVibrationOn;
+        canDebug = gameManager.canDebug;
 
         imageSFX.sprite = ChangeSprite(isVolumeSFXOn);
         imageMusic.sprite = ChangeSprite(isVolumeMusicOn);
@@ -73,6 +76,13 @@ public class CanvasOptions : MonoBehaviour
     {
         isVibrationOn = !isVibrationOn;
         EventChangeVibration?.Invoke(isVibrationOn);
+    }
+
+    public void ToggleDebug()
+    {
+        canDebug = !canDebug;
+        gameManager.canDebug = canDebug;
+        imageDebug.sprite = ChangeSprite(canDebug);
     }
 
     private void StatusSFX(bool isOn)

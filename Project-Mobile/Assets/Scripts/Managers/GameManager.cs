@@ -10,6 +10,7 @@ public class GameManager : Singleton<GameManager>
     public SendTimeFromLastGame eventSendTimeFromLastGame;
 
     private DateTime lastPlayedTime;
+    private bool isResetting = false;
 
     [HideInInspector] public PlayerData playerData = null;
     [HideInInspector] public string file = "PlayerData.json";
@@ -23,8 +24,9 @@ public class GameManager : Singleton<GameManager>
     [Space(10)]
     public AdsManager adsManager = null;
 
-    [Header("DEBUG")]
-    public bool canSave = true;
+    [HideInInspector] public bool canSaveData = true;
+    [HideInInspector] public bool canDebug = false;
+
 
     private new void Awake()
     {
@@ -33,11 +35,16 @@ public class GameManager : Singleton<GameManager>
         // Load Saved data.
         playerData = Load();
 
+        canSaveData = playerData.canSaveData;
+        canDebug = playerData.canDebug;
         isVolumeSFXOn = playerData.SFXVolume;
         isVolumeMusicOn = playerData.MusicVolume;
         isVibrationOn = playerData.VibrationOn;
 
-        lastPlayedTime = Convert.ToDateTime(playerData.lastPlayedTime);
+        if (playerData.lastPlayedTime != "")
+        {
+            lastPlayedTime = Convert.ToDateTime(playerData.lastPlayedTime);
+        }
     }
 
     private void Start()
@@ -45,12 +52,6 @@ public class GameManager : Singleton<GameManager>
         eventSendTimeFromLastGame += CurrencyManager.Instance.GetIdleGainSinceLastGame;
 
         StartCoroutine(WaitToCalculateOfflineGain(3));
-    }
-
-    private void OnApplicationQuit()
-    {
-        lastPlayedTime = DateTime.Now;
-        SaveCurrentData();
     }
 
     private void OnApplicationPause(bool pause)
@@ -62,12 +63,31 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    private void OnApplicationQuit()
+    {
+        if (!isResetting)
+        {
+            lastPlayedTime = DateTime.Now;
+            SaveCurrentData();
+        }
+    }
+
+    // Calculate in seconds how much time passed from last session.
+    // Used to calculate how much currency was gained offline.
     private int GetSecondsFromLastGame()
     {
+        int seconds = 0;
         DateTime currentTime = DateTime.Now;
         TimeSpan timeSpan = currentTime.Subtract(lastPlayedTime);
-        int seconds = (int)timeSpan.TotalSeconds;
+        seconds = (int)timeSpan.TotalSeconds;
         return seconds;
+    }
+
+    public void EnableSaveData()
+    {
+        canSaveData = !canSaveData;
+        SaveCanSaveData();
+
     }
 
     public void SetVolumeSFX(bool isOn)
@@ -110,7 +130,24 @@ public class GameManager : Singleton<GameManager>
         playerData.lastCurrencyIdleGain = CurrencyManager.Instance.currencyIdleGain;
         playerData.lastModifierIdleGain = CurrencyManager.Instance.modifierIdleGain;
         playerData.lastPlayedTime = lastPlayedTime.ToString();
+        playerData.canDebug = canDebug;
         Save();
+    }
+
+    // DEBUG ONLY. Reset all progress and close application.
+    public void ResetData()
+    {
+        isResetting = true;
+        playerData = new PlayerData();
+        Save();
+        Application.Quit();
+        UnityEditor.EditorApplication.isPlaying = false;
+    }
+
+    // DEBUG ONLY.
+    private void SaveCanSaveData()
+    {
+        playerData.canSaveData = canSaveData;
     }
 
     // Doesn't seems like a good idea, but I'll leave it for now.
@@ -136,7 +173,7 @@ public class GameManager : Singleton<GameManager>
     // Convert data to JSON, then save it.
     public void Save()
     {
-        if (canSave)
+        if (canSaveData)
         {
             string json = JsonUtility.ToJson(playerData);
             WriteToFile(file, json);
@@ -158,7 +195,7 @@ public class GameManager : Singleton<GameManager>
         // ...if no File is found, create a new one.
         catch (FileNotFoundException)
         {
-            data = new PlayerData { };
+            data = new PlayerData();
         }
 
         return data;
