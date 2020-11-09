@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "CustomData/ShipData", fileName = "New Ship")]
 public class ShipData : ScriptableObject

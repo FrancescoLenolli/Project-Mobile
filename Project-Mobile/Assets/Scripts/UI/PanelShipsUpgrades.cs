@@ -1,16 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
 public struct UpgradeInfo
 {
-    /// Generic Data for the Ship.
-    /// Things like Name, Sprite, Currency Gain ecc... are all contained here.
+    // Generic Data for the Ship's Upgrade.
+    // Things like cost, effects ecc...
     public ShipUpgradeData upgradeData;
 
-    /// How many ships of the same type the player has.
+    // Was this Upgrade bought or is still available to buy?
+    // Upgrades NOT owned will be visible in the Upgrades panel.
     public bool isOwned;
 
     public UpgradeInfo(ShipUpgradeData newUpgradeData, bool newStatus)
@@ -24,7 +24,6 @@ public class PanelShipsUpgrades : MonoBehaviour
 {
     private GameManager gameManager = null;
     private List<UpgradeInfo> listUpgradesUnlocked = new List<UpgradeInfo>();
-    // Have a List in GameManager to save the bought upgrades, maybe add a panel to see all of them?
     private List<UpgradeInfo> listUpgradesBought = new List<UpgradeInfo>();
 
     public ShipUpgrade prefabShipUpgrade = null;
@@ -41,9 +40,9 @@ public class PanelShipsUpgrades : MonoBehaviour
         List<ShipUpgradeData> listUpgradesOwned = new List<ShipUpgradeData>();
         List<ShipUpgradeData> listUpgradesNotOwned = new List<ShipUpgradeData>();
 
-        foreach(UpgradeInfo upgradeInfo in listUpgradesUnlocked)
+        foreach (UpgradeInfo upgradeInfo in listUpgradesUnlocked)
         {
-            if(upgradeInfo.isOwned)
+            if (upgradeInfo.isOwned)
             {
                 listUpgradesOwned.Add(upgradeInfo.upgradeData);
             }
@@ -53,25 +52,29 @@ public class PanelShipsUpgrades : MonoBehaviour
             }
         }
 
-        foreach(ShipUpgradeData upgradeData in listUpgradesNotOwned)
+        foreach (ShipUpgradeData upgradeData in listUpgradesNotOwned)
         {
             ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
             newUpgrade.SetValues(upgradeData, this);
         }
     }
 
+    // When the Player has enough units of a Ship, unlock all of its Upgrades.
     public void UnlockUpgrades(ShipData.ShipType type)
     {
         List<ShipUpgradeData> listUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades").Where(x => x.shipType == type));
 
-        foreach(ShipUpgradeData shipUpgradeData in listUpgrades)
+        foreach (ShipUpgradeData shipUpgradeData in listUpgrades)
         {
+            // Instantiate new Upgrade...
             ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
             newUpgrade.SetValues(shipUpgradeData, this);
 
-            UpgradeInfo upgradeBought = new UpgradeInfo(shipUpgradeData, false);
-            listUpgradesUnlocked.Add(upgradeBought);
+            // ...Add it to the list of Upgrades Unlocked...
+            UpgradeInfo upgradeUnlocked = new UpgradeInfo(shipUpgradeData, false);
+            listUpgradesUnlocked.Add(upgradeUnlocked);
 
+            // ...Save the list of upgrades.
             gameManager.SaveUpgradesUnlocked(listUpgradesUnlocked);
         }
     }

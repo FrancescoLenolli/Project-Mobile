@@ -35,28 +35,24 @@ public class PanelShips : MonoBehaviour
     private CanvasBottom canvasBottom = null;
     private List<ShipData> listShipDatas = new List<ShipData>();
     private List<Ship> listShips = new List<Ship>();
-
-    [HideInInspector] public List<ShipInfo> listShipInfos = new List<ShipInfo>();
+    private RectTransform containerShipsRect = null;
 
     [SerializeField] private Ship prefabShip = null;
     [SerializeField] private Transform containerShips = null;
 
-    private void Start()
+    [HideInInspector] public List<ShipInfo> listShipInfos = new List<ShipInfo>();
+
+    // Initialise data and Instantiate all ships owned by the player at the START OF THE GAME.
+    public void InitShips()
     {
         gameManager = GameManager.Instance;
         uiManager = UIManager.Instance;
         canvasBottom = FindObjectOfType<CanvasBottom>();
+        containerShipsRect = containerShips.GetComponent<RectTransform>();
         listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
 
         eventShipsInitialised += canvasBottom.panelShipsUpgrades.InitUpgrades;
 
-        InitShips();
-    }
-
-    // ONLY AT LAUNCH.
-    // Instantiate all ships owned by the player.
-    private void InitShips()
-    {
         // Update the list of ships to spawn with Saved Data.
         listShipInfos = gameManager.playerData.playerShips;
 
@@ -76,14 +72,13 @@ public class PanelShips : MonoBehaviour
             int newMultiplier = listShipInfos[i].shipIdleGainModifier;
 
             Ship newShip = Instantiate(prefabShip, containerShips, false);
-            newShip.SetValues(newData, newQuantity, newMultiplier); // [!!!] ADD "this" to SetValues parameters to pass reference to PanelShips.
+            newShip.SetValues(newData, newQuantity, newMultiplier);
 
             listShips.Add(newShip);
 
             // Resize ships container adding the ship's height.
-            // Better than having a fixed size container.
-            RectTransform containerShipsRect = containerShips.GetComponent<RectTransform>();
             containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
+            // Put the new Ship at the top of the list inside the UI.
             newShip.transform.SetSiblingIndex(0);
         }
 
@@ -105,8 +100,6 @@ public class PanelShips : MonoBehaviour
         listShips.Add(newShip);
         listShipInfos.Add(newShipInfo);
 
-        // [!!!] This can also be useful in Upgrades Panel, consider making it a function in UIManager.
-        RectTransform containerShipsRect = containerShips.GetComponent<RectTransform>();
         containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
         newShip.transform.SetSiblingIndex(0);
     }

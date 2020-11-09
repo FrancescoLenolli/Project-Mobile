@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class CanvasMain : MonoBehaviour
 {
@@ -27,12 +23,12 @@ public class CanvasMain : MonoBehaviour
         currencyManager.EventUpdateCurrencyText += UpdateCurrencyText;
         currencyManager.EventUpdateIdleGainText += UpdateIdleGainText;
         currencyManager.EventUpdateDoubleGainTimeText += UpdateDoubleGainTime;
-        currencyManager.EventSpawnTextAtInputPosition += InstantiatePrefab;
+        currencyManager.EventSpawnTextAtInputPosition += InstantiateTapObject;
     }
 
-    private void UpdateCurrencyText(long value)
+    public void UpdateCurrencyText(long value)
     {
-        textCurrency.text = value.ToString(); 
+        textCurrency.text = value.ToString();
     }
 
     private void UpdateIdleGainText(int value)
@@ -45,7 +41,8 @@ public class CanvasMain : MonoBehaviour
         textDoubleGainTime.text = value == 0 ? "" : $"x2 {TimeSpan.FromSeconds(value)}";
     }
 
-    private void InstantiatePrefab(Vector3 mousePosition)
+    // When tapping on screen, instantiate object that displays the amount of currency gained by tapping.
+    private void InstantiateTapObject(Vector3 mousePosition)
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
         newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain);

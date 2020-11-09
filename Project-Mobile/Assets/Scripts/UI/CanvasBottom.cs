@@ -9,8 +9,8 @@ public delegate void UpdateQuantityModifier(int newModifierValue);
 public delegate void ShowOptionsPanel();
 public class CanvasBottom : MonoBehaviour
 {
-    public event UpdateQuantityModifier eventUpdateQuantityModifier;
-    public event ShowOptionsPanel eventShowOptionsPanel;
+    public event UpdateQuantityModifier EventUpdateQuantityModifier;
+    public event ShowOptionsPanel EventShowOptionsPanel;
 
     private CurrencyManager currencyManager = null;
     private UIManager uiManager = null;
@@ -37,7 +37,7 @@ public class CanvasBottom : MonoBehaviour
     {
         modifierValue = currencyManager.CycleModifierAndReturnValue();
         textModifier.text = $"{modifierValue}";
-        eventUpdateQuantityModifier?.Invoke(modifierValue);
+        EventUpdateQuantityModifier?.Invoke(modifierValue);
     }
 
     // Open one panel and close the others.
@@ -58,6 +58,6 @@ public class CanvasBottom : MonoBehaviour
 
     public void ShowOptionsPanel()
     {
-        eventShowOptionsPanel?.Invoke();
+        EventShowOptionsPanel?.Invoke();
     }
 }

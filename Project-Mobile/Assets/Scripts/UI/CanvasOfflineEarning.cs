@@ -22,6 +22,7 @@ public class CanvasOfflineEarning : MonoBehaviour
     public float animationTime = 0;
     public List<Button> listPanelButtons = new List<Button>();
     public TextMeshProUGUI textCurrencyGained = null;
+    public TextMeshProUGUI textOfflineTime = null;
 
     private void Start()
     {
@@ -42,6 +43,7 @@ public class CanvasOfflineEarning : MonoBehaviour
         uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
         offlineEarning = currencyGained;
         textCurrencyGained.text = offlineEarning.ToString();
+        textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
     }
 
     public void DoubleWithAd()

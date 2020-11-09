@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,23 +14,20 @@ public class TapObject : MonoBehaviour
     void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
-        // [!!!] Enumerator StartAnimation
         StartCoroutine(Animation());
     }
 
+    // Print how much currency is gained by tapping on screen.
     public void SetValues(int currency /* Sprite currencySprite */)
     {
         textCurrency.text = $"+{currency}";
     }
 
-    IEnumerator DelayDestroy(int delay)
-    {
-        yield return new WaitForSeconds(delay);
-        Destroy(gameObject);
-    }
-
+    // After instantiating the object, start a little animation.
+    // The object moves, fades out and then get destroyed.
     IEnumerator Animation()
     {
+        // While the object is visible, move up and progressively fade away.
         while (canvasGroup.alpha > 0)
         {
             transform.Translate(Vector3.up * Time.deltaTime * (movementSpeed * 10), Space.Self);
@@ -41,6 +37,7 @@ public class TapObject : MonoBehaviour
             yield return null;
         }
 
+        // Destroy as soon as the object becomes invisible.
         Destroy(gameObject);
         yield return null;
     }

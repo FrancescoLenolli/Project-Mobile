@@ -50,7 +50,7 @@ public class CanvasOptions : MonoBehaviour
         imageMusic.sprite = ChangeSprite(isVolumeMusicOn);
         imageVibration.sprite = ChangeSprite(isVibrationOn);
 
-        FindObjectOfType<CanvasBottom>().eventShowOptionsPanel += MoveToPosition;
+        FindObjectOfType<CanvasBottom>().EventShowOptionsPanel += MoveToPosition;
     }
 
     private void MoveToPosition()

@@ -3,17 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEditor;
 
 public delegate void SendTimeFromLastGame(int seconds);
+public delegate void InitialiseData();
 public class GameManager : Singleton<GameManager>
 {
-    public SendTimeFromLastGame eventSendTimeFromLastGame;
+    public event SendTimeFromLastGame EventSendTimeFromLastGame;
+    public event InitialiseData EventInitData;
 
     private DateTime lastPlayedTime;
     private bool isResetting = false;
 
     [HideInInspector] public PlayerData playerData = null;
     [HideInInspector] public string file = "PlayerData.json";
+    [HideInInspector] public TimeSpan timeOffline = TimeSpan.Zero;
 
     public string playerName = "";
     [Min(0)]
@@ -24,6 +28,7 @@ public class GameManager : Singleton<GameManager>
     [Space(10)]
     public AdsManager adsManager = null;
 
+    // DEBUG
     [HideInInspector] public bool canSaveData = true;
     [HideInInspector] public bool canDebug = false;
 
@@ -49,7 +54,10 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        eventSendTimeFromLastGame += CurrencyManager.Instance.GetIdleGainSinceLastGame;
+        EventSendTimeFromLastGame += CurrencyManager.Instance.GetIdleGainSinceLastGame;
+        EventInitData += FindObjectOfType<PanelShips>().InitShips;
+
+        EventInitData?.Invoke();
 
         StartCoroutine(WaitToCalculateOfflineGain(3));
     }
@@ -76,10 +84,9 @@ public class GameManager : Singleton<GameManager>
     // Used to calculate how much currency was gained offline.
     private int GetSecondsFromLastGame()
     {
-        int seconds = 0;
         DateTime currentTime = DateTime.Now;
-        TimeSpan timeSpan = currentTime.Subtract(lastPlayedTime);
-        seconds = (int)timeSpan.TotalSeconds;
+        timeOffline = currentTime.Subtract(lastPlayedTime);
+        int seconds = (int)timeOffline.TotalSeconds;
         return seconds;
     }
 
@@ -110,7 +117,7 @@ public class GameManager : Singleton<GameManager>
         int secondsFromLastGame = GetSecondsFromLastGame();
 
         yield return new WaitForSeconds(waitTime);
-        eventSendTimeFromLastGame?.Invoke(secondsFromLastGame);
+        EventSendTimeFromLastGame?.Invoke(secondsFromLastGame);
 
         yield return null;
     }
@@ -141,7 +148,7 @@ public class GameManager : Singleton<GameManager>
         playerData = new PlayerData();
         Save();
         Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
+        //EditorApplication.isPlaying = false;
     }
 
     // DEBUG ONLY.
