@@ -59,13 +59,41 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private void Update()
     {
-        // If player tap on the screen...
-        if (Input.GetMouseButtonDown(0))
+        ////If player tap on the screen...
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    //... and if it's not tapping over a UI Object...
+        //    if (EventSystem.current.IsPointerOverGameObject(0))
+        //    {
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        //... Spawn object in the tap position, and add currency based on the active modifiers.
+        //        EventSpawnTextAtInputPosition?.Invoke(Input.mousePosition);
+        //        AddActiveCurrency();
+        //    }
+
+        //}
+
+        //if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        //{
+        //    if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        //    {
+        //        //... Spawn object in the tap position, and add currency based on the active modifiers.
+        //        EventSpawnTextAtInputPosition?.Invoke(Input.mousePosition);
+        //        AddActiveCurrency();
+        //    }
+        //}
+
+        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            //... and if it's not tapping over a UI Object...
-            if (!EventSystem.current.IsPointerOverGameObject())
+            if(EventSystem.current.IsPointerOverGameObject())
             {
-                //... Spawn object in the tap position, and add currency based on the active modifiers.
+                return;
+            }
+            else
+            {
                 EventSpawnTextAtInputPosition?.Invoke(Input.mousePosition);
                 AddActiveCurrency();
             }

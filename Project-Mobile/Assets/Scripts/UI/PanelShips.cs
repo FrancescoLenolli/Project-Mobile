@@ -58,8 +58,9 @@ public class PanelShips : MonoBehaviour
 
         // First time the player play the game.
         // If the player has no ships, add the first type to list.
-        if (listShipInfos.Count == 0)
+        if (listShipInfos == null)
         {
+            listShipInfos = new List<ShipInfo>();
             ShipInfo firstShipInfo = new ShipInfo(listShipDatas[0], 0, 0);
             listShipInfos.Add(firstShipInfo);
         }
@@ -82,7 +83,7 @@ public class PanelShips : MonoBehaviour
             newShip.transform.SetSiblingIndex(0);
         }
 
-        // Send a message when every Ship owned by the Player has been spawned.
+        // When every ship is spawned, start instantiating the upgrades
         eventShipsInitialised?.Invoke();
     }
 

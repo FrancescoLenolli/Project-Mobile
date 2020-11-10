@@ -32,7 +32,12 @@ public class PanelShipsUpgrades : MonoBehaviour
     private void Start()
     {
         gameManager = GameManager.Instance;
+
         listUpgradesUnlocked = gameManager.playerData.playerUpgradesUnlocked;
+        if(listUpgradesUnlocked == null)
+        {
+            listUpgradesUnlocked = new List<UpgradeInfo>();
+        }
     }
 
     public void InitUpgrades()

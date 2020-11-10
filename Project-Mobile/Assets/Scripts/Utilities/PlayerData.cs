@@ -14,9 +14,9 @@ public class PlayerData
     public bool SFXVolume = true;
     public bool MusicVolume = true;
     public bool VibrationOn = true;
-    public List<ShipInfo> playerShips = new List<ShipInfo>();
-    public List<UpgradeInfo> playerUpgradesUnlocked = new List<UpgradeInfo>();
-    public List<UpgradeInfo> playerUpgradesBought = new List<UpgradeInfo>();
+    public List<ShipInfo> playerShips = null;
+    public List<UpgradeInfo> playerUpgradesUnlocked = null;
+    public List<UpgradeInfo> playerUpgradesBought = null;
     public int lastCurrencyIdleGain = 0;
     public int lastModifierIdleGain = 0;
     public string lastPlayedTime = "";
