@@ -55,7 +55,7 @@ public class Ship : MonoBehaviour
     private void Update()
     {
 
-        // [!!!] Add a sprite change.
+        // TODO: Add a sprite change.
         // Call this with an event. 
         // When idle currency is updated, when active currency is updated, when buying new ships.
         if(currencyManager)
@@ -63,10 +63,46 @@ public class Ship : MonoBehaviour
 
     }
 
+    // Update how many units of this ship the player want to buy
+    private void UpdateQuantityModifier(int newModifierValue)
+    {
+        quantityMultiplier = newModifierValue;
+        UpdateValues();
+    }
+
+    // Unlock next Ship once the right quantity has been reached.
+    private void UnlockNextShip(int index)
+    {
+        EventUnlockShip?.Invoke(index);
+    }
+
+    // Update Quantity of this Ship in ShipInfo, that will be saved.
+    private void UpdateQuantity(int index, int quantity)
+    {
+        EventUpdateShipQuantity?.Invoke(index, quantity);
+    }
+
+    private void UpdateMultiplier(int index, int multiplier)
+    {
+        EventUpdateShipModifier?.Invoke(index, multiplier);
+    }
+
+    // Recalculate the idleGain of this Ship;
+    private void UpdateIdleGain()
+    {
+        idleGain = currencyGain * quantity + ((currencyGain * quantity * productionMultiplier) / 100);
+    }
+
+    private int ReturnIdleGain()
+    {
+        idleGain = currencyGain * quantity + ((currencyGain * quantity * productionMultiplier) / 100);
+        return idleGain;
+    }
+
     public void SetValues(ShipData newShipData, int newQuantity, int newMultiplier)
     {
         currencyManager = CurrencyManager.Instance;
-        //[!!!] Use a UI Manager to pass reference to canvasBottom?
+        // TODO: Use a UI Manager to pass reference to canvasBottom?
         canvasBottom = FindObjectOfType<CanvasBottom>();
 
         canvasBottom.EventUpdateQuantityModifier += UpdateQuantityModifier;
@@ -177,41 +213,4 @@ public class Ship : MonoBehaviour
 
         currencyManager.IncreaseCurrencyIdleGain(idleGain);
     }
-
-    // Update how many units of this ship the player want to buy
-    private void UpdateQuantityModifier(int newModifierValue)
-    {
-        quantityMultiplier = newModifierValue;
-        UpdateValues();
-    }
-
-    // Unlock next Ship once the right quantity has been reached.
-    private void UnlockNextShip(int index)
-    {
-        EventUnlockShip?.Invoke(index);
-    }
-
-    // Update Quantity of this Ship in ShipInfo, that will be saved.
-    private void UpdateQuantity(int index, int quantity)
-    {
-        EventUpdateShipQuantity?.Invoke(index, quantity);
-    }
-
-    private void UpdateMultiplier(int index, int multiplier)
-    {
-        EventUpdateShipModifier?.Invoke(index, multiplier);
-    }
-
-    // Recalculate the idleGain of this Ship;
-    private void UpdateIdleGain()
-    {
-        idleGain = currencyGain * quantity + ((currencyGain * quantity * productionMultiplier) / 100);
-    }
-
-    private int ReturnIdleGain()
-    {
-        idleGain = currencyGain * quantity + ((currencyGain * quantity * productionMultiplier) / 100);
-        return idleGain;
-    }
-
 }

@@ -29,22 +29,21 @@ public class PanelShipsUpgrades : MonoBehaviour
     public ShipUpgrade prefabShipUpgrade = null;
     public Transform panelShipUpgrades = null;
 
-    private void Start()
+
+    public void InitUpgrades()
     {
         gameManager = GameManager.Instance;
 
         listUpgradesUnlocked = gameManager.playerData.playerUpgradesUnlocked;
-        if(listUpgradesUnlocked == null)
+        if (listUpgradesUnlocked == null)
         {
             listUpgradesUnlocked = new List<UpgradeInfo>();
         }
-    }
 
-    public void InitUpgrades()
-    {
         List<ShipUpgradeData> listUpgradesOwned = new List<ShipUpgradeData>();
         List<ShipUpgradeData> listUpgradesNotOwned = new List<ShipUpgradeData>();
 
+        // Put upgrades owned in a List separated from upgrades not owned.
         foreach (UpgradeInfo upgradeInfo in listUpgradesUnlocked)
         {
             if (upgradeInfo.isOwned)
@@ -57,14 +56,17 @@ public class PanelShipsUpgrades : MonoBehaviour
             }
         }
 
+        // Instantiate every upgrade not yet owned.
         foreach (ShipUpgradeData upgradeData in listUpgradesNotOwned)
         {
             ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
             newUpgrade.SetValues(upgradeData, this);
         }
+
+        // TODO: Do something with Upgrades Owned.
     }
 
-    // When the Player has enough units of a Ship, unlock all of its Upgrades.
+    // When the Player has enough units of a given Ship, unlock all of its Upgrades.
     public void UnlockUpgrades(ShipData.ShipType type)
     {
         List<ShipUpgradeData> listUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades").Where(x => x.shipType == type));
@@ -87,6 +89,7 @@ public class PanelShipsUpgrades : MonoBehaviour
     // When buying an Upgrade, set his status to Owned so it won't be displayed in the Upgrades Panel when reloading the game.
     public void SetOwnedStatus(ShipUpgradeData upgradeData)
     {
+        // Search for the right Upgrade and set his status to Owned, saving the modified list.
         for (int i = 0; i < listUpgradesUnlocked.Count; ++i)
         {
             if (listUpgradesUnlocked[i].upgradeData == upgradeData)

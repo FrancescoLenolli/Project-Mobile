@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CanvasMain : MonoBehaviour
 {
-    CurrencyManager currencyManager;
+    private CurrencyManager currencyManager;
 
     public TextMeshProUGUI textCurrency;
     public TextMeshProUGUI textIdleGain;
@@ -26,11 +26,6 @@ public class CanvasMain : MonoBehaviour
         currencyManager.EventSpawnTextAtInputPosition += InstantiateTapObject;
     }
 
-    public void UpdateCurrencyText(long value)
-    {
-        textCurrency.text = value.ToString();
-    }
-
     private void UpdateIdleGainText(int value)
     {
         textIdleGain.text = $"+ {value}/s";
@@ -46,5 +41,10 @@ public class CanvasMain : MonoBehaviour
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
         newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain);
+    }
+
+    public void UpdateCurrencyText(long value)
+    {
+        textCurrency.text = value.ToString();
     }
 }

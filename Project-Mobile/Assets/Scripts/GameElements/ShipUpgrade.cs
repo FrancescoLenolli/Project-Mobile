@@ -39,7 +39,7 @@ public class ShipUpgrade : MonoBehaviour
         shipUpgradeData = newData;
         PanelShipsUpgrades panelShipsUpgrades = newPanel;
 
-        // [!!!] UIManager with reference to CanvasBottom?
+        // TODO: UIManager with reference to CanvasBottom?
         myShip = FindObjectOfType<CanvasBottom>().panelShips.ReturnShipOfType(shipUpgradeData.shipType);
 
         eventBoughtUpgrade += myShip.UpdateIdleGain;

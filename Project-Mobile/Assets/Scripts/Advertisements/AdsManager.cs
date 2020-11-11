@@ -4,21 +4,25 @@ using UnityEngine.Advertisements;
 
 public delegate void AdBaseCurrency();
 public delegate void AdDoubleEarnings();
+public delegate void AdDoubleOfflineEarnings();
 public class AdsManager : MonoBehaviour, IUnityAdsListener
 {
     public event AdBaseCurrency EventAdBaseCurrency;
     public event AdDoubleEarnings EventAdDoubleEarnings;
+    public event AdDoubleOfflineEarnings EventAdDoubleOfflineEarnings;
 
-    public enum AdType { BaseCurrency, DoubleEarnings }
+    public enum AdType { BaseCurrency, DoubleIdleEarnings, DoubleOfflineEarnings }
 
     private string placement = "rewardedVideo";
     private AdType watchedAdType;
 
     private void Start()
     {
-        Advertisement.AddListener(this);
+        StartCoroutine(InitAd());
+
         EventAdBaseCurrency += CurrencyManager.Instance.AddCurrencyAdvertisement;
         EventAdDoubleEarnings += CurrencyManager.Instance.AddDoubleIdleGainTime;
+        EventAdDoubleOfflineEarnings += FindObjectOfType<CanvasOfflineEarning>().CollectDouble;
     }
 
     private void SetAdWatchedType(AdType newType)
@@ -36,10 +40,13 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
                     EventAdBaseCurrency?.Invoke();
                     break;
 
-                case AdType.DoubleEarnings:
+                case AdType.DoubleIdleEarnings:
                     EventAdDoubleEarnings?.Invoke();
                     break;
 
+                case AdType.DoubleOfflineEarnings:
+                    EventAdDoubleOfflineEarnings?.Invoke();
+                    break;
                 default:
                     Debug.Log("Something went wrong with Ad rewards.");
                     break;
@@ -62,20 +69,18 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     // Subscribe this to some UI Event
     public void ShowAd(AdType adType)
     {
-        StartCoroutine(StartAd(adType));
+        SetAdWatchedType(adType);
+        Advertisement.Show(placement);
     }
 
-    private IEnumerator StartAd(AdType adType)
+    private IEnumerator InitAd()
     {
+        Advertisement.AddListener(this);
         Advertisement.Initialize("3884039", true);
 
         while (!Advertisement.IsReady(placement))
         {
             yield return null;
         }
-
-        SetAdWatchedType(adType);
-
-        Advertisement.Show(placement);
     }
 }

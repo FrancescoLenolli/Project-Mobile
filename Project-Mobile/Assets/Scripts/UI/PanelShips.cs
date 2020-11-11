@@ -42,6 +42,24 @@ public class PanelShips : MonoBehaviour
 
     [HideInInspector] public List<ShipInfo> listShipInfos = new List<ShipInfo>();
 
+    // Instantiate new ship, add it to listShips and listShipInfos, and update shipsContainer.
+    private void InitAndAddShip(ShipData newShipData)
+    {
+        // Starting quantity and multiplier will always be 0.
+        int newQuantity = 0;
+        int newMultiplier = 0;
+
+        Ship newShip = Instantiate(prefabShip, containerShips, false);
+        newShip.SetValues(newShipData, newQuantity, newMultiplier);
+        ShipInfo newShipInfo = new ShipInfo(newShipData, newQuantity, newMultiplier);
+
+        listShips.Add(newShip);
+        listShipInfos.Add(newShipInfo);
+
+        containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
+        newShip.transform.SetSiblingIndex(0);
+    }
+
     // Initialise data and Instantiate all ships owned by the player at the START OF THE GAME.
     public void InitShips()
     {
@@ -66,7 +84,7 @@ public class PanelShips : MonoBehaviour
         }
 
         // Spawn all ships owned by the player.
-        for(int i = 0; i < listShipInfos.Count; ++i)
+        for (int i = 0; i < listShipInfos.Count; ++i)
         {
             ShipData newData = listShipInfos[i].shipData;
             int newQuantity = listShipInfos[i].shipQuantity;
@@ -83,26 +101,10 @@ public class PanelShips : MonoBehaviour
             newShip.transform.SetSiblingIndex(0);
         }
 
+        gameManager.SaveShipInfos(listShipInfos);
+
         // When every ship is spawned, start instantiating the upgrades
         eventShipsInitialised?.Invoke();
-    }
-
-    // Instantiate new ship, add it to listShips and listShipInfos, and update shipsContainer.
-    private void InitAndAddShip(ShipData newShipData)
-    {
-        // Starting quantity and multiplier will always be 0.
-        int newQuantity = 0;
-        int newMultiplier = 0;
-
-        Ship newShip = Instantiate(prefabShip, containerShips, false);
-        newShip.SetValues(newShipData, newQuantity, newMultiplier);
-        ShipInfo newShipInfo = new ShipInfo(newShipData, newQuantity, newMultiplier);
-
-        listShips.Add(newShip);
-        listShipInfos.Add(newShipInfo);
-
-        containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
-        newShip.transform.SetSiblingIndex(0);
     }
 
     // If conditions are met, unlock new type of ship.

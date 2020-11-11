@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -9,11 +6,15 @@ public delegate void UpdateQuantityModifier(int newModifierValue);
 public delegate void ShowOptionsPanel();
 public class CanvasBottom : MonoBehaviour
 {
+    public enum BottomPanels { Ships, Upgrades, Extras }
     public event UpdateQuantityModifier EventUpdateQuantityModifier;
     public event ShowOptionsPanel EventShowOptionsPanel;
 
     private CurrencyManager currencyManager = null;
     private UIManager uiManager = null;
+
+    [Tooltip("Which Panel will be visible when starting the game?")]
+    [SerializeField] private BottomPanels firstActivePanel = BottomPanels.Ships;
 
     [HideInInspector] public int modifierValue = 0;
     [HideInInspector] public PanelShips panelShips = null;
@@ -28,6 +29,9 @@ public class CanvasBottom : MonoBehaviour
         uiManager = UIManager.Instance;
         panelShips = GetComponentInChildren<PanelShips>();
         panelShipsUpgrades = GetComponentInChildren<PanelShipsUpgrades>();
+
+        // At start of the game, make visible one panel while closing the others.
+        OpenPanel((int)firstActivePanel);
     }
 
     // Update Modifier for Ship Quantity to buy.
@@ -43,9 +47,9 @@ public class CanvasBottom : MonoBehaviour
     // Open one panel and close the others.
     public void OpenPanel(int index)
     {
-        for(int i = 0; i < listPanels.Count; ++i)
+        for (int i = 0; i < listPanels.Count; ++i)
         {
-            if(i == index)
+            if (i == index)
             {
                 uiManager.ChangeStatus(listPanels[i], true);
             }

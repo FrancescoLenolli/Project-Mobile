@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TapObject : MonoBehaviour
 {
     private CanvasGroup canvasGroup = null;
+
     public TextMeshProUGUI textCurrency = null;
     public Image spriteCurrency = null;
     [Min(0)]
@@ -25,7 +26,7 @@ public class TapObject : MonoBehaviour
 
     // After instantiating the object, start a little animation.
     // The object moves, fades out and then get destroyed.
-    IEnumerator Animation()
+    private IEnumerator Animation()
     {
         // While the object is visible, move up and progressively fade away.
         while (canvasGroup.alpha > 0)

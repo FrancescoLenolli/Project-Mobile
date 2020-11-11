@@ -11,8 +11,12 @@ public class CanvasOfflineEarning : MonoBehaviour
     public enum CollectionType { Normal, DoubleAd }
 
     public event CollectOfflineEarning EventCollectOfflineEarning;
+    public event WatchAd EventWatchAd;
 
     private UIManager uIManager = null;
+    private GameManager gameManager = null;
+    private CurrencyManager currencyManager = null;
+
     private Vector3 originalPosition = Vector3.zero;
     private int offlineEarning = 0;
 
@@ -27,10 +31,14 @@ public class CanvasOfflineEarning : MonoBehaviour
     private void Start()
     {
         uIManager = UIManager.Instance;
+        gameManager = GameManager.Instance;
+        currencyManager = CurrencyManager.Instance;
+
         originalPosition = panelOfflineEarning.localPosition;
 
-        EventCollectOfflineEarning += CurrencyManager.Instance.AddOfflineEarnings;
-        CurrencyManager.Instance.EventBackgroundGainCalculated += ShowPanel;
+        EventCollectOfflineEarning += currencyManager.AddOfflineEarnings;
+        EventWatchAd += gameManager.adsManager.ShowAd;
+        currencyManager.EventBackgroundGainCalculated += ShowPanel;
     }
 
     private void HidePanel()
@@ -46,21 +54,31 @@ public class CanvasOfflineEarning : MonoBehaviour
         textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
     }
 
-    public void DoubleWithAd()
+    // Called when the Player chooses to double the offline earnings by watching an Ad.
+    public void DoubleGain()
+    {
+        EventWatchAd?.Invoke(AdsManager.AdType.DoubleOfflineEarnings);
+    }
+
+    // Called by AdsManager after watching ad, doubles offline earnings.
+    public void CollectDouble()
     {
         InvokeEventAndClose(CollectionType.DoubleAd);
     }
 
+    // Collect offline earnings without doubling them.
     public void Collect()
     {
         InvokeEventAndClose(CollectionType.Normal);
     }
 
+    // Collect Offline Earnings and close the panel.
     private void InvokeEventAndClose(CollectionType collectionType)
     {
         EventCollectOfflineEarning?.Invoke(collectionType);
-        HidePanel();
+
         uIManager.ChangeAllButtons(listPanelButtons, false);
+        HidePanel();
     }
 
 

@@ -8,17 +8,17 @@ public class PanelExtra : MonoBehaviour
 {
     public event WatchAd EventWatchCurrencyAd;
 
-    private CurrencyManager currencyManager = null;
+    private GameManager gameManager = null;
     private UIManager uiManager = null;
 
     [SerializeField] private List<Button> listButtons = new List<Button>();
 
     private void Start()
     {
-        currencyManager = CurrencyManager.Instance;
+        gameManager = GameManager.Instance;
         uiManager = UIManager.Instance;
 
-        EventWatchCurrencyAd += GameManager.Instance.adsManager.ShowAd;
+        EventWatchCurrencyAd += gameManager.adsManager.ShowAd;
     }
 
     // Add a percentage of currency to the actual value.
@@ -29,6 +29,6 @@ public class PanelExtra : MonoBehaviour
 
     public void WatchAdDoubleEarnings()
     {
-        EventWatchCurrencyAd?.Invoke(AdsManager.AdType.DoubleEarnings);
+        EventWatchCurrencyAd?.Invoke(AdsManager.AdType.DoubleIdleEarnings);
     }
 }
