@@ -46,12 +46,18 @@ public class CanvasOfflineEarning : MonoBehaviour
         uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, originalPosition, UIManager.Fade.Out);
     }
 
+    // Display panel on screen.
+    // Don't do it if it's the first time the Player plays the game.
     public void ShowPanel(int currencyGained)
     {
-        uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
-        offlineEarning = currencyGained;
-        textCurrencyGained.text = offlineEarning.ToString();
-        textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
+        if (!gameManager.firstTimePlaying)
+        {
+            uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
+            offlineEarning = currencyGained;
+            textCurrencyGained.text = offlineEarning.ToString();
+            textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
+        }
+        gameManager.firstTimePlaying = true;
     }
 
     // Called when the Player chooses to double the offline earnings by watching an Ad.

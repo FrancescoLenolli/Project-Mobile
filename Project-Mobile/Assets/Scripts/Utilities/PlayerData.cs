@@ -8,10 +8,11 @@ public class PlayerData
     public bool canDebug = false;
 
     // GAME DATA
+    public bool firstTimePlaying = true;
     public string playerName = "PlayerName";
     public long playerCurrency = 0;
-    public bool SFXVolume = true;
-    public bool MusicVolume = true;
+    public bool SFXVolumeOn = true;
+    public bool MusicVolumeOn = true;
     public bool VibrationOn = true;
     public List<ShipInfo> playerShips = null;
     public List<UpgradeInfo> playerUpgradesUnlocked = null;

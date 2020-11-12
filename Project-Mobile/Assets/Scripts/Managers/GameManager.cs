@@ -19,6 +19,7 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public string file = "PlayerData.json";
     [HideInInspector] public TimeSpan timeOffline = TimeSpan.Zero;
 
+    public bool firstTimePlaying = true;
     public string playerName = "";
     [Min(0)]
     public long playerCurrency = 0;
@@ -42,8 +43,9 @@ public class GameManager : Singleton<GameManager>
 
         canSaveData = playerData.canSaveData;
         canDebug = playerData.canDebug;
-        isVolumeSFXOn = playerData.SFXVolume;
-        isVolumeMusicOn = playerData.MusicVolume;
+        firstTimePlaying = playerData.firstTimePlaying;
+        isVolumeSFXOn = playerData.SFXVolumeOn;
+        isVolumeMusicOn = playerData.MusicVolumeOn;
         isVibrationOn = playerData.VibrationOn;
 
         if (playerData.lastPlayedTime != "")
@@ -128,10 +130,11 @@ public class GameManager : Singleton<GameManager>
     // Store new data in case something changed during the game.
     public void SaveCurrentData()
     {
+        playerData.firstTimePlaying = firstTimePlaying;
         playerData.playerName = playerName;
         playerData.playerCurrency = CurrencyManager.Instance.currency;
-        playerData.SFXVolume = isVolumeSFXOn;
-        playerData.MusicVolume = isVolumeMusicOn;
+        playerData.SFXVolumeOn = isVolumeSFXOn;
+        playerData.MusicVolumeOn = isVolumeMusicOn;
         playerData.VibrationOn = isVibrationOn;
         //playerData.playerShips = ShipsManager.Instance.listShipInfos;
         playerData.lastCurrencyIdleGain = CurrencyManager.Instance.currencyIdleGain;
