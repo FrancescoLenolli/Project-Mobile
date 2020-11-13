@@ -35,7 +35,7 @@ public class UIManager : Singleton<UIManager>
     /// <param name="additionalElement"></param>
     /// <param name="additionalSpace"></param>
     /// <returns></returns>
-    public Vector2 ResizeContainer(Transform container, Transform additionalElement, float additionalSpace)
+    public Vector2 ResizeContainer(Transform container, Transform additionalElement, float additionalSpace = 0)
     {
         RectTransform additionalElementRect = additionalElement.GetComponent<RectTransform>();
         RectTransform containerRect = container.GetComponent<RectTransform>();

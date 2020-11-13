@@ -8,7 +8,6 @@ public class PlayerData
     public bool canDebug = false;
 
     // GAME DATA
-    public bool firstTimePlaying = true;
     public string playerName = "PlayerName";
     public long playerCurrency = 0;
     public bool SFXVolumeOn = true;

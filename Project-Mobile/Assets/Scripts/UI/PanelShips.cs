@@ -7,7 +7,7 @@ public struct ShipInfo
 {
     /// Generic Data for the Ship.
     /// Things like Name, Sprite, Currency Gain ecc... are all contained here.
-    public ShipData shipData;
+    public string shipName;
 
     /// How many ships of the same type the player has.
     public int shipQuantity;
@@ -15,9 +15,9 @@ public struct ShipInfo
     // Modifier expressed in percentage, modify the Ship's Currency Gain.
     public int shipIdleGainModifier;
 
-    public ShipInfo(ShipData data, int quantity, int multiplier)
+    public ShipInfo(string name, int quantity, int multiplier)
     {
-        shipData = data;
+        shipName = name;
         shipQuantity = quantity;
         shipIdleGainModifier = multiplier;
 
@@ -43,21 +43,38 @@ public class PanelShips : MonoBehaviour
     [HideInInspector] public List<ShipInfo> listShipInfos = new List<ShipInfo>();
 
     // Instantiate new ship, add it to listShips and listShipInfos, and update shipsContainer.
-    private void InitAndAddShip(ShipData newShipData)
+    private void InitAndAddShip(string shipName)
     {
         // Starting quantity and multiplier will always be 0.
         int newQuantity = 0;
         int newMultiplier = 0;
+        ShipData newShipData = ReturnShipData(shipName);
 
         Ship newShip = Instantiate(prefabShip, containerShips, false);
         newShip.SetValues(newShipData, newQuantity, newMultiplier);
-        ShipInfo newShipInfo = new ShipInfo(newShipData, newQuantity, newMultiplier);
+        ShipInfo newShipInfo = new ShipInfo(shipName, newQuantity, newMultiplier);
 
         listShips.Add(newShip);
         listShipInfos.Add(newShipInfo);
 
-        containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
+        containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform);
         newShip.transform.SetSiblingIndex(0);
+    }
+
+    private ShipData ReturnShipData(string shipDataName)
+    {
+        ShipData result = null;
+
+        foreach(ShipData data in listShipDatas)
+        {
+            if (data.shipName == shipDataName)
+            {
+                result = data;
+                break;
+            }
+        }
+
+        return result;
     }
 
     // Initialise data and Instantiate all ships owned by the player at the START OF THE GAME.
@@ -79,14 +96,14 @@ public class PanelShips : MonoBehaviour
         if (listShipInfos == null)
         {
             listShipInfos = new List<ShipInfo>();
-            ShipInfo firstShipInfo = new ShipInfo(listShipDatas[0], 0, 0);
+            ShipInfo firstShipInfo = new ShipInfo(listShipDatas[0].shipName, 0, 0);
             listShipInfos.Add(firstShipInfo);
         }
 
         // Spawn all ships owned by the player.
         for (int i = 0; i < listShipInfos.Count; ++i)
         {
-            ShipData newData = listShipInfos[i].shipData;
+            ShipData newData = ReturnShipData(listShipInfos[i].shipName);
             int newQuantity = listShipInfos[i].shipQuantity;
             int newMultiplier = listShipInfos[i].shipIdleGainModifier;
 
@@ -96,7 +113,7 @@ public class PanelShips : MonoBehaviour
             listShips.Add(newShip);
 
             // Resize ships container adding the ship's height.
-            containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform, 10);
+            containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform);
             // Put the new Ship at the top of the list inside the UI.
             newShip.transform.SetSiblingIndex(0);
         }
@@ -110,14 +127,18 @@ public class PanelShips : MonoBehaviour
     // If conditions are met, unlock new type of ship.
     public void AddNewShip(int currentShipIndex)
     {
+        // currentShipIndex is the index of the last ship bought.
+        // index + 1 is the index of the next ship.
+        // If this new Index is equal to listShipInfo count, the ship with that index is not yet instantiated.
+        // it this listShipInfo count is equal to listShipData count, every ship has already been instantiated.
         bool canAddShip = (currentShipIndex + 1 == listShipInfos.Count && listShipInfos.Count != listShipDatas.Count);
 
         // Spawn next type of ship.
         if(canAddShip)
         {
-            ShipData newData = listShipDatas[listShipInfos.Count];
+            string newDataName = listShipDatas[listShipInfos.Count].shipName;
 
-            InitAndAddShip(newData);
+            InitAndAddShip(newDataName);
         }
 
         gameManager.SaveShipInfos(listShipInfos);
@@ -126,12 +147,12 @@ public class PanelShips : MonoBehaviour
     // Update quantity of specific ship.
     public void UpdateQuantityAt(int shipIndex, int newQuantity)
     {
-        listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipData, newQuantity, listShipInfos[shipIndex].shipIdleGainModifier);
+        listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipName, newQuantity, listShipInfos[shipIndex].shipIdleGainModifier);
     }
 
     public void UpdateModifierAt(int shipIndex, int newModifier)
     {
-        listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipData, listShipInfos[shipIndex].shipQuantity, newModifier);
+        listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipName, listShipInfos[shipIndex].shipQuantity, newModifier);
     }
 
     public Ship ReturnShipOfType(ShipData.ShipType type)

@@ -25,6 +25,7 @@ public class PanelShipsUpgrades : MonoBehaviour
     private GameManager gameManager = null;
     private List<UpgradeInfo> listUpgradesUnlocked = new List<UpgradeInfo>();
     private List<UpgradeInfo> listUpgradesBought = new List<UpgradeInfo>();
+    private RectTransform panelShipRect = null;
 
     public ShipUpgrade prefabShipUpgrade = null;
     public Transform panelShipUpgrades = null;
@@ -33,6 +34,7 @@ public class PanelShipsUpgrades : MonoBehaviour
     public void InitUpgrades()
     {
         gameManager = GameManager.Instance;
+        panelShipRect = panelShipUpgrades.GetComponent<RectTransform>();
 
         listUpgradesUnlocked = gameManager.playerData.playerUpgradesUnlocked;
         if (listUpgradesUnlocked == null)
@@ -56,11 +58,15 @@ public class PanelShipsUpgrades : MonoBehaviour
             }
         }
 
-        // Instantiate every upgrade not yet owned.
+        // Instantiate every upgrade not yet owned and resize their container.
         foreach (ShipUpgradeData upgradeData in listUpgradesNotOwned)
         {
             ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
             newUpgrade.SetValues(upgradeData, this);
+
+            panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
+            newUpgrade.transform.SetSiblingIndex(0);
+
         }
 
         // TODO: Do something with Upgrades Owned.
@@ -80,6 +86,10 @@ public class PanelShipsUpgrades : MonoBehaviour
             // ...Add it to the list of Upgrades Unlocked...
             UpgradeInfo upgradeUnlocked = new UpgradeInfo(shipUpgradeData, false);
             listUpgradesUnlocked.Add(upgradeUnlocked);
+
+            // ...Resize container...
+            panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
+            newUpgrade.transform.SetSiblingIndex(0);
 
             // ...Save the list of upgrades.
             gameManager.SaveUpgradesUnlocked(listUpgradesUnlocked);
