@@ -7,7 +7,7 @@ public delegate void EventUpdateCurrencyText(long value);
 public delegate void EventUpdateIdleGainText(int value);
 public delegate void EventUpdateDoubleGainTimeText(int value);
 public delegate void EventSpawnTextAtInputPosition(Vector3 position);
-public delegate void EventBackgroundGainCalculated(int currency);
+public delegate void EventBackgroundGainCalculated(long currency);
 
 public class CurrencyManager : Singleton<CurrencyManager>
 {
@@ -21,7 +21,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private int currentQuantityModifierIndex = 0;
     private int lastCurrencyIdleGain = 0;
     private int lastModifierIdleGain = 0;
-    private int backgroundGain = 0;
+    private long backgroundGain = 0;
     private int timeIdleGainDoubled = 0;
     private bool isIdleGainDoubled = false;
 

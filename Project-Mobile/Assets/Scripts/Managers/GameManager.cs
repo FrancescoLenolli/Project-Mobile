@@ -81,14 +81,25 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    // Calculate in seconds how much time passed from last session.
-    // Used to calculate how much currency was gained offline.
-    private int GetSecondsFromLastGame()
+    /// <summary>
+    /// Calculate in seconds how much time passed from last session.
+    /// </summary>
+    /// <returns></returns>
+    public int GetSecondsFromLastGame()
     {
         DateTime currentTime = DateTime.Now;
         timeOffline = currentTime.Subtract(lastPlayedTime);
         int seconds = (int)timeOffline.TotalSeconds;
         return seconds;
+    }
+
+    /// <summary>
+    /// Return true if 24 hours or more have passed since last game session.
+    /// </summary>
+    /// <returns></returns>
+    public bool HasDayPassed()
+    {
+        return timeOffline.TotalDays >= 1;
     }
 
     public void EnableSaveData()
@@ -174,6 +185,14 @@ public class GameManager : Singleton<GameManager>
     public void SaveUpgradesBought(List<UpgradeInfo> newList)
     {
         playerData.playerUpgradesBought = newList;
+        Save();
+    }
+
+    public void SaveRewardsData(List<int> listIndexes, int cooldown, int currentIndex)
+    {
+        playerData.listRewardsIndexes = listIndexes;
+        playerData.rewardCooldownTime = cooldown;
+        playerData.currentRewardIndex = currentIndex;
         Save();
     }
 

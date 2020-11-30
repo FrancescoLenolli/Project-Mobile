@@ -18,7 +18,6 @@ public class CanvasOfflineEarning : MonoBehaviour
     private CurrencyManager currencyManager = null;
 
     private Vector3 originalPosition = Vector3.zero;
-    private int offlineEarning = 0;
 
     public Transform panelOfflineEarning = null;
     public Transform newPosition = null;
@@ -48,11 +47,10 @@ public class CanvasOfflineEarning : MonoBehaviour
 
     // Display panel on screen.
     // Don't do it if it's the first time the Player plays the game.
-    public void ShowPanel(int currencyGained)
+    public void ShowPanel(long currencyGained)
     {
             uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
-            offlineEarning = currencyGained;
-            textCurrencyGained.text = offlineEarning.ToString();
+            textCurrencyGained.text = currencyGained.ToString();
             textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
     }
 
