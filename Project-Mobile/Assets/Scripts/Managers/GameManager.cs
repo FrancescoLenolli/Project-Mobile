@@ -12,7 +12,9 @@ public class GameManager : Singleton<GameManager>
     public event SendTimeFromLastGame EventSendTimeFromLastGame;
     public event InitialiseData EventInitData;
 
-    private DateTime lastPlayedTime;
+    private DateTime lastSessionTime;
+    private DateTime currentSessionTime;
+    private int secondsOffline;
     private bool isResetting = false;
 
     [HideInInspector] public PlayerData playerData = null;
@@ -48,14 +50,17 @@ public class GameManager : Singleton<GameManager>
 
         if (playerData.lastPlayedTime != "")
         {
-            lastPlayedTime = Convert.ToDateTime(playerData.lastPlayedTime);
+            lastSessionTime = Convert.ToDateTime(playerData.lastPlayedTime);
         }
+
+        CalculateOfflineTime();
     }
 
     private void Start()
     {
         EventSendTimeFromLastGame += CurrencyManager.Instance.GetIdleGainSinceLastGame;
         EventInitData += FindObjectOfType<PanelShips>().InitShips;
+        EventInitData += FindObjectOfType<CanvasDailyRewards>().InitRewards;
 
         EventInitData?.Invoke();
 
@@ -67,7 +72,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (pause)
         {
-            lastPlayedTime = DateTime.Now;
+            lastSessionTime = DateTime.Now;
             SaveCurrentData();
         }
     }
@@ -76,21 +81,28 @@ public class GameManager : Singleton<GameManager>
     {
         if (!isResetting)
         {
-            lastPlayedTime = DateTime.Now;
+            lastSessionTime = DateTime.Now;
             SaveCurrentData();
         }
     }
 
     /// <summary>
-    /// Calculate in seconds how much time passed from last session.
+    /// Calculate how much time has passed since last session.
+    /// </summary>
+    private void CalculateOfflineTime()
+    {
+        currentSessionTime = DateTime.Now;
+        timeOffline = currentSessionTime.Subtract(lastSessionTime);
+        secondsOffline = (int)timeOffline.TotalSeconds;
+    }
+
+    /// <summary>
+    /// Return time from last session to the current one in seconds.
     /// </summary>
     /// <returns></returns>
-    public int GetSecondsFromLastGame()
+    public int GetOfflineTime()
     {
-        DateTime currentTime = DateTime.Now;
-        timeOffline = currentTime.Subtract(lastPlayedTime);
-        int seconds = (int)timeOffline.TotalSeconds;
-        return seconds;
+        return secondsOffline;
     }
 
     /// <summary>
@@ -126,10 +138,10 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator WaitToCalculateOfflineGain(float waitTime)
     {
-        int secondsFromLastGame = GetSecondsFromLastGame();
+        int secondsOffline = GetOfflineTime();
 
         yield return new WaitForSeconds(waitTime);
-        EventSendTimeFromLastGame?.Invoke(secondsFromLastGame);
+        EventSendTimeFromLastGame?.Invoke(secondsOffline);
 
         yield return null;
     }
@@ -147,7 +159,7 @@ public class GameManager : Singleton<GameManager>
         playerData.VibrationOn = isVibrationOn;
         playerData.lastCurrencyIdleGain = CurrencyManager.Instance.currencyIdleGain;
         playerData.lastModifierIdleGain = CurrencyManager.Instance.modifierIdleGain;
-        playerData.lastPlayedTime = lastPlayedTime.ToString();
+        playerData.lastPlayedTime = lastSessionTime.ToString();
         playerData.canDebug = canDebug;
         Save();
     }

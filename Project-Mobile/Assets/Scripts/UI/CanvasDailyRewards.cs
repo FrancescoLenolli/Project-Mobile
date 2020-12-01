@@ -9,6 +9,7 @@ public class CanvasDailyRewards : MonoBehaviour
     private UIManager uiManager = null;
     private List<DailyReward> listRewardTypes = new List<DailyReward>();
     private List<int> listRewardsIndexes = new List<int>();
+    private List<Image> listRewardsImage = new List<Image>();
     private int currentRewardIndex = 0;
     private int collectionCooldownTime = 0;
     private DailyReward currentReward = null;
@@ -33,11 +34,13 @@ public class CanvasDailyRewards : MonoBehaviour
             {
                 int index = UnityEngine.Random.Range(0, listRewardTypes.Count);
 
-                GameObject newImage = Instantiate(prefabImage, containerRewards, false);
-                newImage.GetComponent<Image>().sprite = listRewardTypes[index].spriteIcon;
+                GameObject newReward = Instantiate(prefabImage, containerRewards, false);
+                Image rewardImage = newReward.GetComponent<Image>();
+                rewardImage.sprite = listRewardTypes[index].spriteIcon;
 
                 listCurrentRewards.Add(listRewardTypes[index]);
                 listRewardsIndexes.Add(index);
+                listRewardsImage.Add(rewardImage);
             }
         }
 
@@ -46,10 +49,15 @@ public class CanvasDailyRewards : MonoBehaviour
         {
             for(int i = 0; i < listRewardsIndexes.Count; ++i)
             {
-                GameObject newImage = Instantiate(prefabImage, containerRewards, false);
-                newImage.GetComponent<Image>().sprite = listRewardTypes[listRewardsIndexes[i]].spriteIcon;
+                GameObject newReward = Instantiate(prefabImage, containerRewards, false);
+                Image rewardImage = newReward.GetComponent<Image>();
+
+                // Check every reward previously collected with a different sprite.
+                rewardImage.sprite =
+                    i >= currentRewardIndex ? listRewardTypes[listRewardsIndexes[i]].spriteIcon : listRewardTypes[listRewardsIndexes[i]].spriteCollectedReward;
 
                 listCurrentRewards.Add(listRewardTypes[listRewardsIndexes[i]]);
+                listRewardsImage.Add(rewardImage);
             }
         }
 
@@ -72,7 +80,7 @@ public class CanvasDailyRewards : MonoBehaviour
         currentRewardIndex = gameManager.playerData.currentRewardIndex;
         collectionCooldownTime = gameManager.playerData.rewardCooldownTime;
 
-        collectionCooldownTime -= gameManager.GetSecondsFromLastGame();
+        collectionCooldownTime -= gameManager.GetOfflineTime();
 
         StartCooldown(collectionCooldownTime);
         LoadRewards();
@@ -84,9 +92,9 @@ public class CanvasDailyRewards : MonoBehaviour
         // Prevent the Player from collecting the same reward multiple times.
         if (canCollect)
         {
+            canCollect = false;
             currentReward.GetReward();
             ++currentRewardIndex;
-            canCollect = false;
             StartCooldown((int)TimeSpan.FromDays(1).TotalSeconds);
         }
         else
@@ -105,7 +113,7 @@ public class CanvasDailyRewards : MonoBehaviour
         canCollect = true;
     }
 
-    // TODO: Ugly, find a better solution;
+    // TODO: Ugly, find a better solution.
     private void OnApplicationQuit()
     {
         gameManager.SaveRewardsData(listRewardsIndexes, collectionCooldownTime, currentRewardIndex);
