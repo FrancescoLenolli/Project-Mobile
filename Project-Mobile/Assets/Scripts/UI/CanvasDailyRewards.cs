@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CanvasDailyRewards : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class CanvasDailyRewards : MonoBehaviour
     private List<int> listRewardsIndexes = new List<int>();
     private List<Image> listRewardsImage = new List<Image>();
     private int currentRewardIndex = 0;
-    private int collectionCooldownTime = 0;
+    private long collectionCooldownTime = 0;
     private DailyReward currentReward = null;
     private bool canCollect = true;
 
@@ -22,6 +23,7 @@ public class CanvasDailyRewards : MonoBehaviour
     public int rewardsNumber = 1;
     public Transform containerRewards = null;
     public GameObject prefabImage = null;
+    public TextMeshProUGUI textCooldownTime = null;
 
     // If all rewards have been collected, reload another list.
     private void LoadRewards()
@@ -64,7 +66,7 @@ public class CanvasDailyRewards : MonoBehaviour
         currentReward = listCurrentRewards[currentRewardIndex];
     }
 
-    private void StartCooldown(int time)
+    private void StartCooldown(long time)
     {
         StartCoroutine(CooldownCollect(time));
     }
@@ -76,11 +78,19 @@ public class CanvasDailyRewards : MonoBehaviour
         uiManager = UIManager.Instance;
         listRewardTypes = new List<DailyReward>(Resources.LoadAll<DailyReward>("DailyRewards"));
 
+        
         listRewardsIndexes = gameManager.playerData.listRewardsIndexes;
-        currentRewardIndex = gameManager.playerData.currentRewardIndex;
-        collectionCooldownTime = gameManager.playerData.rewardCooldownTime;
+        // If there's no list saved, create a new list.
+        if (listRewardsIndexes == null)
+            listRewardsIndexes = new List<int>();
 
+        currentRewardIndex = gameManager.playerData.currentRewardIndex;
+
+        collectionCooldownTime = gameManager.playerData.rewardCooldownTime;
         collectionCooldownTime -= gameManager.GetOfflineTime();
+        if (collectionCooldownTime < 0)
+            collectionCooldownTime = 0;
+        canCollect = collectionCooldownTime > 0 ? false : true;
 
         StartCooldown(collectionCooldownTime);
         LoadRewards();
@@ -94,6 +104,7 @@ public class CanvasDailyRewards : MonoBehaviour
         {
             canCollect = false;
             currentReward.GetReward();
+            listRewardsImage[currentRewardIndex].sprite = currentReward.spriteCollectedReward;
             ++currentRewardIndex;
             StartCooldown((int)TimeSpan.FromDays(1).TotalSeconds);
         }
@@ -103,14 +114,17 @@ public class CanvasDailyRewards : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator CooldownCollect(int time)
+    private System.Collections.IEnumerator CooldownCollect(long time)
     {
         while (time > 0)
         {
             --time;
+            collectionCooldownTime = time;
+            textCooldownTime.text = $"Can collect next reward in:\n{TimeSpan.FromSeconds(time)}";
             yield return new WaitForSeconds(1.0f);
         }
         canCollect = true;
+        textCooldownTime.text = "Collect your reward!";
     }
 
     // TODO: Ugly, find a better solution.

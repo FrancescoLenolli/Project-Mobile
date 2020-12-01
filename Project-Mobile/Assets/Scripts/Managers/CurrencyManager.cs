@@ -214,7 +214,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     ///  Use values from last game to calculate how much currency was gained since then. 
     /// </summary>
     /// <param name="seconds"></param>
-    public void GetIdleGainSinceLastGame(int seconds)
+    public void GetIdleGainSinceLastGame(long seconds)
     {
         backgroundGain = (lastCurrencyIdleGain * lastModifierIdleGain) * seconds;
 

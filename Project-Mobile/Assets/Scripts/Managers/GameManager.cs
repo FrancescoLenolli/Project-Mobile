@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 
-public delegate void SendTimeFromLastGame(int seconds);
+public delegate void SendTimeFromLastGame(long seconds);
 public delegate void InitialiseData();
 public class GameManager : Singleton<GameManager>
 {
@@ -91,16 +91,19 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     private void CalculateOfflineTime()
     {
-        currentSessionTime = DateTime.Now;
-        timeOffline = currentSessionTime.Subtract(lastSessionTime);
-        secondsOffline = (int)timeOffline.TotalSeconds;
+        if (lastSessionTime != DateTime.MinValue)
+        {
+            currentSessionTime = DateTime.Now;
+            timeOffline = currentSessionTime.Subtract(lastSessionTime);
+            secondsOffline = (int)timeOffline.TotalSeconds;
+        }
     }
 
     /// <summary>
     /// Return time from last session to the current one in seconds.
     /// </summary>
     /// <returns></returns>
-    public int GetOfflineTime()
+    public long GetOfflineTime()
     {
         return secondsOffline;
     }
@@ -138,7 +141,7 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator WaitToCalculateOfflineGain(float waitTime)
     {
-        int secondsOffline = GetOfflineTime();
+        long secondsOffline = GetOfflineTime();
 
         yield return new WaitForSeconds(waitTime);
         EventSendTimeFromLastGame?.Invoke(secondsOffline);
@@ -200,7 +203,7 @@ public class GameManager : Singleton<GameManager>
         Save();
     }
 
-    public void SaveRewardsData(List<int> listIndexes, int cooldown, int currentIndex)
+    public void SaveRewardsData(List<int> listIndexes, long cooldown, int currentIndex)
     {
         playerData.listRewardsIndexes = listIndexes;
         playerData.rewardCooldownTime = cooldown;

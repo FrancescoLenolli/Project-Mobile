@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  spriteCollectedReward: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1001 &2725438679259845271
 PrefabInstance:
   m_ObjectHideFlags: 0

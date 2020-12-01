@@ -28,6 +28,6 @@ public class PlayerData
     //********** DAILY REWARDS **********
     public List<int> listRewardsIndexes = null;
     public int currentRewardIndex = 0;
-    public int rewardCooldownTime = 0;
+    public long rewardCooldownTime = 0;
 
 }
