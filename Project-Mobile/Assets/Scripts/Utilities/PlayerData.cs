@@ -9,6 +9,7 @@ public class PlayerData
 
     // GAME DATA
     // ********** GENERAL **********
+    public bool isFirstSession = true;
     public string playerName = "PlayerName";
     public long playerCurrency = 0;
     public int lastCurrencyIdleGain = 0;

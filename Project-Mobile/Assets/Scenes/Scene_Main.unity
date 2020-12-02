@@ -1807,9 +1807,9 @@ RectTransform:
   m_Father: {fileID: 1239600675}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -440.1, y: 1097.8}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 99.95, y: -72.25}
   m_SizeDelta: {x: 199.9, y: 144.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &372008909
@@ -5005,6 +5005,7 @@ MonoBehaviour:
     type: 3}
   buttonCollect: {fileID: 2058134478}
   textCooldown: {fileID: 1882096920}
+  buttonCooldownTime: {fileID: 372008909}
   textCooldownTime: {fileID: 214644427}
   panelRewards: {fileID: 1138326486}
   newPosition: {fileID: 165173006}

@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
     private DateTime currentSessionTime;
     private int secondsOffline;
     private bool isResetting = false;
+    private bool isFirstSession = true;
 
     [HideInInspector] public PlayerData playerData = null;
     [HideInInspector] public string file = "PlayerData.json";
@@ -42,6 +43,7 @@ public class GameManager : Singleton<GameManager>
         // Load Saved data.
         playerData = Load();
 
+        isFirstSession = playerData.isFirstSession;
         canSaveData = playerData.canSaveData;
         canDebug = playerData.canDebug;
         isVolumeSFXOn = playerData.SFXVolumeOn;
@@ -82,6 +84,7 @@ public class GameManager : Singleton<GameManager>
         if (!isResetting)
         {
             lastSessionTime = DateTime.Now;
+            isFirstSession = false;
             SaveCurrentData();
         }
     }
@@ -98,6 +101,15 @@ public class GameManager : Singleton<GameManager>
 
             secondsOffline = (int)timeOffline.TotalSeconds;
         }
+    }
+
+    /// <summary>
+    /// Return true if this is the first time the game is being played.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsFirstSession()
+    {
+        return isFirstSession;
     }
 
     /// <summary>
@@ -156,6 +168,7 @@ public class GameManager : Singleton<GameManager>
     // Store new data in case something changed during the game.
     public void SaveCurrentData()
     {
+        playerData.isFirstSession = isFirstSession;
         playerData.playerName = playerName;
         playerData.playerCurrency = CurrencyManager.Instance.currency;
         playerData.SFXVolumeOn = isVolumeSFXOn;

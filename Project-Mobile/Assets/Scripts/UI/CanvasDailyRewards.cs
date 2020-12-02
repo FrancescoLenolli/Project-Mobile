@@ -26,6 +26,7 @@ public class CanvasDailyRewards : MonoBehaviour
     public GameObject prefabImage = null;
     public Button buttonCollect = null;
     public TextMeshProUGUI textCooldown = null;
+    public Button buttonCooldownTime = null;
     public TextMeshProUGUI textCooldownTime = null;
     [Space(10)]
     [Header("Animation variables")]
@@ -77,6 +78,11 @@ public class CanvasDailyRewards : MonoBehaviour
         }
 
         currentReward = listCurrentRewards[currentRewardIndex];
+
+        if (!gameManager.IsFirstSession() && collectionCooldownTime <= 0)
+            MoveToPosition();
+        if (gameManager.IsFirstSession())
+            buttonCooldownTime.gameObject.SetActive(false);
     }
 
     private void StartCooldown(long time)
