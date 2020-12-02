@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class CanvasDailyRewards : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class CanvasDailyRewards : MonoBehaviour
     private long collectionCooldownTime = 0;
     private DailyReward currentReward = null;
     private bool canCollect = true;
+    private Vector3 originalPosition = Vector3.zero;
 
     [HideInInspector] public List<DailyReward> listCurrentRewards = new List<DailyReward>();
 
@@ -23,7 +24,19 @@ public class CanvasDailyRewards : MonoBehaviour
     public int rewardsNumber = 1;
     public Transform containerRewards = null;
     public GameObject prefabImage = null;
+    public Button buttonCollect = null;
+    public TextMeshProUGUI textCooldown = null;
     public TextMeshProUGUI textCooldownTime = null;
+    [Space(10)]
+    [Header("Animation variables")]
+    public Transform panelRewards = null;
+    public Transform newPosition = null;
+    public float animationTime = 1.0f;
+
+    private void Awake()
+    {
+        originalPosition = panelRewards.localPosition;
+    }
 
     // If all rewards have been collected, reload another list.
     private void LoadRewards()
@@ -49,7 +62,7 @@ public class CanvasDailyRewards : MonoBehaviour
         //...else, used the saved indexes to load the current list.
         else
         {
-            for(int i = 0; i < listRewardsIndexes.Count; ++i)
+            for (int i = 0; i < listRewardsIndexes.Count; ++i)
             {
                 GameObject newReward = Instantiate(prefabImage, containerRewards, false);
                 Image rewardImage = newReward.GetComponent<Image>();
@@ -71,6 +84,11 @@ public class CanvasDailyRewards : MonoBehaviour
         StartCoroutine(CooldownCollect(time));
     }
 
+    private void DisplayCooldownTime(TimeSpan timeSpan)
+    {
+        textCooldownTime.text = timeSpan.TotalSeconds > 0 ? timeSpan.ToString() : "Collect Reward";
+    }
+
     // TODO: Link this method to an event in GameManager called when starting the game.
     public void InitRewards()
     {
@@ -78,14 +96,11 @@ public class CanvasDailyRewards : MonoBehaviour
         uiManager = UIManager.Instance;
         listRewardTypes = new List<DailyReward>(Resources.LoadAll<DailyReward>("DailyRewards"));
 
-        
+        // Get saved Data.
+        currentRewardIndex = gameManager.playerData.currentRewardIndex;
         listRewardsIndexes = gameManager.playerData.listRewardsIndexes;
-        // If there's no list saved, create a new list.
         if (listRewardsIndexes == null)
             listRewardsIndexes = new List<int>();
-
-        currentRewardIndex = gameManager.playerData.currentRewardIndex;
-
         collectionCooldownTime = gameManager.playerData.rewardCooldownTime;
         collectionCooldownTime -= gameManager.GetOfflineTime();
         if (collectionCooldownTime < 0)
@@ -106,7 +121,10 @@ public class CanvasDailyRewards : MonoBehaviour
             currentReward.GetReward();
             listRewardsImage[currentRewardIndex].sprite = currentReward.spriteCollectedReward;
             ++currentRewardIndex;
-            StartCooldown((int)TimeSpan.FromDays(1).TotalSeconds);
+            TimeSpan timeSpan = TimeSpan.FromDays(1);
+            StartCooldown((long)timeSpan.TotalSeconds);
+            DisplayCooldownTime(timeSpan);
+            MoveToPosition();
         }
         else
         {
@@ -114,23 +132,42 @@ public class CanvasDailyRewards : MonoBehaviour
         }
     }
 
+    public void MoveToPosition()
+    {
+        // Check if the panel is already on the newPosition.
+        // Use this value to decide where to move next.
+        bool isPanelVisible = panelRewards.localPosition == newPosition.localPosition;
+
+        Vector3 targetPosition = isPanelVisible ? originalPosition : newPosition.localPosition;
+        UIManager.Fade fadeType = isPanelVisible ? UIManager.Fade.Out : UIManager.Fade.In;
+
+        uiManager.MoveRectObjectAndFade(animationTime, panelRewards, targetPosition, fadeType);
+    }
+
     private System.Collections.IEnumerator CooldownCollect(long time)
     {
+        TimeSpan timeSpan;
+        buttonCollect.interactable = canCollect;
         while (time > 0)
         {
             --time;
             collectionCooldownTime = time;
-            textCooldownTime.text = $"Can collect next reward in:\n{TimeSpan.FromSeconds(time)}";
+            timeSpan = TimeSpan.FromSeconds(time);
+            textCooldown.text = $"Can collect next reward in:\n{timeSpan}";
+            DisplayCooldownTime(timeSpan);
             yield return new WaitForSeconds(1.0f);
         }
         canCollect = true;
-        textCooldownTime.text = "Collect your reward!";
+        buttonCollect.interactable = canCollect;
+        textCooldown.text = "Collect your reward!";
+        DisplayCooldownTime(timeSpan);
     }
 
     // TODO: Ugly, find a better solution.
     private void OnApplicationQuit()
     {
-        gameManager.SaveRewardsData(listRewardsIndexes, collectionCooldownTime, currentRewardIndex);
+        if(gameManager)
+            gameManager.SaveRewardsData(listRewardsIndexes, collectionCooldownTime, currentRewardIndex);
     }
 
 }

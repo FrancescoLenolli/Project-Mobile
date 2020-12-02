@@ -58,9 +58,9 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        EventSendTimeFromLastGame += CurrencyManager.Instance.GetIdleGainSinceLastGame;
         EventInitData += FindObjectOfType<PanelShips>().InitShips;
         EventInitData += FindObjectOfType<CanvasDailyRewards>().InitRewards;
+        EventSendTimeFromLastGame += CurrencyManager.Instance.GetIdleGainSinceLastGame;
 
         EventInitData?.Invoke();
 
@@ -95,6 +95,7 @@ public class GameManager : Singleton<GameManager>
         {
             currentSessionTime = DateTime.Now;
             timeOffline = currentSessionTime.Subtract(lastSessionTime);
+
             secondsOffline = (int)timeOffline.TotalSeconds;
         }
     }
