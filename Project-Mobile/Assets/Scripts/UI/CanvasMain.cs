@@ -45,6 +45,6 @@ public class CanvasMain : MonoBehaviour
 
     public void UpdateCurrencyText(long value)
     {
-        textCurrency.text = value.ToString();
+        textCurrency.text = Formatter.FormatValue(value);
     }
 }

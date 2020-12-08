@@ -16,6 +16,7 @@ public class CanvasDailyRewards : MonoBehaviour
     private DailyReward currentReward = null;
     private bool canCollect = true;
     private Vector3 originalPosition = Vector3.zero;
+    private TextMeshProUGUI textButtonCollect = null;
 
     [HideInInspector] public List<DailyReward> listCurrentRewards = new List<DailyReward>();
 
@@ -26,18 +27,12 @@ public class CanvasDailyRewards : MonoBehaviour
     public GameObject prefabImage = null;
     public Button buttonCollect = null;
     public TextMeshProUGUI textCooldown = null;
-    public Button buttonCooldownTime = null;
     public TextMeshProUGUI textCooldownTime = null;
     [Space(10)]
     [Header("Animation variables")]
     public Transform panelRewards = null;
     public Transform newPosition = null;
     public float animationTime = 1.0f;
-
-    private void Awake()
-    {
-        originalPosition = panelRewards.localPosition;
-    }
 
     // If all rewards have been collected, reload another list.
     private void LoadRewards()
@@ -81,8 +76,6 @@ public class CanvasDailyRewards : MonoBehaviour
 
         if (!gameManager.IsFirstSession() && collectionCooldownTime <= 0)
             MoveToPosition();
-        if (gameManager.IsFirstSession())
-            buttonCooldownTime.gameObject.SetActive(false);
     }
 
     private void StartCooldown(long time)
@@ -90,9 +83,27 @@ public class CanvasDailyRewards : MonoBehaviour
         StartCoroutine(CooldownCollect(time));
     }
 
+    // Display time before next reward is available on the main HUD.
     private void DisplayCooldownTime(TimeSpan timeSpan)
     {
         textCooldownTime.text = timeSpan.TotalSeconds > 0 ? timeSpan.ToString() : "Collect Reward";
+    }
+
+    // Change behaviour of collectButton if the Player can collect or not the daily reward.
+    private void ChangeButtonBehaviour()
+    {
+        if (canCollect)
+        {
+            buttonCollect.onClick.RemoveAllListeners();
+            buttonCollect.onClick.AddListener(CollectReward);
+            textButtonCollect.text = "COLLECT";
+        }
+        else
+        {
+            buttonCollect.onClick.RemoveAllListeners();
+            buttonCollect.onClick.AddListener(MoveToPosition);
+            textButtonCollect.text = "CLOSE";
+        }
     }
 
     // TODO: Link this method to an event in GameManager called when starting the game.
@@ -101,6 +112,9 @@ public class CanvasDailyRewards : MonoBehaviour
         gameManager = GameManager.Instance;
         uiManager = UIManager.Instance;
         listRewardTypes = new List<DailyReward>(Resources.LoadAll<DailyReward>("DailyRewards"));
+
+        originalPosition = panelRewards.localPosition;
+        textButtonCollect = buttonCollect.gameObject.GetComponentInChildren<TextMeshProUGUI>();
 
         // Get saved Data.
         currentRewardIndex = gameManager.playerData.currentRewardIndex;
@@ -120,29 +134,30 @@ public class CanvasDailyRewards : MonoBehaviour
 
     public void CollectReward()
     {
-        // Prevent the Player from collecting the same reward multiple times.
-        if (canCollect)
-        {
-            canCollect = false;
-            currentReward.GetReward();
-            listRewardsImage[currentRewardIndex].sprite = currentReward.spriteCollectedReward;
-            ++currentRewardIndex;
-            TimeSpan timeSpan = TimeSpan.FromDays(1);
-            StartCooldown((long)timeSpan.TotalSeconds);
-            DisplayCooldownTime(timeSpan);
-            MoveToPosition();
-        }
-        else
-        {
-            Debug.Log("Cannot collect Reward yet.");
-        }
+        canCollect = false;
+        currentReward.GetReward();
+        listRewardsImage[currentRewardIndex].sprite = currentReward.spriteCollectedReward;
+        ++currentRewardIndex;
+        TimeSpan timeSpan = TimeSpan.FromDays(1);
+        StartCooldown((long)timeSpan.TotalSeconds);
+        DisplayCooldownTime(timeSpan);
+        MoveToPosition();
+
+        Debug.Log("Collecting Reward");
     }
 
+    // Move Panel to the correct spot and change behaviour of the collectButton if needed.
     public void MoveToPosition()
     {
         // Check if the panel is already on the newPosition.
         // Use this value to decide where to move next.
         bool isPanelVisible = panelRewards.localPosition == newPosition.localPosition;
+
+        // If the panel is moving on screen, see what actions you can do with the Collect Button.
+        if (!isPanelVisible)
+        {
+            ChangeButtonBehaviour();
+        }
 
         Vector3 targetPosition = isPanelVisible ? originalPosition : newPosition.localPosition;
         UIManager.Fade fadeType = isPanelVisible ? UIManager.Fade.Out : UIManager.Fade.In;
@@ -150,10 +165,12 @@ public class CanvasDailyRewards : MonoBehaviour
         uiManager.MoveRectObjectAndFade(animationTime, panelRewards, targetPosition, fadeType);
     }
 
+    // Once every n time (standard is 24h) the Player can collect a reward.
     private System.Collections.IEnumerator CooldownCollect(long time)
     {
         TimeSpan timeSpan;
-        buttonCollect.interactable = canCollect;
+
+        // While time is still passing, display remaining time...
         while (time > 0)
         {
             --time;
@@ -163,8 +180,9 @@ public class CanvasDailyRewards : MonoBehaviour
             DisplayCooldownTime(timeSpan);
             yield return new WaitForSeconds(1.0f);
         }
+
+        //... when n time has passed, the player can now collect the next reward.
         canCollect = true;
-        buttonCollect.interactable = canCollect;
         textCooldown.text = "Collect your reward!";
         DisplayCooldownTime(timeSpan);
     }
@@ -172,7 +190,7 @@ public class CanvasDailyRewards : MonoBehaviour
     // TODO: Ugly, find a better solution.
     private void OnApplicationQuit()
     {
-        if(gameManager)
+        if (gameManager)
             gameManager.SaveRewardsData(listRewardsIndexes, collectionCooldownTime, currentRewardIndex);
     }
 
