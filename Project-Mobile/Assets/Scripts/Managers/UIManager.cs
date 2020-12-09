@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : Singleton<UIManager>
 {
     public enum Fade { In, Out }
+    public enum Resize { Add, Subtract }
 
     private bool canAnimate = true;
 
@@ -29,18 +30,21 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// Increase size of a container to fit more elements.
+    /// Increase or Decrease size of a container by additional element.
     /// </summary>
-    /// <param name="container"></param>
-    /// <param name="additionalElement"></param>
-    /// <param name="additionalSpace"></param>
+    /// <param name="container"> What container needs to be resized.</param>
+    /// <param name="additionalElement">Transform size to add to the Container.</param>
+    /// <param name="bufferSpace"> Add/Remove even more space.</param>
+    /// <param name="resizeType"> Should the container's size increase or decrease?</param>
     /// <returns></returns>
-    public Vector2 ResizeContainer(Transform container, Transform additionalElement, float additionalSpace = 0)
+    public Vector2 ResizeContainer(Transform container, Transform additionalElement, float bufferSpace = 0, Resize resizeType = Resize.Add)
     {
         RectTransform additionalElementRect = additionalElement.GetComponent<RectTransform>();
         RectTransform containerRect = container.GetComponent<RectTransform>();
 
-        Vector2 containerUpdatedSize = new Vector2(containerRect.sizeDelta.x, containerRect.sizeDelta.y + additionalElementRect.sizeDelta.y + additionalSpace);
+        float newSizeY = resizeType == Resize.Add ? containerRect.sizeDelta.y + additionalElementRect.sizeDelta.y + bufferSpace : containerRect.sizeDelta.y - additionalElementRect.sizeDelta.y - bufferSpace;
+
+        Vector2 containerUpdatedSize = new Vector2(containerRect.sizeDelta.x, containerRect.sizeDelta.y + additionalElementRect.sizeDelta.y + bufferSpace);
         return containerUpdatedSize;
     }
 

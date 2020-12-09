@@ -50,7 +50,7 @@ public class CanvasOfflineEarning : MonoBehaviour
     public void ShowPanel(long currencyGained)
     {
             uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
-            textCurrencyGained.text = currencyGained.ToString();
+            textCurrencyGained.text = Formatter.FormatValue(currencyGained);
             textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
     }
 

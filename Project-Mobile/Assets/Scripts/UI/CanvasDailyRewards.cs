@@ -38,7 +38,7 @@ public class CanvasDailyRewards : MonoBehaviour
     private void LoadRewards()
     {
         // If every reward has been collected, reload Rewards List...
-        if (currentRewardIndex == listCurrentRewards.Count)
+        if (currentRewardIndex == listRewardsIndexes.Count)
         {
             currentRewardIndex = 0;
             for (int i = 0; i < rewardsNumber; ++i)

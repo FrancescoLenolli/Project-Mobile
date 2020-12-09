@@ -4,10 +4,13 @@ using UnityEngine.UI;
 
 public delegate void BoughtUpgrade(int myCurrencyGainModifier);
 public delegate void ChangeOwnedStatus(ShipUpgradeData myData);
+public delegate void UpgradeDestroyed(Transform transform);
 public class ShipUpgrade : MonoBehaviour
 {
-    public event BoughtUpgrade eventBoughtUpgrade;
-    public event ChangeOwnedStatus eventChangeOwnedStatus;
+    public event BoughtUpgrade EventBoughtUpgrade;
+    public event ChangeOwnedStatus EventChangeOwnedStatus;
+    public event UpgradeDestroyed EventUpgradeDestroyed;
+
 
     private ShipUpgradeData shipUpgradeData = null;
     private Ship myShip = null;
@@ -42,8 +45,9 @@ public class ShipUpgrade : MonoBehaviour
         // TODO: UIManager with reference to CanvasBottom?
         myShip = FindObjectOfType<CanvasBottom>().panelShips.ReturnShipOfType(shipUpgradeData.shipType);
 
-        eventBoughtUpgrade += myShip.UpdateIdleGain;
-        eventChangeOwnedStatus += panelShipsUpgrades.SetOwnedStatus;
+        EventBoughtUpgrade += myShip.UpdateIdleGain;
+        EventChangeOwnedStatus += panelShipsUpgrades.SetOwnedStatus;
+        EventUpgradeDestroyed += panelShipsUpgrades.ResizeContainer;
 
         cost = shipUpgradeData.cost;
         productionMultiplier = shipUpgradeData.productionMultiplier;
@@ -51,7 +55,7 @@ public class ShipUpgrade : MonoBehaviour
         imageIcon.sprite = shipUpgradeData.upgradeSprite;
         textName.text = shipUpgradeData.upgradeName;
         textProductionMultiplier.text = productionMultiplier.ToString();
-        textCost.text = cost.ToString();
+        textCost.text = Formatter.FormatValue(cost);
         buttonBuy = GetComponentInChildren<Button>();
     }
 
@@ -63,13 +67,15 @@ public class ShipUpgrade : MonoBehaviour
             {
                 currencyManager.currency -= cost;
 
-                eventBoughtUpgrade?.Invoke(productionMultiplier);
-                eventChangeOwnedStatus?.Invoke(shipUpgradeData);
+                EventBoughtUpgrade?.Invoke(productionMultiplier);
+                EventChangeOwnedStatus?.Invoke(shipUpgradeData);
                 isOwned = true;
 
                 buttonBuy.interactable = false;
 
                 // Make Sound
+
+                EventUpgradeDestroyed?.Invoke(transform);
 
                 Destroy(gameObject);
             }

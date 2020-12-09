@@ -133,11 +133,11 @@ public class Ship : MonoBehaviour
 
         textName.text = shipName;
         imageIcon.sprite = shipIcon;
-        textCost.text = $"{cost}";
+        textCost.text = Formatter.FormatValue(cost);
         textQuantity.text = $"{quantity}";
         textQuantityMultiplier.text = $"{quantityMultiplier}";
-        textCurrencyGain.text = $"{ReturnIdleGain()}/s";
-        textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
+        textCurrencyGain.text = "+" + Formatter.FormatValue(ReturnIdleGain()) + "/s";
+        textAdditionalCurrencyGain.text = "+" + Formatter.FormatValue(additionalCurrencyGain) + "/s";
     }
 
     // Update Values when the Player change the quantity of ships to buy.
@@ -150,11 +150,11 @@ public class Ship : MonoBehaviour
 
         UpdateIdleGain();
 
-        textCost.text = $"{cost}";
+        textCost.text = Formatter.FormatValue(cost);
         textQuantity.text = $"{quantity}";
         textQuantityMultiplier.text = $"{quantityMultiplier}";
-        textCurrencyGain.text = $"{ReturnIdleGain()}/s";
-        textAdditionalCurrencyGain.text = $"{additionalCurrencyGain}/s";
+        textCurrencyGain.text = "+" + Formatter.FormatValue(ReturnIdleGain()) + "/s";
+        textAdditionalCurrencyGain.text = "+" + Formatter.FormatValue(additionalCurrencyGain) + "/s";
     }
 
     // Method called from UI button to buy units of a Ship.

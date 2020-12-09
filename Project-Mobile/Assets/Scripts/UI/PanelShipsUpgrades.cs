@@ -30,7 +30,6 @@ public class PanelShipsUpgrades : MonoBehaviour
     public ShipUpgrade prefabShipUpgrade = null;
     public Transform panelShipUpgrades = null;
 
-
     public void InitUpgrades()
     {
         gameManager = GameManager.Instance;
@@ -112,5 +111,10 @@ public class PanelShipsUpgrades : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void ResizeContainer(Transform transform)
+    {
+        UIManager.Instance.ResizeContainer(panelShipUpgrades, transform, 0, UIManager.Resize.Subtract);
     }
 }

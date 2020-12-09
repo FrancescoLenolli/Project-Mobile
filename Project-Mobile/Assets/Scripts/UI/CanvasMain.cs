@@ -28,7 +28,12 @@ public class CanvasMain : MonoBehaviour
 
     private void UpdateIdleGainText(int value)
     {
-        textIdleGain.text = $"+ {value}/s";
+        textIdleGain.text =  value != 0 ? $"+{Formatter.FormatValue(value)}/s" : "";
+    }
+
+    public void UpdateCurrencyText(long value)
+    {
+        textCurrency.text = Formatter.FormatValue(value);
     }
 
     private void UpdateDoubleGainTime(int value)
@@ -41,10 +46,5 @@ public class CanvasMain : MonoBehaviour
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
         newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain);
-    }
-
-    public void UpdateCurrencyText(long value)
-    {
-        textCurrency.text = Formatter.FormatValue(value);
     }
 }

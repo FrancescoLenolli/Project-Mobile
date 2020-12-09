@@ -13,7 +13,7 @@ static class Formatter
         switch (convertedValue.Length)
         {
             case 1:
-                formattedValue = string.Format(convertedValue.Substring(0, 1) + " M");
+                formattedValue = convertedValue != "0" ? string.Format(convertedValue.Substring(0, 1) + " M") : string.Format(convertedValue.Substring(0, 1));
                 break;
             case 2:
                 formattedValue = string.Format(convertedValue.Substring(0, 2) + " M");
