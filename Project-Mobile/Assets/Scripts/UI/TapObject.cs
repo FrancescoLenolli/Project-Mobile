@@ -21,7 +21,7 @@ public class TapObject : MonoBehaviour
     // Print how much currency is gained by tapping on screen.
     public void SetValues(int currency /* Sprite currencySprite */)
     {
-        textCurrency.text = $"+{currency}";
+        textCurrency.text = "+" + Formatter.FormatValue(currency);
     }
 
     // After instantiating the object, start a little animation.

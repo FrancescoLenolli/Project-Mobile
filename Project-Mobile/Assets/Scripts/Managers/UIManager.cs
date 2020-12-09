@@ -44,7 +44,7 @@ public class UIManager : Singleton<UIManager>
 
         float newSizeY = resizeType == Resize.Add ? containerRect.sizeDelta.y + additionalElementRect.sizeDelta.y + bufferSpace : containerRect.sizeDelta.y - additionalElementRect.sizeDelta.y - bufferSpace;
 
-        Vector2 containerUpdatedSize = new Vector2(containerRect.sizeDelta.x, containerRect.sizeDelta.y + additionalElementRect.sizeDelta.y + bufferSpace);
+        Vector2 containerUpdatedSize = new Vector2(containerRect.sizeDelta.x, newSizeY);
         return containerUpdatedSize;
     }
 
