@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CustomData/Upgrades", fileName = "PassiveUpgrade")]
+[CreateAssetMenu(menuName = "CustomData/Upgrades", fileName = "Upgrade")]
 public class ShipUpgradeData : ScriptableObject
 {
     // What ship does this Upgrade affects? 
