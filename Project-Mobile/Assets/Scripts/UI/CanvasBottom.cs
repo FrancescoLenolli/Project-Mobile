@@ -20,7 +20,7 @@ public class CanvasBottom : MonoBehaviour
     [HideInInspector] public PanelShips panelShips = null;
     [HideInInspector] public PanelShipsUpgrades panelShipsUpgrades = null;
 
-    public TextMeshProUGUI textModifier = null;
+    public TextMeshProUGUI textQuantityModifier = null;
     public List<CanvasGroup> listPanels = new List<CanvasGroup>();
 
     private void Awake()
@@ -42,7 +42,7 @@ public class CanvasBottom : MonoBehaviour
     public void CycleModifiers()
     {
         modifierValue = currencyManager.CycleModifierAndReturnValue();
-        textModifier.text = $"{modifierValue}";
+        textQuantityModifier.text = $"{modifierValue}";
         EventUpdateQuantityModifier?.Invoke(modifierValue);
     }
 
