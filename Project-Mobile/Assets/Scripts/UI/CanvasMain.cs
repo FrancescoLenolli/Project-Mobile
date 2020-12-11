@@ -19,6 +19,7 @@ public class CanvasMain : MonoBehaviour
     private void Start()
     {
         textCurrency.text = currencyManager.currency.ToString();
+        textDoubleGainTime.text = "";
 
         currencyManager.EventUpdateCurrencyText += UpdateCurrencyText;
         currencyManager.EventUpdateIdleGainText += UpdateIdleGainText;

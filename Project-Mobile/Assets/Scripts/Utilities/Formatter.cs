@@ -22,52 +22,52 @@ static class Formatter
                 formattedValue = string.Format(convertedValue.Substring(0, 3) + " M");
                 break;
             case 4:
-                formattedValue = string.Format(convertedValue.Substring(0, 1) + " B");
+                formattedValue = string.Format(convertedValue.Substring(0, 1) + string.Format("." + convertedValue.Substring(1,1) + " B"));
                 break;
             case 5:
-                formattedValue = string.Format(convertedValue.Substring(0, 2) + " B");
+                formattedValue = string.Format(convertedValue.Substring(0, 2) + string.Format("." + convertedValue.Substring(2, 1) + " B"));
                 break;
             case 6:
-                formattedValue = string.Format(convertedValue.Substring(0,3) + " B");
+                formattedValue = string.Format(convertedValue.Substring(0,3) + string.Format("." + convertedValue.Substring(3, 1) + " B"));
                 break;
             case 7:
-                formattedValue = string.Format(convertedValue.Substring(0, 1) + " T");
+                formattedValue = string.Format(convertedValue.Substring(0, 1) + string.Format("." + convertedValue.Substring(1, 1) + " T"));
                 break;
             case 8:
-                formattedValue = string.Format(convertedValue.Substring(0, 2) + " T");
+                formattedValue = string.Format(convertedValue.Substring(0, 2) + string.Format("." + convertedValue.Substring(2, 1) + " T"));
                 break;
             case 9:
-                formattedValue = string.Format(convertedValue.Substring(0, 3) + " T");
+                formattedValue = string.Format(convertedValue.Substring(0, 3) + string.Format("." + convertedValue.Substring(3, 1) + " T"));
                 break;
             case 10:
-                formattedValue = string.Format(convertedValue.Substring(0, 1) + " Quad.");
+                formattedValue = string.Format(convertedValue.Substring(0, 1) + string.Format("." + convertedValue.Substring(1, 1) + " Quad."));
                 break;
             case 11:
-                formattedValue = string.Format(convertedValue.Substring(0, 2) + " Quad.");
+                formattedValue = string.Format(convertedValue.Substring(0, 2) + string.Format("." + convertedValue.Substring(2, 1) + " Quad."));
                 break;
             case 12:
-                formattedValue = string.Format(convertedValue.Substring(0, 3) + " Quad.");
+                formattedValue = string.Format(convertedValue.Substring(0, 3) + string.Format("." + convertedValue.Substring(3, 1) + " Quad."));
                 break;
             case 13:
-                formattedValue = string.Format(convertedValue.Substring(0, 1) + " Quint.");
+                formattedValue = string.Format(convertedValue.Substring(0, 1) + string.Format("." + convertedValue.Substring(1, 1) + " Quint."));
                 break;
             case 14:
-                formattedValue = string.Format(convertedValue.Substring(0, 2) + " Quint.");
+                formattedValue = string.Format(convertedValue.Substring(0, 2) + string.Format("." + convertedValue.Substring(2, 1) + " Quint."));
                 break;
             case 15:
-                formattedValue = string.Format(convertedValue.Substring(0, 3) + " Quint.");
+                formattedValue = string.Format(convertedValue.Substring(0, 3) + string.Format("." + convertedValue.Substring(3, 1) + " Quint."));
                 break;
             case 16:
-                formattedValue = string.Format(convertedValue.Substring(0, 1) + " Sixt.");
+                formattedValue = string.Format(convertedValue.Substring(0, 1) + string.Format("." + convertedValue.Substring(1, 1) + " Sixt."));
                 break;
             case 17:
-                formattedValue = string.Format(convertedValue.Substring(0, 2) + " Sixt.");
+                formattedValue = string.Format(convertedValue.Substring(0, 2) + string.Format("." + convertedValue.Substring(2, 1) + " Sixt."));
                 break;
             case 18:
-                formattedValue = string.Format(convertedValue.Substring(0, 3) + " Sixt.");
+                formattedValue = string.Format(convertedValue.Substring(0, 3) + string.Format("." + convertedValue.Substring(3, 1) + " Sixt."));
                 break;
             case 19:
-                formattedValue = string.Format(convertedValue.Substring(0, 1) + " Sept.");
+                formattedValue = string.Format(convertedValue.Substring(0, 1) + string.Format("." + convertedValue.Substring(1, 1) + " Sept."));
                 break;
             default:
                 formattedValue = convertedValue;

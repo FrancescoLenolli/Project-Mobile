@@ -30,6 +30,8 @@ public class CanvasBottom : MonoBehaviour
         panelShips = GetComponentInChildren<PanelShips>();
         panelShipsUpgrades = GetComponentInChildren<PanelShipsUpgrades>();
 
+        EventShowOptionsPanel += FindObjectOfType<CanvasOptions>().MoveToPosition;
+
         // At start of the game, make visible one panel while closing the others.
         OpenPanel((int)firstActivePanel);
     }

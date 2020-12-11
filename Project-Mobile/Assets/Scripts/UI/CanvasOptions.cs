@@ -49,11 +49,9 @@ public class CanvasOptions : MonoBehaviour
         imageSFX.sprite = ChangeSprite(isVolumeSFXOn);
         imageMusic.sprite = ChangeSprite(isVolumeMusicOn);
         imageVibration.sprite = ChangeSprite(isVibrationOn);
-
-        FindObjectOfType<CanvasBottom>().EventShowOptionsPanel += MoveToPosition;
     }
 
-    private void MoveToPosition()
+    public void MoveToPosition()
     {
         Vector3 targetPosition = panelOptions.localPosition == newPosition.localPosition ? originalPosition : newPosition.localPosition;
 
