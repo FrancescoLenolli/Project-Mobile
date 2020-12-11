@@ -97,12 +97,14 @@ public class CanvasDailyRewards : MonoBehaviour
             buttonCollect.onClick.RemoveAllListeners();
             buttonCollect.onClick.AddListener(CollectReward);
             textButtonCollect.text = "COLLECT";
+            Debug.Log("Can now collect reward.");
         }
         else
         {
             buttonCollect.onClick.RemoveAllListeners();
             buttonCollect.onClick.AddListener(MoveToPosition);
             textButtonCollect.text = "CLOSE";
+            Debug.Log("Cannot collect reward yet.");
         }
     }
 
