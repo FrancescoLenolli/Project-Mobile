@@ -32,7 +32,7 @@ public class CanvasBottom : MonoBehaviour
 
         EventShowOptionsPanel += FindObjectOfType<CanvasOptions>().MoveToPosition;
 
-        // At start of the game, make visible one panel while closing the others.
+        // At start of the game, make one panel visible while closing the others.
         OpenPanel((int)firstActivePanel);
 
         textQuantityModifier.text = $"{currencyManager.GetShipQuantityToBuy()}";

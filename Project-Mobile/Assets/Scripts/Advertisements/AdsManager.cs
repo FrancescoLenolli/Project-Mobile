@@ -13,28 +13,37 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
 
     public enum AdType { BaseCurrency, DoubleIdleEarnings, DoubleOfflineEarnings }
 
+    private CurrencyManager currencyManager = null;
     private string placement = "rewardedVideo";
-    private AdType watchedAdType;
+    private AdType adType;
+
+    private void Awake()
+    {
+        currencyManager = CurrencyManager.Instance;
+    }
 
     private void Start()
     {
         StartCoroutine(InitAd());
 
-        EventAdBaseCurrency += CurrencyManager.Instance.AddCurrencyAdvertisement;
-        EventAdDoubleEarnings += CurrencyManager.Instance.AddDoubleIdleGainTime;
+        EventAdBaseCurrency += currencyManager.AddCurrencyAdvertisement;
+        EventAdDoubleEarnings += currencyManager.AddDoubleIdleGainTime;
         EventAdDoubleOfflineEarnings += FindObjectOfType<CanvasOfflineEarning>().CollectDouble;
     }
 
-    private void SetAdWatchedType(AdType newType)
+    // Set which type of Ad will be watched next.
+    private void SetCurrentAdType(AdType newType)
     {
-        watchedAdType = newType;
+        adType = newType;
     }
 
+    // When the Ad has been completely watched, give the right reward to the Player.
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
         if (showResult == ShowResult.Finished)
         {
-            switch (watchedAdType)
+            // Different behaviour depending on the Ad watched.
+            switch (adType)
             {
                 case AdType.BaseCurrency:
                     EventAdBaseCurrency?.Invoke();
@@ -54,6 +63,9 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
         }
     }
 
+    // Normally it's not the best idea to use a Region.
+    // Here I'm simply hiding some unused standard methods.
+    #region UNUSED ADS METHODS
     public void OnUnityAdsReady(string placementId)
     {
     }
@@ -65,14 +77,17 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     public void OnUnityAdsDidError(string message)
     {
     }
+    #endregion
 
-    // Subscribe this to some UI Event
+    // Set the type of the Ad to watch, then show it.
     public void ShowAd(AdType adType)
     {
-        SetAdWatchedType(adType);
+        SetCurrentAdType(adType);
         Advertisement.Show(placement);
     }
 
+    // Prepare the Advertisement.
+    // Avoid delays when the Player wants to watch an Ad.
     private IEnumerator InitAd()
     {
         Advertisement.AddListener(this);

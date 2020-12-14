@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public delegate void WatchAd(AdsManager.AdType adType);
 public class PanelExtra : MonoBehaviour
@@ -9,14 +6,10 @@ public class PanelExtra : MonoBehaviour
     public event WatchAd EventWatchCurrencyAd;
 
     private GameManager gameManager = null;
-    private UIManager uiManager = null;
-
-    [SerializeField] private List<Button> listButtons = new List<Button>();
 
     private void Start()
     {
         gameManager = GameManager.Instance;
-        uiManager = UIManager.Instance;
 
         EventWatchCurrencyAd += gameManager.adsManager.ShowAd;
     }

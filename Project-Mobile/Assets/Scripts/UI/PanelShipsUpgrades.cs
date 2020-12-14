@@ -95,7 +95,10 @@ public class PanelShipsUpgrades : MonoBehaviour
         }
     }
 
-    // When buying an Upgrade, set his status to Owned so it won't be displayed in the Upgrades Panel when reloading the game.
+    /// <summary>
+    /// Set Upgrade status to Owned. Add it to the List of Owned Upgrades.
+    /// </summary>
+    /// <param name="upgradeData"></param>
     public void SetOwnedStatus(ShipUpgradeData upgradeData)
     {
         // Search for the right Upgrade and set his status to Owned, saving the modified list.

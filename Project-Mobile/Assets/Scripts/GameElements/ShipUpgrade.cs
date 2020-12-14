@@ -2,12 +2,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public delegate void BoughtUpgrade(int myCurrencyGainModifier);
+public delegate void UpgradeBought(int myCurrencyGainModifier);
 public delegate void ChangeOwnedStatus(ShipUpgradeData myData);
 public delegate void UpgradeDestroyed(Transform transform);
 public class ShipUpgrade : MonoBehaviour
 {
-    public event BoughtUpgrade EventBoughtUpgrade;
+    public event UpgradeBought EventBoughtUpgrade;
     public event ChangeOwnedStatus EventChangeOwnedStatus;
     public event UpgradeDestroyed EventUpgradeDestroyed;
 

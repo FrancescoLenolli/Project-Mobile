@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,15 +7,14 @@ public delegate void CollectOfflineEarning(CanvasOfflineEarning.CollectionType c
 
 public class CanvasOfflineEarning : MonoBehaviour
 {
-    public enum CollectionType { Normal, DoubleAd }
-
     public event CollectOfflineEarning EventCollectOfflineEarning;
     public event WatchAd EventWatchAd;
+
+    public enum CollectionType { Normal, DoubleAd }
 
     private UIManager uIManager = null;
     private GameManager gameManager = null;
     private CurrencyManager currencyManager = null;
-
     private Vector3 originalPosition = Vector3.zero;
 
     public Transform panelOfflineEarning = null;
@@ -35,8 +33,8 @@ public class CanvasOfflineEarning : MonoBehaviour
 
         originalPosition = panelOfflineEarning.localPosition;
 
-        EventCollectOfflineEarning += currencyManager.AddOfflineEarnings;
         EventWatchAd += gameManager.adsManager.ShowAd;
+        EventCollectOfflineEarning += currencyManager.AddOfflineEarnings;
         currencyManager.EventSendBackgroundGainValue += ShowPanel;
     }
 
@@ -49,9 +47,9 @@ public class CanvasOfflineEarning : MonoBehaviour
     // Don't do it if it's the first time the Player plays the game.
     public void ShowPanel(long currencyGained)
     {
-            uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
-            textCurrencyGained.text = Formatter.FormatValue(currencyGained);
-            textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
+        uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
+        textCurrencyGained.text = Formatter.FormatValue(currencyGained);
+        textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
     }
 
     // Called when the Player chooses to double the offline earnings by watching an Ad.
