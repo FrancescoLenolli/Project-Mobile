@@ -37,7 +37,7 @@ public class CanvasOfflineEarning : MonoBehaviour
 
         EventCollectOfflineEarning += currencyManager.AddOfflineEarnings;
         EventWatchAd += gameManager.adsManager.ShowAd;
-        currencyManager.EventBackgroundGainCalculated += ShowPanel;
+        currencyManager.EventSendBackgroundGainValue += ShowPanel;
     }
 
     private void HidePanel()

@@ -12,10 +12,12 @@ public class GameManager : Singleton<GameManager>
     public event SendTimeFromLastGame EventSendTimeFromLastGame;
     public event InitialiseData EventInitData;
 
+    // Time when the last session ended.
     private DateTime lastSessionTime;
+    // Time when current session started.
     private DateTime currentSessionTime;
+    // seconds passed from last session to current session.
     private int secondsOffline;
-    private bool isResetting = false;
     private bool isFirstSession = true;
 
     [HideInInspector] public PlayerData playerData = null;
@@ -23,18 +25,11 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public TimeSpan timeOffline = TimeSpan.Zero;
 
     public string playerName = "";
-    [Min(0)]
-    public long playerCurrency = 0;
     public bool isVolumeSFXOn = true;
     public bool isVolumeMusicOn = true;
     public bool isVibrationOn = true;
     [Space(10)]
     public AdsManager adsManager = null;
-
-    // DEBUG
-    [HideInInspector] public bool canSaveData = true;
-    [HideInInspector] public bool canDebug = false;
-
 
     private new void Awake()
     {
@@ -44,8 +39,6 @@ public class GameManager : Singleton<GameManager>
         playerData = Load();
 
         isFirstSession = playerData.isFirstSession;
-        canSaveData = playerData.canSaveData;
-        canDebug = playerData.canDebug;
         isVolumeSFXOn = playerData.SFXVolumeOn;
         isVolumeMusicOn = playerData.MusicVolumeOn;
         isVibrationOn = playerData.VibrationOn;
@@ -81,12 +74,9 @@ public class GameManager : Singleton<GameManager>
 
     private void OnApplicationQuit()
     {
-        if (!isResetting)
-        {
             lastSessionTime = DateTime.Now;
             isFirstSession = false;
             SaveCurrentData();
-        }
     }
 
     /// <summary>
@@ -130,13 +120,6 @@ public class GameManager : Singleton<GameManager>
         return timeOffline.TotalDays >= 1;
     }
 
-    public void EnableSaveData()
-    {
-        canSaveData = !canSaveData;
-        SaveCanSaveData();
-
-    }
-
     public void SetVolumeSFX(bool isOn)
     {
         isVolumeSFXOn = isOn;
@@ -177,24 +160,7 @@ public class GameManager : Singleton<GameManager>
         playerData.lastCurrencyIdleGain = CurrencyManager.Instance.currencyIdleGain;
         playerData.lastModifierIdleGain = CurrencyManager.Instance.modifierIdleGain;
         playerData.lastPlayedTime = lastSessionTime.ToString();
-        playerData.canDebug = canDebug;
         Save();
-    }
-
-    // DEBUG ONLY. Reset all progress and close application.
-    public void ResetData()
-    {
-        isResetting = true;
-        playerData = new PlayerData();
-        Save();
-        Application.Quit();
-        //EditorApplication.isPlaying = false;
-    }
-
-    // DEBUG ONLY.
-    private void SaveCanSaveData()
-    {
-        playerData.canSaveData = canSaveData;
     }
 
     // Doesn't seems like a good idea, but I'll leave it for now.
@@ -228,11 +194,8 @@ public class GameManager : Singleton<GameManager>
     // Convert data to JSON, then save it.
     public void Save()
     {
-        if (canSaveData)
-        {
             string json = JsonUtility.ToJson(playerData);
             WriteToFile(file, json);
-        }
     }
 
     /// Load Saved Data, create new Data if none is found.

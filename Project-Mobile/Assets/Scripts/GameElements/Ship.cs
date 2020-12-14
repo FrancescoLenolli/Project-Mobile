@@ -124,7 +124,7 @@ public class Ship : MonoBehaviour
         currencyGain = shipData.currencyGain;
         qtToUnlockNextShip = shipData.qtToUnlockNextShip;
 
-        quantityMultiplier = currencyManager.GetQuantityToBuy();
+        quantityMultiplier = currencyManager.GetShipQuantityToBuy();
         cost *= quantityMultiplier;
 
         additionalCurrencyGain = currencyGain * quantityMultiplier;
@@ -143,7 +143,7 @@ public class Ship : MonoBehaviour
     // Update Values when the Player change the quantity of ships to buy.
     public void UpdateValues()
     {
-        quantityMultiplier = currencyManager.GetQuantityToBuy();
+        quantityMultiplier = currencyManager.GetShipQuantityToBuy();
         cost = shipData.cost * quantityMultiplier;
         currencyGain = shipData.currencyGain;
         additionalCurrencyGain = shipData.currencyGain * quantityMultiplier;

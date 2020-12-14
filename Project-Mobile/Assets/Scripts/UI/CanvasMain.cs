@@ -21,13 +21,13 @@ public class CanvasMain : MonoBehaviour
         textCurrency.text = currencyManager.currency.ToString();
         textDoubleGainTime.text = "";
 
-        currencyManager.EventUpdateCurrencyText += UpdateCurrencyText;
-        currencyManager.EventUpdateIdleGainText += UpdateIdleGainText;
-        currencyManager.EventUpdateDoubleGainTimeText += UpdateDoubleGainTime;
-        currencyManager.EventSpawnTextAtInputPosition += InstantiateTapObject;
+        currencyManager.EventUpdateTextCurrency += UpdateCurrencyText;
+        currencyManager.EventUpdateTextIdleGain += UpdateIdleGainText;
+        currencyManager.EventUpdateTextDoubleGainTime += UpdateDoubleGainTime;
+        currencyManager.EventSendTouchPosition += InstantiateTapObject;
     }
 
-    private void UpdateIdleGainText(int value)
+    private void UpdateIdleGainText(long value)
     {
         textIdleGain.text =  value != 0 ? $"+{Formatter.FormatValue(value)}/s" : "";
     }
@@ -46,6 +46,6 @@ public class CanvasMain : MonoBehaviour
     private void InstantiateTapObject(Vector3 mousePosition)
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
-        newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain);
+        newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain, currencyManager.spriteCurrency);
     }
 }

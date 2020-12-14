@@ -34,6 +34,8 @@ public class CanvasBottom : MonoBehaviour
 
         // At start of the game, make visible one panel while closing the others.
         OpenPanel((int)firstActivePanel);
+
+        textQuantityModifier.text = $"{currencyManager.GetShipQuantityToBuy()}";
     }
 
     // Update Modifier for Ship Quantity to buy.

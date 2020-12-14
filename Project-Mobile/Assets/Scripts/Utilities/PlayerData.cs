@@ -3,16 +3,12 @@ using System.Collections.Generic;
 
 public class PlayerData
 {
-    // DEBUG DATA
-    public bool canSaveData = true;
-    public bool canDebug = false;
-
     // GAME DATA
     // ********** GENERAL **********
     public bool isFirstSession = true;
     public string playerName = "PlayerName";
     public long playerCurrency = 0;
-    public int lastCurrencyIdleGain = 0;
+    public long lastCurrencyIdleGain = 0;
     public int lastModifierIdleGain = 0;
     public string lastPlayedTime = "";
 

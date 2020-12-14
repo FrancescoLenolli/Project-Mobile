@@ -8,7 +8,7 @@ public class TapObject : MonoBehaviour
     private CanvasGroup canvasGroup = null;
 
     public TextMeshProUGUI textCurrency = null;
-    public Image spriteCurrency = null;
+    public Image imageCurrency = null;
     [Min(0)]
     public float movementSpeed = 1;
 
@@ -19,9 +19,10 @@ public class TapObject : MonoBehaviour
     }
 
     // Print how much currency is gained by tapping on screen.
-    public void SetValues(int currency /* Sprite currencySprite */)
+    public void SetValues(long currency, Sprite currencySprite)
     {
         textCurrency.text = "+" + Formatter.FormatValue(currency);
+        imageCurrency.sprite = currencySprite;
     }
 
     // After instantiating the object, start a little animation.
