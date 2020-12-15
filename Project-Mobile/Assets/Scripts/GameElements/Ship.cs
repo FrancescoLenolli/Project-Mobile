@@ -12,6 +12,7 @@ public delegate void UpdateShipModifier(int index, int modifier); // Update this
 public delegate void UnlockUpgrades(ShipData.ShipType myType);
 public delegate void UpdateIdleGain();
 public delegate void UpdateCurrencyText(long value);
+public delegate void ShowPanelDescription(Sprite sprite, string name, string description);
 
 public class Ship : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class Ship : MonoBehaviour
     public event UnlockUpgrades EventUnlockUpgrades;
     public event UpdateIdleGain EventUpdateIdleGain;
     public event UpdateCurrencyText EventUpdateCurrencyText;
+    public event ShowPanelDescription EventShowPanelDescriptions;
 
     private CurrencyManager currencyManager = null;
     private CanvasBottom canvasBottom = null;
@@ -29,6 +31,7 @@ public class Ship : MonoBehaviour
     private ShipData.ShipType shipType = ShipData.ShipType.Patrol;
     private int index = 0;
     private string shipName = "";
+    private string shipDescription = "";
     private Sprite shipIcon = null;
     private int cost = 0;
     private int currencyGain = 0;
@@ -118,6 +121,7 @@ public class Ship : MonoBehaviour
         EventUnlockUpgrades += canvasBottom.panelShipsUpgrades.UnlockUpgrades;
         EventUpdateIdleGain += UpdateIdleGain;
         EventUpdateCurrencyText += FindObjectOfType<CanvasMain>().UpdateCurrencyText;
+        EventShowPanelDescriptions += FindObjectOfType<PanelItemDescription>().ShowPanel;
 
         quantity = newQuantity;
         productionMultiplier = newMultiplier;
@@ -125,6 +129,7 @@ public class Ship : MonoBehaviour
         shipType = shipData.shipType;
         index = shipData.index;
         shipName = shipData.shipName;
+        shipDescription = shipData.shipDescription;
         shipIcon = shipData.shipIcon;
         cost = shipData.cost;
         currencyGain = shipData.currencyGain;
@@ -218,5 +223,10 @@ public class Ship : MonoBehaviour
         EventUpdateIdleGain?.Invoke();
 
         currencyManager.IncreaseCurrencyIdleGain(idleGain);
+    }
+
+    public void ShowPanelDescription()
+    {
+        EventShowPanelDescriptions?.Invoke(shipIcon, shipName, shipDescription);
     }
 }

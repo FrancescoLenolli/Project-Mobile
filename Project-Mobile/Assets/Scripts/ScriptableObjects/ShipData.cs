@@ -9,6 +9,7 @@ public class ShipData : ScriptableObject
     public ShipType shipType = ShipType.Patrol;
     public int index = 0;
     public string shipName = "New Ship";
+    public string shipDescription = "Ship Description";
     public Sprite shipIcon = null;
     public int cost = 0;
     public int currencyGain = 0;

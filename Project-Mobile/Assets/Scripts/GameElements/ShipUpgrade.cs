@@ -11,6 +11,7 @@ public class ShipUpgrade : MonoBehaviour
     public event UpgradeBought EventBoughtUpgrade;
     public event ChangeOwnedStatus EventChangeOwnedStatus;
     public event UpgradeDestroyed EventUpgradeDestroyed;
+    public event ShowPanelDescription EventShowPanelDescription;
 
 
     private ShipUpgradeData shipUpgradeData = null;
@@ -91,5 +92,10 @@ public class ShipUpgrade : MonoBehaviour
                 // Make Another Sound
             }
         }
+    }
+
+    public void ShowPanelDescription()
+    {
+        EventShowPanelDescription?.Invoke(shipUpgradeData.upgradeSprite, shipUpgradeData.upgradeName, shipUpgradeData.description);
     }
 }

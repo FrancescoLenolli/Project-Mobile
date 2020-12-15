@@ -3,12 +3,10 @@ using TMPro;
 using UnityEngine;
 
 public delegate void UpdateQuantityModifier(int newModifierValue);
-public delegate void ShowOptionsPanel();
 public class CanvasBottom : MonoBehaviour
 {
     public enum BottomPanels { Ships, Upgrades, Extras }
     public event UpdateQuantityModifier EventUpdateQuantityModifier;
-    public event ShowOptionsPanel EventShowOptionsPanel;
 
     private CurrencyManager currencyManager = null;
     private UIManager uiManager = null;
@@ -29,8 +27,6 @@ public class CanvasBottom : MonoBehaviour
         uiManager = UIManager.Instance;
         panelShips = GetComponentInChildren<PanelShips>();
         panelShipsUpgrades = GetComponentInChildren<PanelShipsUpgrades>();
-
-        EventShowOptionsPanel += FindObjectOfType<CanvasOptions>().MoveToPosition;
 
         // At start of the game, make one panel visible while closing the others.
         OpenPanel((int)firstActivePanel);
@@ -62,10 +58,5 @@ public class CanvasBottom : MonoBehaviour
                 uiManager.ChangeStatus(listPanels[i], false);
             }
         }
-    }
-
-    public void ShowOptionsPanel()
-    {
-        EventShowOptionsPanel?.Invoke();
     }
 }

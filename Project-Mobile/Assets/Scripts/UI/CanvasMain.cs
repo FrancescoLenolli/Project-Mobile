@@ -2,8 +2,11 @@
 using TMPro;
 using UnityEngine;
 
+public delegate void ShowOptionsPanel();
 public class CanvasMain : MonoBehaviour
 {
+    public event ShowOptionsPanel EventShowOptionsPanel;
+
     private CurrencyManager currencyManager;
 
     public TextMeshProUGUI textCurrency;
@@ -21,6 +24,7 @@ public class CanvasMain : MonoBehaviour
         textCurrency.text = currencyManager.currency.ToString();
         textDoubleGainTime.text = "";
 
+        EventShowOptionsPanel += FindObjectOfType<CanvasOptions>().MoveToPosition;
         currencyManager.EventUpdateTextCurrency += UpdateCurrencyText;
         currencyManager.EventUpdateTextIdleGain += UpdateIdleGainText;
         currencyManager.EventUpdateTextDoubleGainTime += UpdateDoubleGainTime;
@@ -47,5 +51,10 @@ public class CanvasMain : MonoBehaviour
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
         newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain, currencyManager.spriteCurrency);
+    }
+
+    public void ShowOptionsPanel()
+    {
+        EventShowOptionsPanel?.Invoke();
     }
 }

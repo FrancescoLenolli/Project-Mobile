@@ -76,14 +76,17 @@ public class PanelShipsUpgrades : MonoBehaviour
         }
 
         // Instantiate every upgrade not yet owned and resize their container.
-        foreach (ShipUpgradeData upgradeData in listUpgradesNotOwned)
+        if (listUpgradesNotOwned.Count > 0)
         {
-            ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
-            newUpgrade.SetValues(upgradeData, this);
+            foreach (ShipUpgradeData upgradeData in listUpgradesNotOwned)
+            {
+                ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
+                newUpgrade.SetValues(upgradeData, this);
 
-            panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
-            newUpgrade.transform.SetSiblingIndex(0);
+                panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
+                newUpgrade.transform.SetSiblingIndex(0);
 
+            }
         }
 
         // TODO: Do something with Upgrades Owned.
