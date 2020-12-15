@@ -69,6 +69,9 @@ MonoBehaviour:
   textCost: {fileID: 2719035709905159387}
   textQuantityMultiplier: {fileID: 2719035708929906067}
   buttonBuy: {fileID: 9174561490011322439}
+  listButtonSprites:
+  - {fileID: 21300088, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  - {fileID: 21300086, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
 --- !u!1 &2719035708905655554
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,15 +7,15 @@ public struct UpgradeInfo
 {
     // Generic Data for the Ship's Upgrade.
     // Things like cost, effects ecc...
-    public ShipUpgradeData upgradeData;
+    public string upgradeName;
 
     // Was this Upgrade bought or is still available to buy?
     // Upgrades NOT owned will be visible in the Upgrades panel.
     public bool isOwned;
 
-    public UpgradeInfo(ShipUpgradeData newUpgradeData, bool newStatus)
+    public UpgradeInfo(string newUpgradeName, bool newStatus)
     {
-        upgradeData = newUpgradeData;
+        upgradeName = newUpgradeName;
         isOwned = newStatus;
     }
 }
@@ -23,6 +23,7 @@ public struct UpgradeInfo
 public class PanelShipsUpgrades : MonoBehaviour
 {
     private GameManager gameManager = null;
+    private List<ShipUpgradeData> listUpgradesData = new List<ShipUpgradeData>();
     private List<UpgradeInfo> listUpgradesUnlocked = new List<UpgradeInfo>();
     private List<UpgradeInfo> listUpgradesBought = new List<UpgradeInfo>();
     private RectTransform panelShipRect = null;
@@ -30,10 +31,27 @@ public class PanelShipsUpgrades : MonoBehaviour
     public ShipUpgrade prefabShipUpgrade = null;
     public Transform panelShipUpgrades = null;
 
+    private ShipUpgradeData GetUpgradeData(string upgradeName)
+    {
+        ShipUpgradeData upgradeData = null;
+
+        foreach(ShipUpgradeData data in listUpgradesData)
+        {
+            if(data.upgradeName == upgradeName)
+            {
+                upgradeData = data;
+                break;
+            }
+        }
+
+        return upgradeData;
+    }
+
     public void InitUpgrades()
     {
         gameManager = GameManager.Instance;
         panelShipRect = panelShipUpgrades.GetComponent<RectTransform>();
+        listUpgradesData = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades"));
 
         listUpgradesUnlocked = gameManager.playerData.playerUpgradesUnlocked;
         if (listUpgradesUnlocked == null)
@@ -49,11 +67,11 @@ public class PanelShipsUpgrades : MonoBehaviour
         {
             if (upgradeInfo.isOwned)
             {
-                listUpgradesOwned.Add(upgradeInfo.upgradeData);
+                listUpgradesOwned.Add(GetUpgradeData(upgradeInfo.upgradeName));
             }
             else
             {
-                listUpgradesNotOwned.Add(upgradeInfo.upgradeData);
+                listUpgradesNotOwned.Add(GetUpgradeData(upgradeInfo.upgradeName));
             }
         }
 
@@ -83,7 +101,7 @@ public class PanelShipsUpgrades : MonoBehaviour
             newUpgrade.SetValues(shipUpgradeData, this);
 
             // ...Add it to the list of Upgrades Unlocked...
-            UpgradeInfo upgradeUnlocked = new UpgradeInfo(shipUpgradeData, false);
+            UpgradeInfo upgradeUnlocked = new UpgradeInfo(shipUpgradeData.upgradeName, false);
             listUpgradesUnlocked.Add(upgradeUnlocked);
 
             // ...Resize container...
@@ -104,9 +122,9 @@ public class PanelShipsUpgrades : MonoBehaviour
         // Search for the right Upgrade and set his status to Owned, saving the modified list.
         for (int i = 0; i < listUpgradesUnlocked.Count; ++i)
         {
-            if (listUpgradesUnlocked[i].upgradeData == upgradeData)
+            if (listUpgradesUnlocked[i].upgradeName == upgradeData.upgradeName)
             {
-                listUpgradesUnlocked[i] = new UpgradeInfo(listUpgradesUnlocked[i].upgradeData, true);
+                listUpgradesUnlocked[i] = new UpgradeInfo(listUpgradesUnlocked[i].upgradeName, true);
                 listUpgradesBought.Add(listUpgradesUnlocked[i]);
 
                 gameManager.SaveUpgradesBought(listUpgradesBought);

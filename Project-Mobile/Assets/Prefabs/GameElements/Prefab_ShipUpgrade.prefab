@@ -57,9 +57,12 @@ MonoBehaviour:
   isOwned: 0
   imageIcon: {fileID: 3259970952836145291}
   textName: {fileID: 3259970952841240384}
-  textProductionMultiplier: {fileID: 3259970953825483940}
+  textDescription: {fileID: 3259970953825483940}
   textCost: {fileID: 3259970953701009744}
   buttonBuy: {fileID: 8634770262192362956}
+  listButtonSprites:
+  - {fileID: 21300088, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  - {fileID: 21300086, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
 --- !u!1 &3259970952836145289
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,8 +170,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -97.2, y: 37.5}
-  m_SizeDelta: {x: 585.5, y: 75}
+  m_AnchoredPosition: {x: -24.975, y: 37.5}
+  m_SizeDelta: {x: 729.95, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3259970952841240385
 CanvasRenderer:
@@ -224,10 +227,10 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 70
+  m_fontSize: 58.15
   m_fontSizeBase: 70
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 36
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -241,7 +244,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 0
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -379,11 +382,11 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 72
-  m_fontSizeBase: 36
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 1
-  m_fontSizeMin: 36
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 20
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_textAlignment: 514
@@ -550,8 +553,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -92.325005, y: -43.746}
-  m_SizeDelta: {x: 575.75, y: 62.5}
+  m_AnchoredPosition: {x: -24.974, y: -37.498}
+  m_SizeDelta: {x: 729.95, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3259970953825483941
 CanvasRenderer:
@@ -607,14 +610,14 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 33.35
+  m_fontSize: 42.45
   m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 30
   m_fontSizeMax: 70.35
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 513
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0

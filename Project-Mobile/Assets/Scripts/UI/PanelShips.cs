@@ -42,7 +42,7 @@ public class PanelShips : MonoBehaviour
 
     [HideInInspector] public List<ShipInfo> listShipInfos = new List<ShipInfo>();
 
-    // Instantiate new ship, add it to listShips and listShipInfos, and update shipsContainer.
+    // Instantiate new ship, add it to listShips and listShipInfos, and update shipsContainer's size.
     private void InitAndAddShip(string shipName)
     {
         // Starting quantity and multiplier will always be 0.
@@ -61,6 +61,7 @@ public class PanelShips : MonoBehaviour
         newShip.transform.SetSiblingIndex(0);
     }
 
+    // Return a ShipData from the list of ShipDatas.
     private ShipData ReturnShipData(string shipDataName)
     {
         ShipData result = null;
@@ -82,7 +83,7 @@ public class PanelShips : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         uiManager = UIManager.Instance;
-        canvasBottom = FindObjectOfType<CanvasBottom>();
+        canvasBottom = GetComponentInParent<CanvasBottom>();
         containerShipsRect = containerShips.GetComponent<RectTransform>();
         listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
 
@@ -91,7 +92,7 @@ public class PanelShips : MonoBehaviour
         // Update the list of ships to spawn with Saved Data.
         listShipInfos = gameManager.playerData.playerShips;
 
-        // First time the player play the game.
+        // Handles first time the game is played.
         // If the player has no ships, add the first type to list.
         if (listShipInfos == null)
         {
@@ -124,7 +125,10 @@ public class PanelShips : MonoBehaviour
         eventShipsInitialised?.Invoke();
     }
 
-    // If conditions are met, unlock new type of ship.
+    /// <summary>
+    /// Unlock new Ship.
+    /// </summary>
+    /// <param name="currentShipIndex"></param>
     public void AddNewShip(int currentShipIndex)
     {
         // currentShipIndex is the index of the last ship bought.
@@ -144,17 +148,31 @@ public class PanelShips : MonoBehaviour
         gameManager.SaveShipInfos(listShipInfos);
     }
 
-    // Update quantity of specific ship.
+    /// <summary>
+    /// Update quantity value of specific ship.
+    /// </summary>
+    /// <param name="shipIndex"></param>
+    /// <param name="newQuantity"></param>
     public void UpdateQuantityAt(int shipIndex, int newQuantity)
     {
         listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipName, newQuantity, listShipInfos[shipIndex].shipIdleGainModifier);
     }
 
+    /// <summary>
+    /// Update currencyGain modifier value of specific ship.
+    /// </summary>
+    /// <param name="shipIndex"></param>
+    /// <param name="newModifier"></param>
     public void UpdateModifierAt(int shipIndex, int newModifier)
     {
         listShipInfos[shipIndex] = new ShipInfo(listShipInfos[shipIndex].shipName, listShipInfos[shipIndex].shipQuantity, newModifier);
     }
 
+    /// <summary>
+    /// Return an object of type Ship from the list of Ships owned.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public Ship ReturnShipOfType(ShipData.ShipType type)
     {
         Ship ship = null;

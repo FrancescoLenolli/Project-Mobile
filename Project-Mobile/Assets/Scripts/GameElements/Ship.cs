@@ -51,6 +51,7 @@ public class Ship : MonoBehaviour
     public TextMeshProUGUI textCost = null;
     public TextMeshProUGUI textQuantityMultiplier = null;
     public Button buttonBuy = null;
+    public List<Sprite> listButtonSprites = new List<Sprite>();
 
     private void Update()
     {
@@ -58,8 +59,13 @@ public class Ship : MonoBehaviour
         // TODO: Add a sprite change.
         // Call this with an event. 
         // When idle currency is updated, when active currency is updated, when buying new ships.
-        if(currencyManager)
-        buttonBuy.interactable = currencyManager.currency >= cost;
+        if (currencyManager || listButtonSprites != null)
+        {
+            bool canBuy = currencyManager.currency >= cost;
+
+            buttonBuy.image.sprite = canBuy ? listButtonSprites[0] : listButtonSprites[1];
+            buttonBuy.interactable = canBuy;
+        }
 
     }
 
@@ -162,7 +168,7 @@ public class Ship : MonoBehaviour
     {
         int multiplier = quantityMultiplier;
 
-        if (currencyManager.currency >= cost * multiplier)
+        if (currencyManager.currency >= cost)
         {
             currencyManager.currency -= cost;
             EventUpdateCurrencyText?.Invoke(currencyManager.currency);

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,9 +24,10 @@ public class ShipUpgrade : MonoBehaviour
 
     public Image imageIcon = null;
     public TextMeshProUGUI textName = null;
-    public TextMeshProUGUI textProductionMultiplier = null;
+    public TextMeshProUGUI textDescription = null;
     public TextMeshProUGUI textCost = null;
     public Button buttonBuy = null;
+    public List<Sprite> listButtonSprites = new List<Sprite>();
 
     private void Awake()
     {
@@ -34,7 +36,12 @@ public class ShipUpgrade : MonoBehaviour
 
     private void Update()
     {
-        buttonBuy.interactable = currencyManager.currency >= cost ? true : false;
+        if (currencyManager)
+        {
+            bool canBuy = currencyManager.currency >= cost;
+            buttonBuy.image.sprite = canBuy ? listButtonSprites[0] : listButtonSprites[1];
+            buttonBuy.interactable = canBuy;
+        }
     }
 
     public void SetValues(ShipUpgradeData newData, PanelShipsUpgrades newPanel)
@@ -54,7 +61,7 @@ public class ShipUpgrade : MonoBehaviour
 
         imageIcon.sprite = shipUpgradeData.upgradeSprite;
         textName.text = shipUpgradeData.upgradeName;
-        textProductionMultiplier.text = productionMultiplier.ToString();
+        textDescription.text = $"{newData.description}\nImprove efficiency by {productionMultiplier}%.";
         textCost.text = Formatter.FormatValue(cost);
         buttonBuy = GetComponentInChildren<Button>();
     }
