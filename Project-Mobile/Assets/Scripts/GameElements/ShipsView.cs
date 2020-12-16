@@ -17,14 +17,18 @@ public class ShipsView : MonoBehaviour
     {
         viewPosition = parentObject.position;
 
+        Quaternion newRotation = new Quaternion();
+        newRotation.eulerAngles = new Vector3(0, 180, 0);
+
         foreach (GameObject gameObject in listPrefabShips)
         {
-            GameObject ship = Instantiate(gameObject, new Vector3(0, 0, -200), new Quaternion(0, 0, 0, 0));
+
+            GameObject ship = Instantiate(gameObject, new Vector3(0, 0, -200), newRotation);
             listShips.Add(ship);
         }
 
         listShips[index].transform.SetParent(parentObject);
-        listShips[index].transform.localPosition = viewPosition;
+        listShips[index].transform.position = viewPosition;
     }
 
     public void CycleLeft()
@@ -58,6 +62,6 @@ public class ShipsView : MonoBehaviour
         }
 
         listShips[index].transform.SetParent(parentObject);
-        listShips[index].transform.localPosition = viewPosition;
+        listShips[index].transform.position = viewPosition;
     }
 }

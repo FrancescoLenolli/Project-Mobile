@@ -12,6 +12,6 @@ public class AutoRotation : MonoBehaviour
     void FixedUpdate()
     {
         newValue += Time.fixedDeltaTime * rotationSpeed;
-        transform.rotation = Quaternion.Euler(0, newValue, 0);
+        transform.localRotation = Quaternion.Euler(0, newValue, 0);
     }
 }
