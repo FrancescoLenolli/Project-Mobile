@@ -1,0 +1,166 @@
+fileFormatVersion: 2
+guid: 85ed974e9d1064b089cff63f0b574ec2
+timeCreated: 1507759257
+licenseType: Store
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Camera
+    100002: Lamp
+    100004: Lamp.001
+    100006: Lamp.002
+    100008: Lamp.003
+    100010: Lamp.004
+    100012: Lamp.005
+    100014: Lamp.006
+    100016: Lamp.007
+    100018: Lamp.008
+    100020: Lamp.009
+    100022: Lamp.010
+    100024: Lamp.011
+    100026: polySurface16
+    100028: polySurface19
+    100030: polySurface19.001
+    100032: polySurface20
+    100034: polySurface20.001
+    100036: polySurface20.002
+    100038: polySurface21
+    100040: polySurface22
+    100042: polySurface23
+    100044: polySurface24
+    100046: //RootNode
+    100048: transform2
+    100050: transform3
+    100052: transform4
+    100054: transform5
+    100056: transform6
+    100058: transform7
+    100060: transform8
+    400000: Camera
+    400002: Lamp
+    400004: Lamp.001
+    400006: Lamp.002
+    400008: Lamp.003
+    400010: Lamp.004
+    400012: Lamp.005
+    400014: Lamp.006
+    400016: Lamp.007
+    400018: Lamp.008
+    400020: Lamp.009
+    400022: Lamp.010
+    400024: Lamp.011
+    400026: polySurface16
+    400028: polySurface19
+    400030: polySurface19.001
+    400032: polySurface20
+    400034: polySurface20.001
+    400036: polySurface20.002
+    400038: polySurface21
+    400040: polySurface22
+    400042: polySurface23
+    400044: polySurface24
+    400046: //RootNode
+    400048: transform2
+    400050: transform3
+    400052: transform4
+    400054: transform5
+    400056: transform6
+    400058: transform7
+    400060: transform8
+    2000000: Camera
+    2300000: polySurface19.001
+    2300002: polySurface20.001
+    2300004: polySurface20.002
+    3300000: polySurface19.001
+    3300002: polySurface20.001
+    3300004: polySurface20.002
+    4300000: polySurface20.002
+    4300002: polySurface19.001
+    4300004: polySurface20.001
+    10800000: Lamp
+    10800002: Lamp.001
+    10800004: Lamp.002
+    10800006: Lamp.003
+    10800008: Lamp.004
+    10800010: Lamp.005
+    10800012: Lamp.006
+    10800014: Lamp.007
+    10800016: Lamp.008
+    10800018: Lamp.009
+    10800020: Lamp.010
+    10800022: Lamp.011
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
