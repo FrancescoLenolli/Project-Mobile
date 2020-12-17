@@ -25,11 +25,9 @@ public struct ShipInfo
 }
 
 public delegate void ShipsInitialised();
-public delegate void UnlockedShip();
 public class PanelShips : MonoBehaviour
 {
     public event ShipsInitialised EventShipsInitialised;
-    public event UnlockedShip EventUnlockedShip;
 
     private GameManager gameManager = null;
     private UIManager uiManager = null;
@@ -89,7 +87,6 @@ public class PanelShips : MonoBehaviour
         listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
 
         EventShipsInitialised += canvasBottom.panelShipsUpgrades.InitUpgrades;
-        EventUnlockedShip += FindObjectOfType<ShipsView>().SetShipsCount;
 
         // Update the list of ships to spawn with Saved Data.
         listShipInfos = gameManager.playerData.playerShips;
@@ -143,7 +140,6 @@ public class PanelShips : MonoBehaviour
             string newDataName = listShipDatas[listShipInfos.Count].shipName;
 
             InitAndAddShip(newDataName);
-            EventUnlockedShip?.Invoke();
         }
     }
 

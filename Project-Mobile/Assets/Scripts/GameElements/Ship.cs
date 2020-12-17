@@ -10,6 +10,7 @@ public delegate void UnlockShip(int index); // Unlock new ship when certain requ
 public delegate void UpdateShipQuantity(int index, int quantity); // Update this ship's quantity when buying one or more.
 public delegate void UpdateShipModifier(int index, int modifier); // Update this ship's idleGain modifier when buying an upgrade.
 public delegate void UnlockUpgrades(ShipData.ShipType myType);
+public delegate void ShowShip();
 public delegate void UpdateIdleGain();
 public delegate void UpdateCurrencyText(long value);
 public delegate void ShowPanelDescription(Sprite sprite, string name, string description);
@@ -21,6 +22,7 @@ public class Ship : MonoBehaviour
     public event UpdateShipQuantity EventUpdateShipQuantity;
     public event UpdateShipModifier EventUpdateShipModifier;
     public event UnlockUpgrades EventUnlockUpgrades;
+    public event ShowShip EventShowShip;
     public event UpdateIdleGain EventUpdateIdleGain;
     public event UpdateCurrencyText EventUpdateCurrencyText;
     public event ShowPanelDescription EventShowPanelDescriptions;
@@ -119,6 +121,7 @@ public class Ship : MonoBehaviour
         EventUpdateShipQuantity += canvasBottom.panelShips.UpdateQuantityAt;
         EventUpdateShipModifier += canvasBottom.panelShips.UpdateModifierAt;
         EventUnlockUpgrades += canvasBottom.panelShipsUpgrades.UnlockUpgrades;
+        EventShowShip += FindObjectOfType<ShipsView>().ShowNewShip;
         EventUpdateIdleGain += UpdateIdleGain;
         EventUpdateCurrencyText += FindObjectOfType<CanvasMain>().UpdateCurrencyText;
         EventShowPanelDescriptions += FindObjectOfType<PanelItemDescription>().ShowPanel;
@@ -173,6 +176,7 @@ public class Ship : MonoBehaviour
     {
         int multiplier = quantityMultiplier;
 
+        // Ship can be bought.
         if (currencyManager.currency >= cost)
         {
             currencyManager.currency -= cost;
@@ -182,6 +186,7 @@ public class Ship : MonoBehaviour
             if(quantity == 0)
             {
                 EventUnlockUpgrades?.Invoke(shipType);
+                EventShowShip?.Invoke();
             }
 
             // Recalculate IdleGain according to new Quantity.
@@ -196,6 +201,7 @@ public class Ship : MonoBehaviour
 
             // Play sound.
         }
+        // Ship cannot be bought.
         else
         {
             // Play different sound.

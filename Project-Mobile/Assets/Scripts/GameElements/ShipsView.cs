@@ -7,6 +7,7 @@ public class ShipsView : MonoBehaviour
 
     private GameManager gameManager = null;
     private List<GameObject> listShips = new List<GameObject>();
+    private Quaternion newRotation = new Quaternion();
     private Vector3 viewPosition = Vector3.zero;
     private int index = 0;
     private int unlockedShipsCount = 0;
@@ -17,26 +18,40 @@ public class ShipsView : MonoBehaviour
 
     private void CycleMethod(Cycle cycleType)
     {
-        listShips[index].transform.parent = null;
-        listShips[index].transform.position = new Vector3(0, 0, -200);
-
-        switch (cycleType)
+        if (unlockedShipsCount > 0)
         {
-            case Cycle.Left:
-                --index;
-                if (index < 0)
-                    index = unlockedShipsCount -1;
-                break;
+            HideShip(index);
 
-            case Cycle.Right:
-                ++index;
-                if (index == unlockedShipsCount -1)
-                    index = 0;
-                break;
+            switch (cycleType)
+            {
+                case Cycle.Left:
+                    --index;
+                    if (index < 0)
+                        index = unlockedShipsCount - 1;
+                    break;
+
+                case Cycle.Right:
+                    ++index;
+                    if (index == unlockedShipsCount)
+                        index = 0;
+                    break;
+            }
+
+            ShowShip(index);
         }
+    }
 
-        listShips[index].transform.SetParent(parentObject);
-        listShips[index].transform.position = viewPosition;
+    private void ShowShip(int shipIndex)
+    {
+        listShips[shipIndex].transform.SetParent(parentObject);
+        listShips[shipIndex].transform.position = viewPosition;
+        listShips[shipIndex].transform.rotation = newRotation;
+    }
+
+    private void HideShip(int shipIndex)
+    {
+        listShips[shipIndex].transform.parent = null;
+        listShips[shipIndex].transform.position = new Vector3(0, 0, -200);
     }
 
     public void InitData()
@@ -44,9 +59,10 @@ public class ShipsView : MonoBehaviour
         gameManager = GameManager.Instance;
 
         unlockedShipsCount = gameManager.playerData.unlockedShipsCount;
+        index = unlockedShipsCount == 0 ? unlockedShipsCount : unlockedShipsCount - 1;
         viewPosition = parentObject.position;
 
-        Quaternion newRotation = new Quaternion();
+
         newRotation.eulerAngles = new Vector3(0, 180, 0);
 
         foreach (GameObject gameObject in listPrefabShips)
@@ -58,8 +74,7 @@ public class ShipsView : MonoBehaviour
 
         if (unlockedShipsCount > 0)
         {
-            listShips[index].transform.SetParent(parentObject);
-            listShips[index].transform.position = viewPosition;
+            ShowShip(index);
         }
     }
 
@@ -73,9 +88,19 @@ public class ShipsView : MonoBehaviour
         CycleMethod(Cycle.Right);
     }
 
-    public void SetShipsCount()
+    public void ShowNewShip()
     {
-        ++unlockedShipsCount;
+        if (unlockedShipsCount <= listPrefabShips.Count)
+        {
+            HideShip(index);
+
+            ++unlockedShipsCount;
+
+            // Handles first method call.
+            index = unlockedShipsCount == 1 ? 0 : unlockedShipsCount - 1;
+
+            ShowShip(index);
+        }
     }
 
     public void SaveData()

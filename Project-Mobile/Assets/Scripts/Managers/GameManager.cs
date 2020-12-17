@@ -178,14 +178,6 @@ public class GameManager : Singleton<GameManager>
         playerData.lastPlayedTime = lastSessionTime.ToString();
     }
 
-    public void SaveRewardsData(List<int> listIndexes, long cooldown, int currentIndex)
-    {
-        playerData.listRewardsIndexes = listIndexes;
-        playerData.rewardCooldownTime = cooldown;
-        playerData.currentRewardIndex = currentIndex;
-        //Save();
-    }
-
     // Convert data to JSON, then save it.
     public void Save()
     {

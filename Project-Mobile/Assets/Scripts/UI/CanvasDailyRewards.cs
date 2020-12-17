@@ -195,13 +195,4 @@ public class CanvasDailyRewards : MonoBehaviour
         textCooldown.text = "Collect your reward!";
         DisplayCooldownTime(timeSpan);
     }
-
-    // TODO: Ugly, find a better solution.
-    private void OnApplicationQuit()
-    {
-        if (gameManager)
-            gameManager.SaveRewardsData(listRewardsIndexes, collectionCooldownTime, currentRewardIndex);
-    }
-
-
 }
