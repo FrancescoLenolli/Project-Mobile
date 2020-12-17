@@ -110,9 +110,6 @@ public class PanelShipsUpgrades : MonoBehaviour
             // ...Resize container...
             panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
             newUpgrade.transform.SetSiblingIndex(0);
-
-            // ...Save the list of upgrades.
-            gameManager.SaveUpgradesUnlocked(listUpgradesUnlocked);
         }
     }
 
@@ -130,8 +127,6 @@ public class PanelShipsUpgrades : MonoBehaviour
                 listUpgradesUnlocked[i] = new UpgradeInfo(listUpgradesUnlocked[i].upgradeName, true);
                 listUpgradesBought.Add(listUpgradesUnlocked[i]);
 
-                gameManager.SaveUpgradesBought(listUpgradesBought);
-
                 break;
             }
         }
@@ -140,5 +135,12 @@ public class PanelShipsUpgrades : MonoBehaviour
     public void ResizeContainer(Transform transform)
     {
         panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, transform, 0, UIManager.Resize.Subtract);
+    }
+
+    public void SaveUpgradesInfo()
+    {
+        gameManager.playerData.playerUpgradesUnlocked = listUpgradesUnlocked;
+        gameManager.playerData.playerUpgradesBought = listUpgradesBought;
+
     }
 }

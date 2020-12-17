@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEditor;
 
 public delegate void SendTimeFromLastGame(long seconds);
 public delegate void InitialiseData();
+public delegate void Save();
 public class GameManager : Singleton<GameManager>
 {
     public event SendTimeFromLastGame EventSendTimeFromLastGame;
     public event InitialiseData EventInitData;
+    public event Save EventSaveData;
 
     // Time when the last session ended.
     private DateTime lastSessionTime;
@@ -53,14 +54,26 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        EventInitData += FindObjectOfType<PanelShips>().InitShips;
-        EventInitData += FindObjectOfType<CanvasDailyRewards>().InitRewards;
-        EventSendTimeFromLastGame += CurrencyManager.Instance.GetIdleGainSinceLastGame;
+        PanelShips panelShips = FindObjectOfType<PanelShips>();
+        CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
+        CurrencyManager currencyManager = CurrencyManager.Instance;
+        ShipsView shipsView = FindObjectOfType<ShipsView>();
+
+        EventInitData += panelShips.InitShips;
+        EventInitData += canvasDailyRewards.InitRewards;
+        EventInitData += shipsView.InitData;
+        EventSendTimeFromLastGame += currencyManager.GetIdleGainSinceLastGame;
+        EventSaveData += SaveCurrentData;
+        EventSaveData += panelShips.SaveShipsInfo;
+        EventSaveData += FindObjectOfType<PanelShipsUpgrades>().SaveUpgradesInfo;
+        EventSaveData += canvasDailyRewards.SaveRewardsData;
+        EventSaveData += currencyManager.SaveCurrencyData;
+        EventSaveData += shipsView.SaveData;
 
         EventInitData?.Invoke();
 
-        if(playerData.lastCurrencyIdleGain != 0)
-        StartCoroutine(WaitToCalculateOfflineGain(3));
+        if (playerData.lastCurrencyIdleGain != 0)
+            StartCoroutine(WaitToCalculateOfflineGain(3));
     }
 
     private void OnApplicationPause(bool pause)
@@ -68,15 +81,15 @@ public class GameManager : Singleton<GameManager>
         if (pause)
         {
             lastSessionTime = DateTime.Now;
-            SaveCurrentData();
+            SaveData();
         }
     }
 
     private void OnApplicationQuit()
     {
-            lastSessionTime = DateTime.Now;
-            isFirstSession = false;
-            SaveCurrentData();
+        lastSessionTime = DateTime.Now;
+        isFirstSession = false;
+        SaveData();
     }
 
     /// <summary>
@@ -148,39 +161,21 @@ public class GameManager : Singleton<GameManager>
 
     /***********  SAVE SYSTEM  ***********/
 
+    private void SaveData()
+    {
+        EventSaveData?.Invoke();
+        Save();
+    }
+
     // Store new data in case something changed during the game.
     public void SaveCurrentData()
     {
         playerData.isFirstSession = isFirstSession;
         playerData.playerName = playerName;
-        playerData.playerCurrency = CurrencyManager.Instance.currency;
         playerData.SFXVolumeOn = isVolumeSFXOn;
         playerData.MusicVolumeOn = isVolumeMusicOn;
         playerData.VibrationOn = isVibrationOn;
-        playerData.lastCurrencyIdleGain = CurrencyManager.Instance.currencyIdleGain;
-        playerData.lastModifierIdleGain = CurrencyManager.Instance.modifierIdleGain;
         playerData.lastPlayedTime = lastSessionTime.ToString();
-        Save();
-    }
-
-    // Doesn't seems like a good idea, but I'll leave it for now.
-    // Maybe have a list directly in GameManager?
-    public void SaveShipInfos(List<ShipInfo> newList)
-    {
-        playerData.playerShips = newList;
-        Save();
-    }
-
-    public void SaveUpgradesUnlocked(List<UpgradeInfo> newList)
-    {
-        playerData.playerUpgradesUnlocked = newList;
-        Save();
-    }
-
-    public void SaveUpgradesBought(List<UpgradeInfo> newList)
-    {
-        playerData.playerUpgradesBought = newList;
-        Save();
     }
 
     public void SaveRewardsData(List<int> listIndexes, long cooldown, int currentIndex)
@@ -188,14 +183,14 @@ public class GameManager : Singleton<GameManager>
         playerData.listRewardsIndexes = listIndexes;
         playerData.rewardCooldownTime = cooldown;
         playerData.currentRewardIndex = currentIndex;
-        Save();
+        //Save();
     }
 
     // Convert data to JSON, then save it.
     public void Save()
     {
-            string json = JsonUtility.ToJson(playerData);
-            WriteToFile(file, json);
+        string json = JsonUtility.ToJson(playerData);
+        WriteToFile(file, json);
     }
 
     /// Load Saved Data, create new Data if none is found.

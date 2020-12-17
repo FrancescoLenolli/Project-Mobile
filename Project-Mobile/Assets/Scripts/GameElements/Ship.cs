@@ -115,7 +115,7 @@ public class Ship : MonoBehaviour
         canvasBottom = FindObjectOfType<CanvasBottom>();
 
         canvasBottom.EventUpdateQuantityModifier += UpdateQuantityModifier;
-        EventUnlockShip += canvasBottom.panelShips.AddNewShip;
+        EventUnlockShip += canvasBottom.panelShips.UnlockNewShip;
         EventUpdateShipQuantity += canvasBottom.panelShips.UpdateQuantityAt;
         EventUpdateShipModifier += canvasBottom.panelShips.UpdateModifierAt;
         EventUnlockUpgrades += canvasBottom.panelShipsUpgrades.UnlockUpgrades;

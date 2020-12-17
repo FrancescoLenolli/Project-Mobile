@@ -22,6 +22,9 @@ public class PlayerData
     public List<UpgradeInfo> playerUpgradesUnlocked = null;
     public List<UpgradeInfo> playerUpgradesBought = null;
 
+    //********** SHIPS 3D MODEL **********
+    public  int unlockedShipsCount = 0;
+
     //********** DAILY REWARDS **********
     public List<int> listRewardsIndexes = null;
     public int currentRewardIndex = 0;

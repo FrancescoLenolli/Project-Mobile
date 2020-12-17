@@ -167,6 +167,13 @@ public class CanvasDailyRewards : MonoBehaviour
         uiManager.MoveRectObjectAndFade(animationTime, panelRewards, targetPosition, fadeType);
     }
 
+    public void SaveRewardsData()
+    {
+        gameManager.playerData.listRewardsIndexes = listRewardsIndexes;
+        gameManager.playerData.rewardCooldownTime = collectionCooldownTime;
+        gameManager.playerData.currentRewardIndex = currentRewardIndex;
+    }
+
     // Once every n time (standard is 24h) the Player can collect a reward.
     private System.Collections.IEnumerator CooldownCollect(long time)
     {
@@ -195,5 +202,6 @@ public class CanvasDailyRewards : MonoBehaviour
         if (gameManager)
             gameManager.SaveRewardsData(listRewardsIndexes, collectionCooldownTime, currentRewardIndex);
     }
+
 
 }

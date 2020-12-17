@@ -257,6 +257,13 @@ public class CurrencyManager : Singleton<CurrencyManager>
         EventUpdateTextCurrency?.Invoke(currency);
     }
 
+    public void SaveCurrencyData()
+    {
+        gameManager.playerData.playerCurrency = currency;
+        gameManager.playerData.lastCurrencyIdleGain = currencyIdleGain;
+        gameManager.playerData.lastModifierIdleGain = modifierIdleGain;
+    }
+
     // Add currency based on idle values every second.
     private IEnumerator UpdateCurrency()
     {

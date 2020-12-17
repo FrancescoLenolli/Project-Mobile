@@ -5,16 +5,45 @@ public class ShipsView : MonoBehaviour
 {
     public enum Cycle { Left, Right }
 
+    private GameManager gameManager = null;
     private List<GameObject> listShips = new List<GameObject>();
     private Vector3 viewPosition = Vector3.zero;
     private int index = 0;
+    private int unlockedShipsCount = 0;
 
     public List<GameObject> listPrefabShips = new List<GameObject>();
     [Space(10)]
     public Transform parentObject = null;
 
-    private void Start()
+    private void CycleMethod(Cycle cycleType)
     {
+        listShips[index].transform.parent = null;
+        listShips[index].transform.position = new Vector3(0, 0, -200);
+
+        switch (cycleType)
+        {
+            case Cycle.Left:
+                --index;
+                if (index < 0)
+                    index = unlockedShipsCount -1;
+                break;
+
+            case Cycle.Right:
+                ++index;
+                if (index == unlockedShipsCount -1)
+                    index = 0;
+                break;
+        }
+
+        listShips[index].transform.SetParent(parentObject);
+        listShips[index].transform.position = viewPosition;
+    }
+
+    public void InitData()
+    {
+        gameManager = GameManager.Instance;
+
+        unlockedShipsCount = gameManager.playerData.unlockedShipsCount;
         viewPosition = parentObject.position;
 
         Quaternion newRotation = new Quaternion();
@@ -27,8 +56,11 @@ public class ShipsView : MonoBehaviour
             listShips.Add(ship);
         }
 
-        listShips[index].transform.SetParent(parentObject);
-        listShips[index].transform.position = viewPosition;
+        if (unlockedShipsCount > 0)
+        {
+            listShips[index].transform.SetParent(parentObject);
+            listShips[index].transform.position = viewPosition;
+        }
     }
 
     public void CycleLeft()
@@ -41,27 +73,13 @@ public class ShipsView : MonoBehaviour
         CycleMethod(Cycle.Right);
     }
 
-    private void CycleMethod(Cycle cycleType)
+    public void SetShipsCount()
     {
-        listShips[index].transform.parent = null;
-        listShips[index].transform.position = new Vector3(0, 0, -200);
+        ++unlockedShipsCount;
+    }
 
-        switch (cycleType)
-        {
-            case Cycle.Left:
-                --index;
-                if (index < 0)
-                    index = listPrefabShips.Count - 1;
-                break;
-
-            case Cycle.Right:
-                ++index;
-                if (index == listPrefabShips.Count)
-                    index = 0;
-                break;
-        }
-
-        listShips[index].transform.SetParent(parentObject);
-        listShips[index].transform.position = viewPosition;
+    public void SaveData()
+    {
+        gameManager.playerData.unlockedShipsCount = unlockedShipsCount;
     }
 }

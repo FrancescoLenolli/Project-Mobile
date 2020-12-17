@@ -25,10 +25,11 @@ public struct ShipInfo
 }
 
 public delegate void ShipsInitialised();
-
+public delegate void UnlockedShip();
 public class PanelShips : MonoBehaviour
 {
-    public event ShipsInitialised eventShipsInitialised;
+    public event ShipsInitialised EventShipsInitialised;
+    public event UnlockedShip EventUnlockedShip;
 
     private GameManager gameManager = null;
     private UIManager uiManager = null;
@@ -87,7 +88,8 @@ public class PanelShips : MonoBehaviour
         containerShipsRect = containerShips.GetComponent<RectTransform>();
         listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
 
-        eventShipsInitialised += canvasBottom.panelShipsUpgrades.InitUpgrades;
+        EventShipsInitialised += canvasBottom.panelShipsUpgrades.InitUpgrades;
+        EventUnlockedShip += FindObjectOfType<ShipsView>().SetShipsCount;
 
         // Update the list of ships to spawn with Saved Data.
         listShipInfos = gameManager.playerData.playerShips;
@@ -119,17 +121,15 @@ public class PanelShips : MonoBehaviour
             newShip.transform.SetSiblingIndex(0);
         }
 
-        gameManager.SaveShipInfos(listShipInfos);
-
         // When every ship is spawned, start instantiating the upgrades
-        eventShipsInitialised?.Invoke();
+        EventShipsInitialised?.Invoke();
     }
 
     /// <summary>
     /// Unlock new Ship.
     /// </summary>
     /// <param name="currentShipIndex"></param>
-    public void AddNewShip(int currentShipIndex)
+    public void UnlockNewShip(int currentShipIndex)
     {
         // currentShipIndex is the index of the last ship bought.
         // index + 1 is the index of the next ship.
@@ -143,9 +143,8 @@ public class PanelShips : MonoBehaviour
             string newDataName = listShipDatas[listShipInfos.Count].shipName;
 
             InitAndAddShip(newDataName);
+            EventUnlockedShip?.Invoke();
         }
-
-        gameManager.SaveShipInfos(listShipInfos);
     }
 
     /// <summary>
@@ -187,5 +186,10 @@ public class PanelShips : MonoBehaviour
         }
 
         return ship;
+    }
+
+    public void SaveShipsInfo()
+    {
+        gameManager.playerData.playerShips = listShipInfos;
     }
 }
