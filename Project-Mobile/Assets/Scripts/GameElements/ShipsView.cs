@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void UnlockedShip();
 public class ShipsView : MonoBehaviour
 {
     public enum Cycle { Left, Right }
+
+    public event UnlockedShip EventUnlockedShip;
 
     private GameManager gameManager = null;
     private List<GameObject> listShips = new List<GameObject>();
@@ -75,6 +78,15 @@ public class ShipsView : MonoBehaviour
         if (unlockedShipsCount > 0)
         {
             ShowShip(index);
+
+            if (unlockedShipsCount >= 2)
+            {
+                CanvasBottom canvasBottom = FindObjectOfType<CanvasBottom>();
+
+                EventUnlockedShip += canvasBottom.ShowCycleButtons;
+                EventUnlockedShip?.Invoke();
+                EventUnlockedShip -= canvasBottom.ShowCycleButtons;
+            }
         }
     }
 
@@ -100,6 +112,15 @@ public class ShipsView : MonoBehaviour
             index = unlockedShipsCount == 1 ? 0 : unlockedShipsCount - 1;
 
             ShowShip(index);
+
+            if (unlockedShipsCount == 2)
+            {
+                CanvasBottom canvasBottom = FindObjectOfType<CanvasBottom>();
+
+                EventUnlockedShip += canvasBottom.ShowCycleButtons;
+                EventUnlockedShip?.Invoke();
+                EventUnlockedShip -= canvasBottom.ShowCycleButtons;
+            }
         }
     }
 

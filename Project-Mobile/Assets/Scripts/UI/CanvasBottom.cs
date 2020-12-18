@@ -25,6 +25,7 @@ public class CanvasBottom : MonoBehaviour
 
     public TextMeshProUGUI textQuantityModifier = null;
     public List<CanvasGroup> listPanels = new List<CanvasGroup>();
+    public CanvasGroup containerCycleButtons= null;
 
     private void Awake()
     {
@@ -67,6 +68,11 @@ public class CanvasBottom : MonoBehaviour
                 uiManager.ChangeStatus(listPanels[i], false);
             }
         }
+    }
+
+    public void ShowCycleButtons()
+    {
+        uiManager.ChangeStatus(containerCycleButtons, true);
     }
 
     public void CycleLeft()
