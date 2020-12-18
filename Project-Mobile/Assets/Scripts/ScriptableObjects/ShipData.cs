@@ -4,13 +4,14 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "CustomData/ShipData", fileName = "New Ship")]
 public class ShipData : ScriptableObject
 {
-    public enum ShipType { Patrol, Light, Heavy, Battleship, Titan, DeathStar }
+    public enum ShipType { Patrol, Light, Heavy, Corvette, ManOfWar, Galleon, Battleship, Titan, DeathStar, BorgCube }
 
     public ShipType shipType = ShipType.Patrol;
     public int index = 0;
     public string shipName = "New Ship";
     public string shipDescription = "Ship Description";
     public Sprite shipIcon = null;
+    public GameObject shipPrefab = null;
     public double cost = 0;
     public double currencyGain = 0;
     // Defined by upgrades, how much is increased currencyGain.

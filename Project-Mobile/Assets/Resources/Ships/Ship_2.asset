@@ -17,6 +17,7 @@ MonoBehaviour:
   shipName: Heavy Attack Ship
   shipDescription: Ship Description
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  shipPrefab: {fileID: 1578151531806032, guid: 8247a213e30c0734a98bcb0af9f4d340, type: 3}
   cost: 60
   currencyGain: 30
   productionMultiplier: 0

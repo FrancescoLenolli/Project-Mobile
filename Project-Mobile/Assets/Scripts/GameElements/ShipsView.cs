@@ -14,8 +14,6 @@ public class ShipsView : MonoBehaviour
     private Vector3 viewPosition = Vector3.zero;
     private int index = 0;
     private int unlockedShipsCount = 0;
-
-    public List<GameObject> listPrefabShips = new List<GameObject>();
     [Space(10)]
     public Transform parentObject = null;
 
@@ -64,14 +62,14 @@ public class ShipsView : MonoBehaviour
         unlockedShipsCount = gameManager.playerData.unlockedShipsCount;
         index = unlockedShipsCount == 0 ? unlockedShipsCount : unlockedShipsCount - 1;
         viewPosition = parentObject.position;
-
-
         newRotation.eulerAngles = new Vector3(0, 180, 0);
 
-        foreach (GameObject gameObject in listPrefabShips)
+        List<ShipData> listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
+
+        foreach (ShipData data in listShipDatas)
         {
 
-            GameObject ship = Instantiate(gameObject, new Vector3(0, 0, -200), newRotation);
+            GameObject ship = Instantiate(data.shipPrefab, new Vector3(0, 0, -200), newRotation);
             listShips.Add(ship);
         }
 
@@ -102,7 +100,7 @@ public class ShipsView : MonoBehaviour
 
     public void ShowNewShip()
     {
-        if (unlockedShipsCount <= listPrefabShips.Count)
+        if (unlockedShipsCount <= listShips.Count)
         {
             HideShip(index);
 

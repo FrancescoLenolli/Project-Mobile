@@ -17,6 +17,7 @@ MonoBehaviour:
   shipName: Light Attack Ship
   shipDescription: Ship Description
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  shipPrefab: {fileID: 1261967083292032, guid: 8473f9776d8295943a5758049686e69c, type: 3}
   cost: 40
   currencyGain: 20
   productionMultiplier: 0

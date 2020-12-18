@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shipType: 3
   index: 3
-  shipName: Battleship
+  shipName: Corvette
   shipDescription: Ship Description
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  shipPrefab: {fileID: 1542112843390278, guid: b47bece6812c64d44b8a3f159e732957, type: 3}
   cost: 80
   currencyGain: 40
   productionMultiplier: 0

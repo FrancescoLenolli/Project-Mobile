@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shipType: 4
   index: 4
-  shipName: Titan
+  shipName: Man Of War
   shipDescription: Ship Description
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  shipPrefab: {fileID: 1044101965864496, guid: a825e414d2854204e98190cc7a58404e, type: 3}
   cost: 100
   currencyGain: 50
   productionMultiplier: 0

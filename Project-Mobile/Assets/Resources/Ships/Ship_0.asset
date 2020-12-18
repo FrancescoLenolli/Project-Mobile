@@ -17,6 +17,7 @@ MonoBehaviour:
   shipName: Patrol Ship
   shipDescription: Ship Description
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  shipPrefab: {fileID: 1993769037395402, guid: 1e0e09158ccbc064a9a4f4413946f881, type: 3}
   cost: 20
   currencyGain: 10
   productionMultiplier: 0
