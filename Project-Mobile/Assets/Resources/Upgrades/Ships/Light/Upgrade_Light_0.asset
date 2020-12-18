@@ -17,5 +17,5 @@ MonoBehaviour:
   upgradeName: Gun
   description: Description Gun
   upgradeSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  cost: 32530
+  cost: 32406006
   productionMultiplier: 11

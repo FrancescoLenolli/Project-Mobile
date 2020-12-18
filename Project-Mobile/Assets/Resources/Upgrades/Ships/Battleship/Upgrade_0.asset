@@ -17,5 +17,5 @@ MonoBehaviour:
   upgradeName: Spinal Gun
   description: Upgrades for Battleship
   upgradeSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  cost: 300000
+  cost: 400000
   productionMultiplier: 10
