@@ -11,8 +11,8 @@ public class ShipData : ScriptableObject
     public string shipName = "New Ship";
     public string shipDescription = "Ship Description";
     public Sprite shipIcon = null;
-    public int cost = 0;
-    public int currencyGain = 0;
+    public double cost = 0;
+    public double currencyGain = 0;
     // Defined by upgrades, how much is increased currencyGain.
     // Expressed in percentages, a value of 50 increase currencyGain by 50%;
     public int productionMultiplier = 0;

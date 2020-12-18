@@ -1603,7 +1603,7 @@ PrefabInstance:
     - target: {fileID: 8945366616641214000, guid: bc54ac72d05f2a44d8cc87e821d69fe7,
         type: 3}
       propertyPath: currencyActiveGain
-      value: 1
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8945366616641214000, guid: bc54ac72d05f2a44d8cc87e821d69fe7,
         type: 3}

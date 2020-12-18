@@ -15,8 +15,9 @@ MonoBehaviour:
   shipType: 1
   index: 1
   shipName: Light Attack Ship
+  shipDescription: Ship Description
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   cost: 40
-  currencyGain: 100
-  currencyGainMultiplier: 0
+  currencyGain: 20
+  productionMultiplier: 0
   qtToUnlockNextShip: 10

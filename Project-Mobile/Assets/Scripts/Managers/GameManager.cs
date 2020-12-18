@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public delegate void SendTimeFromLastGame(long seconds);
+public delegate void SendTimeFromLastGame(double seconds);
 public delegate void InitialiseData();
 public delegate void Save();
 public class GameManager : Singleton<GameManager>

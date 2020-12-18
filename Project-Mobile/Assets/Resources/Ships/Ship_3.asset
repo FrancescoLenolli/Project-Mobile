@@ -15,8 +15,9 @@ MonoBehaviour:
   shipType: 3
   index: 3
   shipName: Battleship
+  shipDescription: Ship Description
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   cost: 80
-  currencyGain: 200
-  currencyGainMultiplier: 0
+  currencyGain: 40
+  productionMultiplier: 0
   qtToUnlockNextShip: 10

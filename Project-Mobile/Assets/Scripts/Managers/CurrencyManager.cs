@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public delegate void EventUpdateTextCurrency(long value);
-public delegate void EventUpdateTextIdleGain(long value);
+public delegate void EventUpdateTextCurrency(double value);
+public delegate void EventUpdateTextIdleGain(double value);
 public delegate void EventUpdateTextDoubleGainTime(int value);
 public delegate void EventSendTouchPosition(Vector3 position);
-public delegate void EventSendBackgroundGainValue(long currency);
+public delegate void EventSendBackgroundGainValue(double currency);
 
 public class CurrencyManager : Singleton<CurrencyManager>
 {
@@ -19,18 +19,18 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private GameManager gameManager = null;
     private int currentQuantityModifierIndex = 0;
-    private long offlineEarnings = 0;
+    private double offlineEarnings = 0;
     private int timeDoubledIdleGain = 0;
     private bool isIdleGainDoubled = false;
-    private long lastCurrencyIdleGain = 0;
-    private int lastModifierIdleGain = 0;
+    private double lastCurrencyIdleGain = 0;
+    private float lastModifierIdleGain = 0;
 
-    public long currency = 0;
+    public double currency = 0;
     [Space(10)]
-    public long currencyIdleGain = 0;
-    public long currencyActiveGain = 0;
-    public int modifierIdleGain = 1;
-    public int modifierActiveGain = 1;
+    public double currencyIdleGain = 0;
+    public double currencyActiveGain = 0;
+    public float modifierIdleGain = 1;
+    public float modifierActiveGain = 1;
     public List<int> listQuantityModifier = new List<int>();
     [Space(10)]
     [Header("Ads Values")]
@@ -84,17 +84,12 @@ public class CurrencyManager : Singleton<CurrencyManager>
     }
 
     // Add currency to the Player's current currency value.
-    private void AddCurrency(long value, int modifier = 1)
+    private void AddCurrency(double value, float modifier = 1)
     {
         if (value != 0 || modifier != 0)
         {
             // Currenct idle gain. Double it if the double gain modifier is active.
-            long newValue = isIdleGainDoubled ? (value * modifier) * 2 : (value * modifier);
-
-            if (newValue > long.MaxValue)
-            {
-                newValue = long.MaxValue;
-            }
+            double newValue = isIdleGainDoubled ? (value * modifier) * 2 : (value * modifier);
 
             currency += newValue;
             EventUpdateTextCurrency?.Invoke(currency);
@@ -128,7 +123,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     /// Increase Currency Idle Gain by value. This determines how much currency is gained in background.
     /// </summary>
     /// <param name="value">How much CurrencyIdleGain is increased.</param>
-    public void IncreaseCurrencyIdleGain(int value)
+    public void IncreaseCurrencyIdleGain(double value)
     {
         currencyIdleGain += value;
     }
@@ -137,7 +132,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     /// Decrease Currency Idle Gain by value. Used when recalculating production multiplier of a ship, after buying an upgrade.
     /// </summary>
     /// <param name="value"></param>
-    public void DecreaseCurrencyIdleGain(int value)
+    public void DecreaseCurrencyIdleGain(double value)
     {
         currencyIdleGain -= value;
     }
@@ -197,7 +192,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     /// </summary>
     public void AddCurrencyAdvertisement()
     {
-        long bonus = (currency * adGainPercentage) / 100;
+        double bonus = (currency * adGainPercentage) / 100;
         AddCurrency(bonus);
         Debug.Log($"Ad Watched, gained {bonus}");
     }
@@ -225,7 +220,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     ///  Use values from last game to calculate how much currency was gained since then. 
     /// </summary>
     /// <param name="seconds"></param>
-    public void GetIdleGainSinceLastGame(long seconds)
+    public void GetIdleGainSinceLastGame(double seconds)
     {
         offlineEarnings = (lastCurrencyIdleGain * lastModifierIdleGain) * seconds;
 

@@ -7,9 +7,9 @@ public class PlayerData
     // ********** GENERAL **********
     public bool isFirstSession = true;
     public string playerName = "PlayerName";
-    public long playerCurrency = 0;
-    public long lastCurrencyIdleGain = 0;
-    public int lastModifierIdleGain = 0;
+    public double playerCurrency = 0;
+    public double lastCurrencyIdleGain = 0;
+    public float lastModifierIdleGain = 0;
     public string lastPlayedTime = "";
 
     //********** SETTINGS **********

@@ -15,8 +15,9 @@ MonoBehaviour:
   shipType: 4
   index: 4
   shipName: Titan
+  shipDescription: Ship Description
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  cost: 80
-  currencyGain: 200
-  currencyGainMultiplier: 0
+  cost: 100
+  currencyGain: 50
+  productionMultiplier: 0
   qtToUnlockNextShip: 10

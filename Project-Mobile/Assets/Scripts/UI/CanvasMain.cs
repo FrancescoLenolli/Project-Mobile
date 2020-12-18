@@ -31,12 +31,12 @@ public class CanvasMain : MonoBehaviour
         currencyManager.EventSendTouchPosition += InstantiateTapObject;
     }
 
-    private void UpdateIdleGainText(long value)
+    private void UpdateIdleGainText(double value)
     {
         textIdleGain.text =  value != 0 ? $"+{Formatter.FormatValue(value)}/s" : "";
     }
 
-    public void UpdateCurrencyText(long value)
+    public void UpdateCurrencyText(double value)
     {
         textCurrency.text = Formatter.FormatValue(value);
     }

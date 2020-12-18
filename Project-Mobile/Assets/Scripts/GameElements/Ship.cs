@@ -12,7 +12,7 @@ public delegate void UpdateShipModifier(int index, int modifier); // Update this
 public delegate void UnlockUpgrades(ShipData.ShipType myType);
 public delegate void ShowShip();
 public delegate void UpdateIdleGain();
-public delegate void UpdateCurrencyText(long value);
+public delegate void UpdateCurrencyText(double value);
 public delegate void ShowPanelDescription(Sprite sprite, string name, string description);
 
 public class Ship : MonoBehaviour
@@ -35,12 +35,12 @@ public class Ship : MonoBehaviour
     private string shipName = "";
     private string shipDescription = "";
     private Sprite shipIcon = null;
-    private int cost = 0;
-    private int currencyGain = 0;
+    private double cost = 0;
+    private double currencyGain = 0;
     // How much currency does this ship gain every second.
-    private int idleGain = 0;
+    private double idleGain = 0;
     // CurrencyGain increased if more X units are bought.
-    private int additionalCurrencyGain = 0;
+    private double additionalCurrencyGain = 0;
     private int quantityMultiplier = 0;
     // CurrencyGain is increased by this percentage when buying upgrades.
     private int productionMultiplier = 0;
@@ -104,7 +104,7 @@ public class Ship : MonoBehaviour
         idleGain = currencyGain * quantity + ((currencyGain * quantity * productionMultiplier) / 100);
     }
 
-    private int ReturnIdleGain()
+    private double ReturnIdleGain()
     {
         idleGain = currencyGain * quantity + ((currencyGain * quantity * productionMultiplier) / 100);
         return idleGain;

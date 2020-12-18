@@ -45,7 +45,7 @@ public class CanvasOfflineEarning : MonoBehaviour
 
     // Display panel on screen.
     // Don't do it if it's the first time the Player plays the game.
-    public void ShowPanel(long currencyGained)
+    public void ShowPanel(double currencyGained)
     {
         uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
         textCurrencyGained.text = Formatter.FormatValue(currencyGained);

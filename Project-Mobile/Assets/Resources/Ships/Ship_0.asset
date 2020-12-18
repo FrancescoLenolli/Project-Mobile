@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4cf6b9778d49894dbd468bf3c53ed88, type: 3}
   m_Name: Ship_0
   m_EditorClassIdentifier: 
+  shipType: 0
   index: 0
   shipName: Patrol Ship
+  shipDescription: Ship Description
   shipIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   cost: 20
-  currencyGain: 50
+  currencyGain: 10
+  productionMultiplier: 0
   qtToUnlockNextShip: 10

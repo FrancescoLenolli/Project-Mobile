@@ -17,7 +17,7 @@ public class ShipUpgrade : MonoBehaviour
     private ShipUpgradeData shipUpgradeData = null;
     private Ship myShip = null;
     private int productionMultiplier = 0;
-    private int cost = 0;
+    private double cost = 0;
     private CurrencyManager currencyManager;
 
     // Was this Upgrade already bought?

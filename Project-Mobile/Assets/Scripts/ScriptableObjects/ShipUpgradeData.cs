@@ -12,7 +12,7 @@ public class ShipUpgradeData : ScriptableObject
     [TextArea(2, 10)]
     public string description = "";
     public Sprite upgradeSprite = null;
-    public int cost = 0;
+    public double cost = 0;
 
     // By how much the currencyGain is increased in percentages.
     // Example: productionMultiplier = 15, currencyGain is increased by 15%.
