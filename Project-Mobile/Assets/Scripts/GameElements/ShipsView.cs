@@ -55,11 +55,16 @@ public class ShipsView : MonoBehaviour
         listShips[shipIndex].transform.position = new Vector3(0, 0, -200);
     }
 
+    private void LoadData()
+    {
+        unlockedShipsCount = gameManager.playerData.unlockedShipsCount;
+    }
+
     public void InitData()
     {
         gameManager = GameManager.Instance;
 
-        unlockedShipsCount = gameManager.playerData.unlockedShipsCount;
+        LoadData();
         index = unlockedShipsCount == 0 ? unlockedShipsCount : unlockedShipsCount - 1;
         viewPosition = parentObject.position;
         newRotation.eulerAngles = new Vector3(0, 180, 0);

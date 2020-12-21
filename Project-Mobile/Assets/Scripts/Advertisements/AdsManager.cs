@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 
 public delegate void AdBaseCurrency();
-public delegate void AdDoubleEarnings();
+public delegate void AdDoubleEarnings(int doubleGainTime);
 public delegate void AdDoubleOfflineEarnings();
 public class AdsManager : MonoBehaviour, IUnityAdsListener
 {
@@ -16,6 +16,9 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     private CurrencyManager currencyManager = null;
     private string placement = "rewardedVideo";
     private AdType adType;
+
+    [Tooltip("Time in HOURS where idle currency gain is doubled.")]
+    public int doubleGainTime = 0;
 
     private void Awake()
     {
@@ -50,7 +53,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
                     break;
 
                 case AdType.DoubleIdleEarnings:
-                    EventAdDoubleEarnings?.Invoke();
+                    EventAdDoubleEarnings?.Invoke(doubleGainTime * 3600);
                     break;
 
                 case AdType.DoubleOfflineEarnings:
@@ -63,7 +66,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
         }
     }
 
-    // Normally it's not the best idea to use a Region.
+    // Normally it's not the best idea to use a Region when organizing code.
     // Here I'm simply hiding some unused standard methods.
     #region UNUSED ADS METHODS
     public void OnUnityAdsReady(string placementId)

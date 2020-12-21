@@ -36,18 +36,7 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
 
-        // Load Saved data.
-        playerData = Load();
-
-        isFirstSession = playerData.isFirstSession;
-        isVolumeSFXOn = playerData.SFXVolumeOn;
-        isVolumeMusicOn = playerData.MusicVolumeOn;
-        isVibrationOn = playerData.VibrationOn;
-
-        if (playerData.lastPlayedTime != "")
-        {
-            lastSessionTime = Convert.ToDateTime(playerData.lastPlayedTime);
-        }
+        LoadCurrentData();
 
         CalculateOfflineTime();
     }
@@ -59,15 +48,15 @@ public class GameManager : Singleton<GameManager>
         CurrencyManager currencyManager = CurrencyManager.Instance;
         ShipsView shipsView = FindObjectOfType<ShipsView>();
 
-        EventInitData += panelShips.InitShips;
-        EventInitData += canvasDailyRewards.InitRewards;
+        EventInitData += panelShips.InitData;
+        EventInitData += canvasDailyRewards.InitData;
         EventInitData += shipsView.InitData;
         EventSendTimeFromLastGame += currencyManager.GetIdleGainSinceLastGame;
         EventSaveData += SaveCurrentData;
-        EventSaveData += panelShips.SaveShipsInfo;
-        EventSaveData += FindObjectOfType<PanelShipsUpgrades>().SaveUpgradesInfo;
-        EventSaveData += canvasDailyRewards.SaveRewardsData;
-        EventSaveData += currencyManager.SaveCurrencyData;
+        EventSaveData += panelShips.SaveData;
+        EventSaveData += FindObjectOfType<PanelShipsUpgrades>().SaveData;
+        EventSaveData += canvasDailyRewards.SaveData;
+        EventSaveData += currencyManager.SaveData;
         EventSaveData += shipsView.SaveData;
 
         EventInitData?.Invoke();
@@ -90,6 +79,21 @@ public class GameManager : Singleton<GameManager>
         lastSessionTime = DateTime.Now;
         isFirstSession = false;
         SaveData();
+    }
+
+    private void LoadCurrentData()
+    {
+        // Load Saved data.
+        playerData = Load();
+
+        isFirstSession = playerData.isFirstSession;
+        isVolumeSFXOn = playerData.SFXVolumeOn;
+        isVolumeMusicOn = playerData.MusicVolumeOn;
+        isVibrationOn = playerData.VibrationOn;
+        if (playerData.lastPlayedTime != "")
+        {
+            lastSessionTime = Convert.ToDateTime(playerData.lastPlayedTime);
+        }
     }
 
     /// <summary>

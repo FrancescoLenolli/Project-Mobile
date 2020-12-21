@@ -37,9 +37,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
     [Min(1)]
     [Tooltip("When watching an Ad, gain this percentage of the current Currency")]
     public int adGainPercentage = 1;
-    [Min(60)]
-    [Tooltip("When watching an Ad, double the IdleGain by n Time expressed in seconds")]
-    public int adDoubleGainTime = 1;
     [Space(10)]
     public Sprite spriteCurrency = null;
 
@@ -51,11 +48,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private void Start()
     {
         gameManager = GameManager.Instance;
-
-        currency = gameManager.playerData.playerCurrency;
-        lastCurrencyIdleGain = gameManager.playerData.lastCurrencyIdleGain;
-        lastModifierIdleGain = gameManager.playerData.lastModifierIdleGain;
-
+        LoadData();
         StartCoroutine(UpdateCurrency());
     }
 
@@ -117,6 +110,25 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private void EnableDoubleIdleGain()
     {
         StartCoroutine(DoubleIdleGain());
+    }
+
+    // Load saved Data.
+    private void LoadData()
+    {
+        currency = gameManager.playerData.playerCurrency;
+        lastCurrencyIdleGain = gameManager.playerData.lastCurrencyIdleGain;
+        lastModifierIdleGain = gameManager.playerData.lastModifierIdleGain;
+        timeDoubledIdleGain = gameManager.playerData.timeDoubledIdleGain;
+    }
+
+    /// <summary>
+    /// Add fixed amount to Player's currency.
+    /// </summary>
+    /// <param name="value"></param>
+    public void AddCurrency(double value)
+    {
+        currency += value;
+        EventUpdateTextCurrency?.Invoke(currency);
     }
 
     /// <summary>
@@ -201,18 +213,18 @@ public class CurrencyManager : Singleton<CurrencyManager>
     /// Add time in seconds to timer that double Idle currency gained.
     /// Once the timer is at zero, Double Gain is disabled.
     /// </summary>
-    public void AddDoubleIdleGainTime()
+    public void AddDoubleIdleGainTime(int time)
     {
         if (timeDoubledIdleGain == 0)
         {
             // if time is set to 0, start doubling IdleGain....
-            timeDoubledIdleGain += adDoubleGainTime;
+            timeDoubledIdleGain += time;
             EnableDoubleIdleGain();
         }
         else
         {
             //....if not, just add more time.
-            timeDoubledIdleGain += adDoubleGainTime;
+            timeDoubledIdleGain += time;
         }
     }
 
@@ -252,12 +264,13 @@ public class CurrencyManager : Singleton<CurrencyManager>
         EventUpdateTextCurrency?.Invoke(currency);
     }
 
-    public void SaveCurrencyData()
+    public void SaveData()
     {
         gameManager.playerData.playerCurrency = currency;
         gameManager.playerData.lastCurrencyIdleGain = currencyIdleGain;
         gameManager.playerData.lastModifierIdleGain = modifierIdleGain;
-    }
+        gameManager.playerData.timeDoubledIdleGain = timeDoubledIdleGain;
+    }   
 
     // Add currency based on idle values every second.
     private IEnumerator UpdateCurrency()

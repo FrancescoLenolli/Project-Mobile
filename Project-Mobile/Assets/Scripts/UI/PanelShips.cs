@@ -77,8 +77,13 @@ public class PanelShips : MonoBehaviour
         return result;
     }
 
+    private void LoadData()
+    {
+        listShipInfos = gameManager.playerData.playerShips;
+    }
+
     // Initialise data and Instantiate all ships owned by the player at the START OF THE GAME.
-    public void InitShips()
+    public void InitData()
     {
         gameManager = GameManager.Instance;
         uiManager = UIManager.Instance;
@@ -88,8 +93,7 @@ public class PanelShips : MonoBehaviour
 
         EventShipsInitialised += canvasBottom.panelShipsUpgrades.InitUpgrades;
 
-        // Update the list of ships to spawn with Saved Data.
-        listShipInfos = gameManager.playerData.playerShips;
+        LoadData();
 
         // Handles first time the game is played.
         // If the player has no ships, add the first type to list.
@@ -184,7 +188,7 @@ public class PanelShips : MonoBehaviour
         return ship;
     }
 
-    public void SaveShipsInfo()
+    public void SaveData()
     {
         gameManager.playerData.playerShips = listShipInfos;
     }

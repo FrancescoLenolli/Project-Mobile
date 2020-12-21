@@ -11,6 +11,7 @@ public class PlayerData
     public double lastCurrencyIdleGain = 0;
     public float lastModifierIdleGain = 0;
     public string lastPlayedTime = "";
+    public int timeDoubledIdleGain = 0;
 
     //********** SETTINGS **********
     public bool SFXVolumeOn = true;

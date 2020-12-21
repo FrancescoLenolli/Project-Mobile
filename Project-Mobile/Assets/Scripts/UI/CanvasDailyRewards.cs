@@ -108,8 +108,18 @@ public class CanvasDailyRewards : MonoBehaviour
         }
     }
 
+    private void LoadData()
+    {
+        currentRewardIndex = gameManager.playerData.currentRewardIndex;
+        listRewardsIndexes = gameManager.playerData.listRewardsIndexes;
+        collectionCooldownTime = gameManager.playerData.rewardCooldownTime;
+
+        if (listRewardsIndexes == null)
+            listRewardsIndexes = new List<int>();
+    }
+
     // TODO: Link this method to an event in GameManager called when starting the game.
-    public void InitRewards()
+    public void InitData()
     {
         gameManager = GameManager.Instance;
         uiManager = UIManager.Instance;
@@ -118,12 +128,7 @@ public class CanvasDailyRewards : MonoBehaviour
         originalPosition = panelRewards.localPosition;
         textButtonCollect = buttonCollect.gameObject.GetComponentInChildren<TextMeshProUGUI>();
 
-        // Get saved Data.
-        currentRewardIndex = gameManager.playerData.currentRewardIndex;
-        listRewardsIndexes = gameManager.playerData.listRewardsIndexes;
-        if (listRewardsIndexes == null)
-            listRewardsIndexes = new List<int>();
-        collectionCooldownTime = gameManager.playerData.rewardCooldownTime;
+        LoadData();
         collectionCooldownTime -= gameManager.GetOfflineTime();
         if (collectionCooldownTime < 0)
             collectionCooldownTime = 0;
@@ -167,7 +172,7 @@ public class CanvasDailyRewards : MonoBehaviour
         uiManager.MoveRectObjectAndFade(animationTime, panelRewards, targetPosition, fadeType);
     }
 
-    public void SaveRewardsData()
+    public void SaveData()
     {
         gameManager.playerData.listRewardsIndexes = listRewardsIndexes;
         gameManager.playerData.rewardCooldownTime = collectionCooldownTime;

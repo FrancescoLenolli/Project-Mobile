@@ -35,9 +35,9 @@ public class PanelShipsUpgrades : MonoBehaviour
     {
         ShipUpgradeData upgradeData = null;
 
-        foreach(ShipUpgradeData data in listUpgradesData)
+        foreach (ShipUpgradeData data in listUpgradesData)
         {
-            if(data.upgradeName == upgradeName)
+            if (data.upgradeName == upgradeName)
             {
                 upgradeData = data;
                 break;
@@ -47,13 +47,20 @@ public class PanelShipsUpgrades : MonoBehaviour
         return upgradeData;
     }
 
+    private void LoadData()
+    {
+        listUpgradesUnlocked = gameManager.playerData.playerUpgradesUnlocked;
+        listUpgradesBought = gameManager.playerData.playerUpgradesBought;
+    }
+
     public void InitUpgrades()
     {
         gameManager = GameManager.Instance;
         panelShipRect = panelShipUpgrades.GetComponent<RectTransform>();
         listUpgradesData = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades"));
 
-        listUpgradesUnlocked = gameManager.playerData.playerUpgradesUnlocked;
+        LoadData();
+
         if (listUpgradesUnlocked == null)
         {
             listUpgradesUnlocked = new List<UpgradeInfo>();
@@ -137,7 +144,7 @@ public class PanelShipsUpgrades : MonoBehaviour
         panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, transform, 0, UIManager.Resize.Subtract);
     }
 
-    public void SaveUpgradesInfo()
+    public void SaveData()
     {
         gameManager.playerData.playerUpgradesUnlocked = listUpgradesUnlocked;
         gameManager.playerData.playerUpgradesBought = listUpgradesBought;

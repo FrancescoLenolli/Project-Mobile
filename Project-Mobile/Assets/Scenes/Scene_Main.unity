@@ -813,13 +813,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4acc4212825940443af13afd268a921a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  listPrefabShips:
-  - {fileID: 1993769037395402, guid: 1e0e09158ccbc064a9a4f4413946f881, type: 3}
-  - {fileID: 1261967083292032, guid: 8473f9776d8295943a5758049686e69c, type: 3}
-  - {fileID: 1578151531806032, guid: 8247a213e30c0734a98bcb0af9f4d340, type: 3}
-  - {fileID: 1542112843390278, guid: b47bece6812c64d44b8a3f159e732957, type: 3}
-  - {fileID: 1044101965864496, guid: a825e414d2854204e98190cc7a58404e, type: 3}
-  - {fileID: 1993769037395402, guid: 73b09e5094ff94fddac6945d623c08af, type: 3}
   parentObject: {fileID: 1908981147}
 --- !u!4 &213254127
 Transform:
@@ -6347,7 +6340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767445676}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.2693598, y: -5.1906123, z: 13.942755}
+  m_LocalPosition: {x: 4, y: -5.1906123, z: 13.942755}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1248233256}
@@ -6553,7 +6546,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18104
+  m_Name: pb_Mesh18100
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7108,8 +7101,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: -0.0057344004, y: 0.95417726, z: -0.29862568, w: -0.018322056}
-  m_LocalPosition: {x: 0.6885962, y: 11.857158, z: 18.393875}
+  m_LocalRotation: {x: 0.20580496, y: -0.014682532, z: 0.003088101, w: 0.9784781}
+  m_LocalPosition: {x: 2, y: 18, z: -40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -10509,7 +10502,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17884
+  m_Name: pb_Mesh17882
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12471,6 +12464,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1376736384890412709, guid: 233070f8bc3d08f48a069039ee5c077c,
+        type: 3}
+      propertyPath: doubleGainTime
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
       propertyPath: canSave
