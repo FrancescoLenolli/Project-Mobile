@@ -79,7 +79,7 @@ public class PanelShips : MonoBehaviour
 
     private void LoadData()
     {
-        listShipInfos = gameManager.playerData.playerShips;
+        listShipInfos = gameManager.playerData.listShipInfos;
     }
 
     // Initialise data and Instantiate all ships owned by the player at the START OF THE GAME.
@@ -190,6 +190,6 @@ public class PanelShips : MonoBehaviour
 
     public void SaveData()
     {
-        gameManager.playerData.playerShips = listShipInfos;
+        gameManager.playerData.listShipInfos = listShipInfos;
     }
 }

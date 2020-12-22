@@ -115,9 +115,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
     // Load saved Data.
     private void LoadData()
     {
-        currency = gameManager.playerData.playerCurrency;
-        lastCurrencyIdleGain = gameManager.playerData.lastCurrencyIdleGain;
-        lastModifierIdleGain = gameManager.playerData.lastModifierIdleGain;
+        currency = gameManager.playerData.currency;
+        lastCurrencyIdleGain = gameManager.playerData.currencyIdleGain;
+        lastModifierIdleGain = gameManager.playerData.modifierIdleGain;
         timeDoubledIdleGain = gameManager.playerData.timeDoubledIdleGain;
     }
 
@@ -266,9 +266,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     public void SaveData()
     {
-        gameManager.playerData.playerCurrency = currency;
-        gameManager.playerData.lastCurrencyIdleGain = currencyIdleGain;
-        gameManager.playerData.lastModifierIdleGain = modifierIdleGain;
+        gameManager.playerData.currency = currency;
+        gameManager.playerData.currencyIdleGain = currencyIdleGain;
+        gameManager.playerData.modifierIdleGain = modifierIdleGain;
         gameManager.playerData.timeDoubledIdleGain = timeDoubledIdleGain;
     }   
 

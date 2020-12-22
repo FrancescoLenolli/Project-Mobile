@@ -7,21 +7,21 @@ public class PlayerData
     // ********** GENERAL **********
     public bool isFirstSession = true;
     public string playerName = "PlayerName";
-    public double playerCurrency = 0;
-    public double lastCurrencyIdleGain = 0;
-    public float lastModifierIdleGain = 0;
-    public string lastPlayedTime = "";
+    public double currency = 0;
+    public double currencyIdleGain = 0;
+    public float modifierIdleGain = 0;
+    public string lastSessionTime = "";
     public int timeDoubledIdleGain = 0;
 
     //********** SETTINGS **********
-    public bool SFXVolumeOn = true;
-    public bool MusicVolumeOn = true;
-    public bool VibrationOn = true;
+    public bool isVolumeSFXOn = true;
+    public bool isVolumeMusicOn = true;
+    public bool isVibrationOn = true;
 
     //********** SHIPS & UPGRADES **********
-    public List<ShipInfo> playerShips = null;
-    public List<UpgradeInfo> playerUpgradesUnlocked = null;
-    public List<UpgradeInfo> playerUpgradesBought = null;
+    public List<ShipInfo> listShipInfos = null;
+    public List<UpgradeInfo> listUpgradesUnlocked = null;
+    public List<UpgradeInfo> listUpgradesBought = null;
 
     //********** SHIPS 3D MODEL **********
     public  int unlockedShipsCount = 0;
@@ -29,6 +29,6 @@ public class PlayerData
     //********** DAILY REWARDS **********
     public List<int> listRewardsIndexes = null;
     public int currentRewardIndex = 0;
-    public long rewardCooldownTime = 0;
+    public long collectionCooldownTime = 0;
 
 }

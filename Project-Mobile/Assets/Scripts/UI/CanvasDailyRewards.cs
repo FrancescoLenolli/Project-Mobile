@@ -112,7 +112,7 @@ public class CanvasDailyRewards : MonoBehaviour
     {
         currentRewardIndex = gameManager.playerData.currentRewardIndex;
         listRewardsIndexes = gameManager.playerData.listRewardsIndexes;
-        collectionCooldownTime = gameManager.playerData.rewardCooldownTime;
+        collectionCooldownTime = gameManager.playerData.collectionCooldownTime;
 
         if (listRewardsIndexes == null)
             listRewardsIndexes = new List<int>();
@@ -175,7 +175,7 @@ public class CanvasDailyRewards : MonoBehaviour
     public void SaveData()
     {
         gameManager.playerData.listRewardsIndexes = listRewardsIndexes;
-        gameManager.playerData.rewardCooldownTime = collectionCooldownTime;
+        gameManager.playerData.collectionCooldownTime = collectionCooldownTime;
         gameManager.playerData.currentRewardIndex = currentRewardIndex;
     }
 

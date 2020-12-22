@@ -61,7 +61,7 @@ public class GameManager : Singleton<GameManager>
 
         EventInitData?.Invoke();
 
-        if (playerData.lastCurrencyIdleGain != 0)
+        if (playerData.currencyIdleGain != 0)
             StartCoroutine(WaitToCalculateOfflineGain(3));
     }
 
@@ -87,12 +87,12 @@ public class GameManager : Singleton<GameManager>
         playerData = Load();
 
         isFirstSession = playerData.isFirstSession;
-        isVolumeSFXOn = playerData.SFXVolumeOn;
-        isVolumeMusicOn = playerData.MusicVolumeOn;
-        isVibrationOn = playerData.VibrationOn;
-        if (playerData.lastPlayedTime != "")
+        isVolumeSFXOn = playerData.isVolumeSFXOn;
+        isVolumeMusicOn = playerData.isVolumeMusicOn;
+        isVibrationOn = playerData.isVibrationOn;
+        if (playerData.lastSessionTime != "")
         {
-            lastSessionTime = Convert.ToDateTime(playerData.lastPlayedTime);
+            lastSessionTime = Convert.ToDateTime(playerData.lastSessionTime);
         }
     }
 
@@ -176,10 +176,10 @@ public class GameManager : Singleton<GameManager>
     {
         playerData.isFirstSession = isFirstSession;
         playerData.playerName = playerName;
-        playerData.SFXVolumeOn = isVolumeSFXOn;
-        playerData.MusicVolumeOn = isVolumeMusicOn;
-        playerData.VibrationOn = isVibrationOn;
-        playerData.lastPlayedTime = lastSessionTime.ToString();
+        playerData.isVolumeSFXOn = isVolumeSFXOn;
+        playerData.isVolumeMusicOn = isVolumeMusicOn;
+        playerData.isVibrationOn = isVibrationOn;
+        playerData.lastSessionTime = lastSessionTime.ToString();
     }
 
     // Convert data to JSON, then save it.
