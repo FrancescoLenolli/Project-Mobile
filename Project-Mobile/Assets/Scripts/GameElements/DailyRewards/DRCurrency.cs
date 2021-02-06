@@ -7,6 +7,7 @@ public class DRCurrency : DailyReward
 
     public override void GetReward()
     {
-        CurrencyManager.Instance.AddCurrency(currencyBonus);
+        //TODO: DailyReward
+        //CurrencyManager.Instance.AddCurrency(currencyBonus);
     }
 }

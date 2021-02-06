@@ -41,7 +41,7 @@ public class CanvasBottom : MonoBehaviour
         // At start of the game, make one panel visible while closing the others.
         OpenPanel((int)firstActivePanel);
 
-        textQuantityModifier.text = $"{currencyManager.GetShipQuantityToBuy()}";
+        //textQuantityModifier.text = $"{currencyManager.GetShipQuantityToBuy()}";
     }
 
     // Update Modifier for Ship Quantity to buy.
@@ -49,7 +49,7 @@ public class CanvasBottom : MonoBehaviour
     // Modifiers are stored in currencyManager > listQuantityModifier.
     public void CycleModifiers()
     {
-        modifierValue = currencyManager.CycleModifierAndReturnValue();
+        //modifierValue = currencyManager.CycleModifierAndReturnValue();
         textQuantityModifier.text = $"{modifierValue}";
         EventUpdateQuantityModifier?.Invoke(modifierValue);
     }

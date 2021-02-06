@@ -28,7 +28,7 @@ public class PanelShipsUpgrades : MonoBehaviour
     private List<UpgradeInfo> listUpgradesBought = new List<UpgradeInfo>();
     private RectTransform panelShipRect = null;
 
-    public ShipUpgrade prefabShipUpgrade = null;
+    //public ShipUpgrade prefabShipUpgrade = null;
     public Transform panelShipUpgrades = null;
 
     private ShipUpgradeData GetUpgradeData(string upgradeName)
@@ -87,11 +87,11 @@ public class PanelShipsUpgrades : MonoBehaviour
         {
             foreach (ShipUpgradeData upgradeData in listUpgradesNotOwned)
             {
-                ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
-                newUpgrade.SetValues(upgradeData, this);
+                //ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
+                //newUpgrade.SetValues(upgradeData, this);
 
-                panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
-                newUpgrade.transform.SetSiblingIndex(0);
+                //panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
+                //newUpgrade.transform.SetSiblingIndex(0);
 
             }
         }
@@ -107,16 +107,16 @@ public class PanelShipsUpgrades : MonoBehaviour
         foreach (ShipUpgradeData shipUpgradeData in listUpgrades)
         {
             // Instantiate new Upgrade...
-            ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
-            newUpgrade.SetValues(shipUpgradeData, this);
+            //ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
+            //newUpgrade.SetValues(shipUpgradeData, this);
 
             // ...Add it to the list of Upgrades Unlocked...
             UpgradeInfo upgradeUnlocked = new UpgradeInfo(shipUpgradeData.upgradeName, false);
             listUpgradesUnlocked.Add(upgradeUnlocked);
 
             // ...Resize container...
-            panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
-            newUpgrade.transform.SetSiblingIndex(0);
+            //panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
+            //newUpgrade.transform.SetSiblingIndex(0);
         }
     }
 

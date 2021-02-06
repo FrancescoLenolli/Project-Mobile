@@ -17,6 +17,5 @@ MonoBehaviour:
   model: {fileID: 0}
   currencyGain: 100
   upgrades:
-  - 30
-  - 30
-  - 20
+  - {fileID: 11400000, guid: e63e72c362ae0d34985236f1a300e068, type: 2}
+  - {fileID: 11400000, guid: afd47133f5dfffb4aa8745045035c44f, type: 2}

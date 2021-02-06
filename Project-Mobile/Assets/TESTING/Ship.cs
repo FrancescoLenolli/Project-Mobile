@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TEST_Ship : MonoBehaviour
+public class Ship : MonoBehaviour
 {
     private double totalCurrencyGain;
     private int quantity = 10;
@@ -28,12 +28,12 @@ public class TEST_Ship : MonoBehaviour
     private void SetTotalCurrencyGain()
     {
         double currencyGain = shipData.currencyGain;
-        List<float> upgrades = shipData.upgrades;
+        List<Upgrade> upgrades = shipData.upgrades;
         float totalUpgrades = 0f;
 
-        foreach(float upgrade in upgrades)
+        foreach(Upgrade upgrade in upgrades)
         {
-            totalUpgrades += upgrade;
+            totalUpgrades += upgrade.upgradePercentage;
         }
 
         double newCurrencyGain = totalUpgrades == 0f ? currencyGain : currencyGain + (currencyGain * totalUpgrades / 100);

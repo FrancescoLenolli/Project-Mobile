@@ -51,12 +51,12 @@ public class GameManager : Singleton<GameManager>
         EventInitData += panelShips.InitData;
         EventInitData += canvasDailyRewards.InitData;
         EventInitData += shipsView.InitData;
-        EventSendTimeFromLastGame += currencyManager.GetIdleGainSinceLastGame;
+        //EventSendTimeFromLastGame += currencyManager.GetIdleGainSinceLastGame;
         EventSaveData += SaveCurrentData;
         EventSaveData += panelShips.SaveData;
         EventSaveData += FindObjectOfType<PanelShipsUpgrades>().SaveData;
         EventSaveData += canvasDailyRewards.SaveData;
-        EventSaveData += currencyManager.SaveData;
+        //EventSaveData += currencyManager.SaveData;
         EventSaveData += shipsView.SaveData;
 
         EventInitData?.Invoke();

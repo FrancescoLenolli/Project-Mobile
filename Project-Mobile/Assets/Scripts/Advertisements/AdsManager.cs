@@ -29,8 +29,9 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     {
         StartCoroutine(InitAd());
 
-        EventAdBaseCurrency += currencyManager.AddCurrencyAdvertisement;
-        EventAdDoubleEarnings += currencyManager.AddDoubleIdleGainTime;
+        //TODO: AdsManager
+        //EventAdBaseCurrency += currencyManager.AddCurrencyAdvertisement;
+        //EventAdDoubleEarnings += currencyManager.AddDoubleIdleGainTime;
         EventAdDoubleOfflineEarnings += FindObjectOfType<CanvasOfflineEarning>().CollectDouble;
     }
 

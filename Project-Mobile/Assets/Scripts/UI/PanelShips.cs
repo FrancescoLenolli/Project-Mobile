@@ -50,7 +50,7 @@ public class PanelShips : MonoBehaviour
         ShipData newShipData = ReturnShipData(shipName);
 
         Ship newShip = Instantiate(prefabShip, containerShips, false);
-        newShip.SetValues(newShipData, newQuantity, newMultiplier);
+        //newShip.SetValues(newShipData, newQuantity, newMultiplier);
         ShipInfo newShipInfo = new ShipInfo(shipName, newQuantity, newMultiplier);
 
         listShips.Add(newShip);
@@ -112,7 +112,7 @@ public class PanelShips : MonoBehaviour
             int newMultiplier = listShipInfos[i].shipIdleGainModifier;
 
             Ship newShip = Instantiate(prefabShip, containerShips, false);
-            newShip.SetValues(newData, newQuantity, newMultiplier);
+            //newShip.SetValues(newData, newQuantity, newMultiplier);
 
             listShips.Add(newShip);
 
@@ -174,18 +174,18 @@ public class PanelShips : MonoBehaviour
     /// <returns></returns>
     public Ship ReturnShipOfType(ShipData.ShipType type)
     {
-        Ship ship = null;
+        //Ship ship = null;
 
-        for (int i = 0; i < listShips.Count; ++i)
-        {
-            if(listShips[i].shipData.shipType == type)
-            {
-                ship = listShips[i];
-                break;
-            }
-        }
+        //for (int i = 0; i < listShips.Count; ++i)
+        //{
+        //    if(listShips[i].shipData.shipType == type)
+        //    {
+        //        ship = listShips[i];
+        //        break;
+        //    }
+        //}
 
-        return ship;
+        return null;
     }
 
     public void SaveData()

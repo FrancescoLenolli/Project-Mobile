@@ -5,35 +5,42 @@ using UnityEngine;
 public delegate void ShowOptionsPanel();
 public class CanvasMain : MonoBehaviour
 {
-    public event ShowOptionsPanel EventShowOptionsPanel;
+    private Action EventShowOptionsPanel;
 
     private CurrencyManager currencyManager;
 
     public TextMeshProUGUI textCurrency;
-    public TextMeshProUGUI textIdleGain;
+    public TextMeshProUGUI textPassiveGain;
     public TextMeshProUGUI textDoubleGainTime;
     public TapObject prefabTextMousePosition;
 
-    private void Awake()
-    {
-        currencyManager = CurrencyManager.Instance;
-    }
-
     private void Start()
     {
-        textCurrency.text = currencyManager.currency.ToString();
-        textDoubleGainTime.text = "";
+        currencyManager = CurrencyManager.Instance;
 
-        EventShowOptionsPanel += FindObjectOfType<CanvasOptions>().MoveToPosition;
-        currencyManager.EventUpdateTextCurrency += UpdateCurrencyText;
-        currencyManager.EventUpdateTextIdleGain += UpdateIdleGainText;
-        currencyManager.EventUpdateTextDoubleGainTime += UpdateDoubleGainTime;
-        currencyManager.EventSendTouchPosition += InstantiateTapObject;
+        textCurrency.text = currencyManager.currency.ToString();
+        //textDoubleGainTime.text = "";
+
+        //SubscribeToEventShowOptionsPanel(FindObjectOfType<CanvasOptions>().MoveToPosition);
+        //currencyManager.EventUpdateTextCurrency += UpdateCurrencyText;
+        //currencyManager.EventUpdateTextIdleGain += UpdateIdleGainText;
+        //currencyManager.EventUpdateTextDoubleGainTime += UpdateDoubleGainTime;
+        //currencyManager.EventSendTouchPosition += InstantiateTapObject;
     }
 
-    private void UpdateIdleGainText(double value)
+    public void ShowOptionsPanel()
     {
-        textIdleGain.text =  value != 0 ? $"+{Formatter.FormatValue(value)}/s" : "";
+        EventShowOptionsPanel?.Invoke();
+    }
+
+    public void SubscribeToEventShowOptionsPanel(Action method)
+    {
+        EventShowOptionsPanel += method;
+    }
+
+    public void UpdatePassiveGainText(double value)
+    {
+        textPassiveGain.text =  value != 0 ? $"+{Formatter.FormatValue(value)}/s" : "";
     }
 
     public void UpdateCurrencyText(double value)
@@ -50,11 +57,6 @@ public class CanvasMain : MonoBehaviour
     private void InstantiateTapObject(Vector3 mousePosition)
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
-        newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain, currencyManager.spriteCurrency);
-    }
-
-    public void ShowOptionsPanel()
-    {
-        EventShowOptionsPanel?.Invoke();
+        //newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain, currencyManager.spriteCurrency);
     }
 }

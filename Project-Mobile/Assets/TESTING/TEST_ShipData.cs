@@ -10,5 +10,5 @@ public class TEST_ShipData : ScriptableObject
     public GameObject model;
     [Space]
     public double currencyGain;
-    public List<float> upgrades; // TODO: Make it a List of Upgrade class
+    public List<Upgrade> upgrades; // TODO: Make it a List of Upgrade class
 }

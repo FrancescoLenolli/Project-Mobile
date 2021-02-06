@@ -8,6 +8,7 @@ public class DRDoubleGainTime : DailyReward
     public int doubleGainTime = 0;
     public override void GetReward()
     {
-        CurrencyManager.Instance.AddDoubleIdleGainTime(doubleGainTime * 3600);
+        //TODO: DailyReward
+        //CurrencyManager.Instance.AddDoubleIdleGainTime(doubleGainTime * 3600);
     }
 }
