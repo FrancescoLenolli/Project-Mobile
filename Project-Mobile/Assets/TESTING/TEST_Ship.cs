@@ -5,17 +5,9 @@ using UnityEngine;
 public class TEST_Ship : MonoBehaviour
 {
     private double totalCurrencyGain;
+    private int quantity = 10;
 
-    public double currencyGain;
-    public int quantity;
-    public List<float> upgradeValues;
-
-    public TEST_Ship(double currencyGain, int quantity, List<float> upgradeValues)
-    {
-        this.currencyGain = currencyGain;
-        this.quantity = quantity;
-        this.upgradeValues = upgradeValues;
-    }
+    public TEST_ShipData shipData;
 
     private void Start()
     {
@@ -35,8 +27,11 @@ public class TEST_Ship : MonoBehaviour
 
     private void SetTotalCurrencyGain()
     {
+        double currencyGain = shipData.currencyGain;
+        List<float> upgrades = shipData.upgrades;
         float totalUpgrades = 0f;
-        foreach(float upgrade in upgradeValues)
+
+        foreach(float upgrade in upgrades)
         {
             totalUpgrades += upgrade;
         }

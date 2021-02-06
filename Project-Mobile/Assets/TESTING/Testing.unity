@@ -198,12 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd81c12fe3ef5241b6cb90dfb0e6155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currencyGain: 10
-  quantity: 10
-  upgradeValues:
-  - 10
-  - 10
-  - 10
+  shipData: {fileID: 11400000, guid: 04da7826edff8454480a841fee27d971, type: 2}
 --- !u!4 &1334984800
 Transform:
   m_ObjectHideFlags: 0
