@@ -32,6 +32,6 @@ public class PanelItemDescription : MonoBehaviour
 
     public void HidePanel()
     {
-        uiManager.MoveRectObject(animationTime, transform, originalPosition);
+        //uiManager.MoveRectObject(animationTime, transform, originalPosition);
     }
 }

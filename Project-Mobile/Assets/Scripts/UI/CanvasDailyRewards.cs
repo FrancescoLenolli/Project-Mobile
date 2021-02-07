@@ -169,7 +169,7 @@ public class CanvasDailyRewards : MonoBehaviour
         Vector3 targetPosition = isPanelVisible ? originalPosition : newPosition.localPosition;
         UIManager.Fade fadeType = isPanelVisible ? UIManager.Fade.Out : UIManager.Fade.In;
 
-        uiManager.MoveRectObjectAndFade(animationTime, panelRewards, targetPosition, fadeType);
+        //uiManager.MoveRectObjectAndFade(animationTime, panelRewards, targetPosition, fadeType);
     }
 
     public void SaveData()

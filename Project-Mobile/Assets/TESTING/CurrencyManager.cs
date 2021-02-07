@@ -36,6 +36,11 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return ships;
     }
 
+    public void AddShip(Ship ship)
+    {
+        ships.Add(ship);
+    }
+
     public void SubscribeToEventSendCurrencyValue(Action<double> method)
     {
         EventSendCurrencyValue += method;

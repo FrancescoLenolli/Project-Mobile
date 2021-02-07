@@ -141,7 +141,7 @@ public class PanelShipsUpgrades : MonoBehaviour
 
     public void ResizeContainer(Transform transform)
     {
-        panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, transform, 0, UIManager.Resize.Subtract);
+        //panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, transform, 0, UIManager.Resize.Subtract);
     }
 
     public void SaveData()

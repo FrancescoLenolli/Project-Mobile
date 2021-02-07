@@ -55,7 +55,7 @@ public class CanvasOptions : MonoBehaviour
         Vector3 targetPosition = isPanelVisible ? originalPosition : newPosition.localPosition;
         UIManager.Fade fadeType = isPanelVisible ? UIManager.Fade.Out : UIManager.Fade.In;
 
-        UIManager.Instance.MoveRectObjectAndFade(animationTime, panelOptions, targetPosition, fadeType);
+        //UIManager.Instance.MoveRectObjectAndFade(animationTime, panelOptions, targetPosition, fadeType);
     }
 
     public void ToggleSFX()

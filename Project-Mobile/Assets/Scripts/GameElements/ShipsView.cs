@@ -86,9 +86,9 @@ public class ShipsView : MonoBehaviour
             {
                 CanvasBottom canvasBottom = FindObjectOfType<CanvasBottom>();
 
-                EventUnlockedShip += canvasBottom.ShowCycleButtons;
+                //EventUnlockedShip += canvasBottom.ShowCycleButtons;
                 EventUnlockedShip?.Invoke();
-                EventUnlockedShip -= canvasBottom.ShowCycleButtons;
+                //EventUnlockedShip -= canvasBottom.ShowCycleButtons;
             }
         }
     }
@@ -120,9 +120,9 @@ public class ShipsView : MonoBehaviour
             {
                 CanvasBottom canvasBottom = FindObjectOfType<CanvasBottom>();
 
-                EventUnlockedShip += canvasBottom.ShowCycleButtons;
+                //EventUnlockedShip += canvasBottom.ShowCycleButtons;
                 EventUnlockedShip?.Invoke();
-                EventUnlockedShip -= canvasBottom.ShowCycleButtons;
+                //EventUnlockedShip -= canvasBottom.ShowCycleButtons;
             }
         }
     }

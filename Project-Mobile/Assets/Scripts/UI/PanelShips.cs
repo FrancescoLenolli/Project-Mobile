@@ -56,7 +56,7 @@ public class PanelShips : MonoBehaviour
         listShips.Add(newShip);
         listShipInfos.Add(newShipInfo);
 
-        containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform);
+        //containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform);
         newShip.transform.SetSiblingIndex(0);
     }
 
@@ -91,7 +91,7 @@ public class PanelShips : MonoBehaviour
         containerShipsRect = containerShips.GetComponent<RectTransform>();
         listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
 
-        EventShipsInitialised += canvasBottom.panelShipsUpgrades.InitUpgrades;
+        //EventShipsInitialised += canvasBottom.panelShipsUpgrades.InitUpgrades;
 
         LoadData();
 
@@ -117,7 +117,7 @@ public class PanelShips : MonoBehaviour
             listShips.Add(newShip);
 
             // Resize ships container adding the ship's height.
-            containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform);
+            //containerShipsRect.sizeDelta = uiManager.ResizeContainer(containerShips, newShip.transform);
             // Put the new Ship at the top of the list inside the UI.
             newShip.transform.SetSiblingIndex(0);
         }

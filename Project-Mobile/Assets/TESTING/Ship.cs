@@ -1,28 +1,50 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using System.Linq;
 
 public class Ship : MonoBehaviour
 {
     private double totalCurrencyGain;
     private int quantity = 10;
 
+    [SerializeField] private TextMeshProUGUI textShipName = null;
+    [SerializeField] private TextMeshProUGUI textShipCost = null;
+    [SerializeField] private TextMeshProUGUI textShipCurrencyGain = null;
+    [SerializeField] private TextMeshProUGUI textShipQuantity = null;
+    [SerializeField] private Image imageShipIcon = null;
+    [Space]
     public TEST_ShipData shipData;
 
-    private void Start()
+    public void InitData(TEST_ShipData data)
     {
-        SetTotalCurrencyGain();    
+        shipData = data;
+        SetTotalCurrencyGain();
+
+        textShipName.text = data.name;
+        textShipCost.text = Formatter.FormatValue(data.cost);
+        textShipCurrencyGain.text = $"+ {Formatter.FormatValue(data.currencyGain)}/s";
+        imageShipIcon.sprite = data.icon;
+        SetTextQuantity();
     }
 
     public void Buy()
     {
         ++quantity;
         SetTotalCurrencyGain();
+        SetTextQuantity();
     }
 
     public double GetTotalCurrencyGain()
     {
         return totalCurrencyGain;
+    }
+
+    private void SetTextQuantity()
+    {
+        textShipQuantity.text = $"x{quantity}";
     }
 
     private void SetTotalCurrencyGain()
@@ -31,7 +53,7 @@ public class Ship : MonoBehaviour
         List<Upgrade> upgrades = shipData.upgrades;
         float totalUpgrades = 0f;
 
-        foreach(Upgrade upgrade in upgrades)
+        foreach(Upgrade upgrade in upgrades.Where(x => x.isOwned))
         {
             totalUpgrades += upgrade.upgradePercentage;
         }

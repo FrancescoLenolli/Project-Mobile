@@ -40,14 +40,14 @@ public class CanvasOfflineEarning : MonoBehaviour
 
     private void HidePanel()
     {
-        uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, originalPosition, UIManager.Fade.Out);
+        //uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, originalPosition, UIManager.Fade.Out);
     }
 
     // Display panel on screen.
     // Don't do it if it's the first time the Player plays the game.
     public void ShowPanel(double currencyGained)
     {
-        uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
+        //uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
         textCurrencyGained.text = Formatter.FormatValue(currencyGained);
         textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
     }
