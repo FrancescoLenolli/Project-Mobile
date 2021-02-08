@@ -100,25 +100,25 @@ public class PanelShipsUpgrades : MonoBehaviour
     }
 
     // When the Player has enough units of a given Ship, unlock all of its Upgrades.
-    public void UnlockUpgrades(ShipData.ShipType type)
-    {
-        List<ShipUpgradeData> listUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades").Where(x => x.shipType == type));
+    //public void UnlockUpgrades(ShipData.ShipType type)
+    //{
+    //    List<ShipUpgradeData> listUpgrades = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades").Where(x => x.shipType == type));
 
-        foreach (ShipUpgradeData shipUpgradeData in listUpgrades)
-        {
-            // Instantiate new Upgrade...
-            //ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
-            //newUpgrade.SetValues(shipUpgradeData, this);
+    //    foreach (ShipUpgradeData shipUpgradeData in listUpgrades)
+    //    {
+    //        // Instantiate new Upgrade...
+    //        //ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
+    //        //newUpgrade.SetValues(shipUpgradeData, this);
 
-            // ...Add it to the list of Upgrades Unlocked...
-            UpgradeInfo upgradeUnlocked = new UpgradeInfo(shipUpgradeData.upgradeName, false);
-            listUpgradesUnlocked.Add(upgradeUnlocked);
+    //        // ...Add it to the list of Upgrades Unlocked...
+    //        UpgradeInfo upgradeUnlocked = new UpgradeInfo(shipUpgradeData.upgradeName, false);
+    //        listUpgradesUnlocked.Add(upgradeUnlocked);
 
-            // ...Resize container...
-            //panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
-            //newUpgrade.transform.SetSiblingIndex(0);
-        }
-    }
+    //        // ...Resize container...
+    //        //panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
+    //        //newUpgrade.transform.SetSiblingIndex(0);
+    //    }
+    //}
 
     /// <summary>
     /// Set Upgrade status to Owned. Add it to the List of Owned Upgrades.

@@ -16,9 +16,9 @@ public class Ship : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textShipQuantity = null;
     [SerializeField] private Image imageShipIcon = null;
     [Space]
-    public TEST_ShipData shipData;
+    public ShipData shipData;
 
-    public void InitData(TEST_ShipData data)
+    public void InitData(ShipData data)
     {
         shipData = data;
         SetTotalCurrencyGain();

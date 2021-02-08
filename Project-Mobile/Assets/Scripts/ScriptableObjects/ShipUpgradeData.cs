@@ -6,7 +6,7 @@ using UnityEngine;
 public class ShipUpgradeData : ScriptableObject
 {
     // What ship does this Upgrade affects? 
-    public ShipData.ShipType shipType = ShipData.ShipType.Patrol;
+    //public ShipData.ShipType shipType = ShipData.ShipType.Patrol;
     public int index = 0;
     public string upgradeName = "";
     [TextArea(2, 10)]

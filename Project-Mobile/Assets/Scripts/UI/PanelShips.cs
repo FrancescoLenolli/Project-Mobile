@@ -32,7 +32,7 @@ public class PanelShips : MonoBehaviour
     private GameManager gameManager = null;
     private UIManager uiManager = null;
     private CanvasBottom canvasBottom = null;
-    private List<ShipData> listShipDatas = new List<ShipData>();
+    //private List<ShipData> listShipDatas = new List<ShipData>();
     private List<Ship> listShips = new List<Ship>();
     private RectTransform containerShipsRect = null;
 
@@ -47,7 +47,7 @@ public class PanelShips : MonoBehaviour
         // Starting quantity and multiplier will always be 0.
         int newQuantity = 0;
         int newMultiplier = 0;
-        ShipData newShipData = ReturnShipData(shipName);
+        //ShipData newShipData = ReturnShipData(shipName);
 
         Ship newShip = Instantiate(prefabShip, containerShips, false);
         //newShip.SetValues(newShipData, newQuantity, newMultiplier);
@@ -61,21 +61,21 @@ public class PanelShips : MonoBehaviour
     }
 
     // Return a ShipData from the list of ShipDatas.
-    private ShipData ReturnShipData(string shipDataName)
-    {
-        ShipData result = null;
+    //private ShipData ReturnShipData(string shipDataName)
+    //{
+    //    ShipData result = null;
 
-        foreach(ShipData data in listShipDatas)
-        {
-            if (data.shipName == shipDataName)
-            {
-                result = data;
-                break;
-            }
-        }
+    //    foreach(ShipData data in listShipDatas)
+    //    {
+    //        if (data.shipName == shipDataName)
+    //        {
+    //            result = data;
+    //            break;
+    //        }
+    //    }
 
-        return result;
-    }
+    //    return result;
+    //}
 
     private void LoadData()
     {
@@ -89,7 +89,7 @@ public class PanelShips : MonoBehaviour
         uiManager = UIManager.Instance;
         canvasBottom = GetComponentInParent<CanvasBottom>();
         containerShipsRect = containerShips.GetComponent<RectTransform>();
-        listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
+        //listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
 
         //EventShipsInitialised += canvasBottom.panelShipsUpgrades.InitUpgrades;
 
@@ -100,14 +100,14 @@ public class PanelShips : MonoBehaviour
         if (listShipInfos == null)
         {
             listShipInfos = new List<ShipInfo>();
-            ShipInfo firstShipInfo = new ShipInfo(listShipDatas[0].shipName, 0, 0);
-            listShipInfos.Add(firstShipInfo);
+            //ShipInfo firstShipInfo = new ShipInfo(listShipDatas[0].shipName, 0, 0);
+            //listShipInfos.Add(firstShipInfo);
         }
 
         // Spawn all ships owned by the player.
         for (int i = 0; i < listShipInfos.Count; ++i)
         {
-            ShipData newData = ReturnShipData(listShipInfos[i].shipName);
+            //ShipData newData = ReturnShipData(listShipInfos[i].shipName);
             int newQuantity = listShipInfos[i].shipQuantity;
             int newMultiplier = listShipInfos[i].shipIdleGainModifier;
 
@@ -136,12 +136,12 @@ public class PanelShips : MonoBehaviour
         // index + 1 is the index of the next ship.
         // If this new Index is equal to listShipInfo count, the ship with that index is not yet instantiated.
         // it this listShipInfo count is equal to listShipData count, every ship has already been instantiated.
-        bool canAddShip = (currentShipIndex + 1 == listShipInfos.Count && listShipInfos.Count != listShipDatas.Count);
+        bool canAddShip = true/*(currentShipIndex + 1 == listShipInfos.Count && listShipInfos.Count != listShipDatas.Count)*/;
 
         // Spawn next type of ship.
         if(canAddShip)
         {
-            string newDataName = listShipDatas[listShipInfos.Count].shipName;
+            string newDataName = "";
 
             InitAndAddShip(newDataName);
         }
@@ -172,21 +172,21 @@ public class PanelShips : MonoBehaviour
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public Ship ReturnShipOfType(ShipData.ShipType type)
-    {
-        //Ship ship = null;
+    //public Ship ReturnShipOfType(ShipData.ShipType type)
+    //{
+    //    //Ship ship = null;
 
-        //for (int i = 0; i < listShips.Count; ++i)
-        //{
-        //    if(listShips[i].shipData.shipType == type)
-        //    {
-        //        ship = listShips[i];
-        //        break;
-        //    }
-        //}
+    //    //for (int i = 0; i < listShips.Count; ++i)
+    //    //{
+    //    //    if(listShips[i].shipData.shipType == type)
+    //    //    {
+    //    //        ship = listShips[i];
+    //    //        break;
+    //    //    }
+    //    //}
 
-        return null;
-    }
+    //    return null;
+    //}
 
     public void SaveData()
     {

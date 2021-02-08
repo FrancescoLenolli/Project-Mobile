@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CustomData/TEST_ShipData", fileName = "New Ship")]
-public class TEST_ShipData : ScriptableObject
+[CreateAssetMenu(menuName = "CustomData/ShipData", fileName = "New Ship")]
+public class ShipData : ScriptableObject
 {
     public new string name;
     public Sprite icon;

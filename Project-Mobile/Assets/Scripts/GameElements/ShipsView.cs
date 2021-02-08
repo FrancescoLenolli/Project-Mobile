@@ -69,14 +69,14 @@ public class ShipsView : MonoBehaviour
         viewPosition = parentObject.position;
         newRotation.eulerAngles = new Vector3(0, 180, 0);
 
-        List<ShipData> listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
+        //List<ShipData> listShipDatas = new List<ShipData>(Resources.LoadAll<ShipData>("Ships"));
 
-        foreach (ShipData data in listShipDatas)
-        {
+        //foreach (ShipData data in listShipDatas)
+        //{
 
-            GameObject ship = Instantiate(data.shipPrefab, new Vector3(0, 0, -200), newRotation);
-            listShips.Add(ship);
-        }
+        //    GameObject ship = Instantiate(data.shipPrefab, new Vector3(0, 0, -200), newRotation);
+        //    listShips.Add(ship);
+        //}
 
         if (unlockedShipsCount > 0)
         {

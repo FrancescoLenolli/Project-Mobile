@@ -7,7 +7,7 @@ public class CanvasBottom : MonoBehaviour
     private CurrencyManager currencyManager;
     private UIManager uiManager;
 
-    public List<TEST_ShipData> shipDatas = new List<TEST_ShipData>();
+    public List<ShipData> shipDatas = new List<ShipData>();
     public Ship prefabShip;
     public Transform containerShips;
 
@@ -20,7 +20,7 @@ public class CanvasBottom : MonoBehaviour
 
     private void InitShip()
     {
-        foreach(TEST_ShipData data in shipDatas)
+        foreach(ShipData data in shipDatas)
         {
             Ship ship = Instantiate(prefabShip, containerShips, false);
             ship.InitData(data);
