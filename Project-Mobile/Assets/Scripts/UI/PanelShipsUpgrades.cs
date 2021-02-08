@@ -23,7 +23,7 @@ public struct UpgradeInfo
 public class PanelShipsUpgrades : MonoBehaviour
 {
     private GameManager gameManager = null;
-    private List<ShipUpgradeData> listUpgradesData = new List<ShipUpgradeData>();
+    //private List<ShipUpgradeData> listUpgradesData = new List<ShipUpgradeData>();
     private List<UpgradeInfo> listUpgradesUnlocked = new List<UpgradeInfo>();
     private List<UpgradeInfo> listUpgradesBought = new List<UpgradeInfo>();
     private RectTransform panelShipRect = null;
@@ -31,21 +31,21 @@ public class PanelShipsUpgrades : MonoBehaviour
     //public ShipUpgrade prefabShipUpgrade = null;
     public Transform panelShipUpgrades = null;
 
-    private ShipUpgradeData GetUpgradeData(string upgradeName)
-    {
-        ShipUpgradeData upgradeData = null;
+    //private ShipUpgradeData GetUpgradeData(string upgradeName)
+    //{
+    //    ShipUpgradeData upgradeData = null;
 
-        foreach (ShipUpgradeData data in listUpgradesData)
-        {
-            if (data.upgradeName == upgradeName)
-            {
-                upgradeData = data;
-                break;
-            }
-        }
+    //    foreach (ShipUpgradeData data in listUpgradesData)
+    //    {
+    //        if (data.upgradeName == upgradeName)
+    //        {
+    //            upgradeData = data;
+    //            break;
+    //        }
+    //    }
 
-        return upgradeData;
-    }
+    //    return upgradeData;
+    //}
 
     private void LoadData()
     {
@@ -57,7 +57,7 @@ public class PanelShipsUpgrades : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         panelShipRect = panelShipUpgrades.GetComponent<RectTransform>();
-        listUpgradesData = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades"));
+        //listUpgradesData = new List<ShipUpgradeData>(Resources.LoadAll<ShipUpgradeData>("Upgrades"));
 
         LoadData();
 
@@ -66,35 +66,35 @@ public class PanelShipsUpgrades : MonoBehaviour
             listUpgradesUnlocked = new List<UpgradeInfo>();
         }
 
-        List<ShipUpgradeData> listUpgradesOwned = new List<ShipUpgradeData>();
-        List<ShipUpgradeData> listUpgradesNotOwned = new List<ShipUpgradeData>();
+        //List<ShipUpgradeData> listUpgradesOwned = new List<ShipUpgradeData>();
+        //List<ShipUpgradeData> listUpgradesNotOwned = new List<ShipUpgradeData>();
 
         // Put upgrades owned in a List separated from upgrades not owned.
-        foreach (UpgradeInfo upgradeInfo in listUpgradesUnlocked)
-        {
-            if (upgradeInfo.isOwned)
-            {
-                listUpgradesOwned.Add(GetUpgradeData(upgradeInfo.upgradeName));
-            }
-            else
-            {
-                listUpgradesNotOwned.Add(GetUpgradeData(upgradeInfo.upgradeName));
-            }
-        }
+        //foreach (UpgradeInfo upgradeInfo in listUpgradesUnlocked)
+        //{
+        //    if (upgradeInfo.isOwned)
+        //    {
+        //        listUpgradesOwned.Add(GetUpgradeData(upgradeInfo.upgradeName));
+        //    }
+        //    else
+        //    {
+        //        listUpgradesNotOwned.Add(GetUpgradeData(upgradeInfo.upgradeName));
+        //    }
+        //}
 
-        // Instantiate every upgrade not yet owned and resize their container.
-        if (listUpgradesNotOwned.Count > 0)
-        {
-            foreach (ShipUpgradeData upgradeData in listUpgradesNotOwned)
-            {
-                //ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
-                //newUpgrade.SetValues(upgradeData, this);
+        //// Instantiate every upgrade not yet owned and resize their container.
+        //if (listUpgradesNotOwned.Count > 0)
+        //{
+        //    foreach (ShipUpgradeData upgradeData in listUpgradesNotOwned)
+        //    {
+        //        //ShipUpgrade newUpgrade = Instantiate(prefabShipUpgrade, panelShipUpgrades, false);
+        //        //newUpgrade.SetValues(upgradeData, this);
 
-                //panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
-                //newUpgrade.transform.SetSiblingIndex(0);
+        //        //panelShipRect.sizeDelta = UIManager.Instance.ResizeContainer(panelShipUpgrades, newUpgrade.transform);
+        //        //newUpgrade.transform.SetSiblingIndex(0);
 
-            }
-        }
+        //    }
+        //}
 
         // TODO: Do something with Upgrades Owned.
     }
@@ -124,20 +124,20 @@ public class PanelShipsUpgrades : MonoBehaviour
     /// Set Upgrade status to Owned. Add it to the List of Owned Upgrades.
     /// </summary>
     /// <param name="upgradeData"></param>
-    public void SetOwnedStatus(ShipUpgradeData upgradeData)
-    {
-        // Search for the right Upgrade and set his status to Owned, saving the modified list.
-        for (int i = 0; i < listUpgradesUnlocked.Count; ++i)
-        {
-            if (listUpgradesUnlocked[i].upgradeName == upgradeData.upgradeName)
-            {
-                listUpgradesUnlocked[i] = new UpgradeInfo(listUpgradesUnlocked[i].upgradeName, true);
-                listUpgradesBought.Add(listUpgradesUnlocked[i]);
+    //public void SetOwnedStatus(ShipUpgradeData upgradeData)
+    //{
+    //    // Search for the right Upgrade and set his status to Owned, saving the modified list.
+    //    for (int i = 0; i < listUpgradesUnlocked.Count; ++i)
+    //    {
+    //        if (listUpgradesUnlocked[i].upgradeName == upgradeData.upgradeName)
+    //        {
+    //            listUpgradesUnlocked[i] = new UpgradeInfo(listUpgradesUnlocked[i].upgradeName, true);
+    //            listUpgradesBought.Add(listUpgradesUnlocked[i]);
 
-                break;
-            }
-        }
-    }
+    //            break;
+    //        }
+    //    }
+    //}
 
     public void ResizeContainer(Transform transform)
     {

@@ -9,14 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 702c6820cf89f4f4294e5ca3632247a6, type: 3}
-  m_Name: TEST_Heavy Ship
+  m_Script: {fileID: 11500000, guid: 73797c0201dbcdb478c30548607b29d8, type: 3}
+  m_Name: 1_Heavy Ship
   m_EditorClassIdentifier: 
   name: Heavy Ship
-  icon: {fileID: 21300010, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  icon: {fileID: 21300004, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 0}
   currencyGain: 100
-  cost: 300
-  upgrades:
-  - {fileID: 11400000, guid: e63e72c362ae0d34985236f1a300e068, type: 2}
-  - {fileID: 11400000, guid: afd47133f5dfffb4aa8745045035c44f, type: 2}
+  cost: 5000
+  qtForNextShip: 3
+  upgrades: []

@@ -309,9 +309,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86ca5ef0ad4098648908918ea2436824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shipDatas:
-  - {fileID: 11400000, guid: cc4d2374d66dc1641a79d5d49e5dd6af, type: 2}
-  - {fileID: 11400000, guid: 04da7826edff8454480a841fee27d971, type: 2}
   prefabShip: {fileID: 4318612673560804211, guid: 989d9b9a60b90e14a9f02262c73bed1b,
     type: 3}
   containerShips: {fileID: 925379846}
@@ -713,6 +710,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1433662655}
+  - component: {fileID: 1433662656}
   m_Layer: 0
   m_Name: ShipsManager
   m_TagString: Untagged
@@ -734,6 +732,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1433662656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433662654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c7958832928ebd43a3d7ca0d1090a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1613474397
 PrefabInstance:
   m_ObjectHideFlags: 0

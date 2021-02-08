@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CustomData/TEST_Upgrade", fileName = "New Upgrade")]
-public class Upgrade : ScriptableObject
+[CreateAssetMenu(menuName = "CustomData/Upgrade", fileName = "New Upgrade")]
+public class UpgradeData : ScriptableObject
 {
     public new string name;
     [TextArea]

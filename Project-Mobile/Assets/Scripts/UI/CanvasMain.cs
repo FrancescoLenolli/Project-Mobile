@@ -18,7 +18,8 @@ public class CanvasMain : MonoBehaviour
     {
         currencyManager = CurrencyManager.Instance;
 
-        textCurrency.text = currencyManager.currency.ToString();
+        currencyManager.SubscribeToEventSendCurrencyValue(UpdateCurrencyText);
+        currencyManager.SubscribeToEventSendPassiveCurrencyGainValue(UpdatePassiveGainText);
         //textDoubleGainTime.text = "";
 
         //SubscribeToEventShowOptionsPanel(FindObjectOfType<CanvasOptions>().MoveToPosition);

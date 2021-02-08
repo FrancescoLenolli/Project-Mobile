@@ -15,11 +15,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private void Start()
     {
-        CanvasMain canvasMain = FindObjectOfType<CanvasMain>();
-
-        SubscribeToEventSendCurrencyValue(canvasMain.UpdateCurrencyText);
-        SubscribeToEventSendPassiveCurrencyGainValue(canvasMain.UpdatePassiveGainText);
-
         AddPassiveCurrency();
     }
 

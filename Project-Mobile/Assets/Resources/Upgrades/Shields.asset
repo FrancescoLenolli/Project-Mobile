@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80a4ed656ca282c43b36b2a83cc95bfa, type: 3}
-  m_Name: TEST_Thrusters
+  m_Script: {fileID: 11500000, guid: 2d29799469370c24f9e057ba9bd2fb1e, type: 3}
+  m_Name: Shields
   m_EditorClassIdentifier: 
-  name: Thrusters
-  description: Improved thrusters make the ship go brrrr
-  icon: {fileID: 21300010, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  cost: 10000
-  upgradePercentage: 30
+  name: Shields
+  description: These are Shields
+  icon: {fileID: 21300004, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  cost: 200000
+  upgradePercentage: 40
+  isOwned: 0

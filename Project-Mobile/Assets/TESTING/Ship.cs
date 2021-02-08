@@ -4,11 +4,16 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Linq;
+using System;
 
 public class Ship : MonoBehaviour
 {
+    private Action<Ship> EventSendData;
+
+    private ShipsManager shipsManager;
     private double totalCurrencyGain;
-    private int quantity = 10;
+    private int quantity;
+    private bool isOwned = false;
 
     [SerializeField] private TextMeshProUGUI textShipName = null;
     [SerializeField] private TextMeshProUGUI textShipCost = null;
@@ -18,21 +23,44 @@ public class Ship : MonoBehaviour
     [Space]
     public ShipData shipData;
 
-    public void InitData(ShipData data)
+    public void InitData(ShipData data, ShipsManager shipsManager)
     {
-        shipData = data;
-        SetTotalCurrencyGain();
+        if (data)
+        {
+            shipData = data;
+            SetTotalCurrencyGain();
 
-        textShipName.text = data.name;
-        textShipCost.text = Formatter.FormatValue(data.cost);
-        textShipCurrencyGain.text = $"+ {Formatter.FormatValue(data.currencyGain)}/s";
-        imageShipIcon.sprite = data.icon;
-        SetTextQuantity();
+            textShipName.text = data.name;
+            textShipCost.text = Formatter.FormatValue(data.cost);
+            textShipCurrencyGain.text = $"+ {Formatter.FormatValue(data.currencyGain)}/s";
+            imageShipIcon.sprite = data.icon;
+
+            // Get quantity from saved data.
+            SetTextQuantity();
+
+            if (!shipData.IsQuantityEnough(quantity))
+            {
+                isOwned = false;
+                this.shipsManager = shipsManager;
+            }
+            if(!isOwned && shipsManager)
+            {
+                SubscribeToEventSendData(shipsManager.UnlockNewShip);
+            }
+        }
     }
 
     public void Buy()
     {
         ++quantity;
+
+        if (!isOwned && shipData.IsQuantityEnough(quantity))
+        {
+            EventSendData?.Invoke(this);
+            UnsubscribeToEventSendData(shipsManager.UnlockNewShip);
+            isOwned = true;
+        }
+
         SetTotalCurrencyGain();
         SetTextQuantity();
     }
@@ -40,6 +68,26 @@ public class Ship : MonoBehaviour
     public double GetTotalCurrencyGain()
     {
         return totalCurrencyGain;
+    }
+
+    public int GetQuantity()
+    {
+        return quantity;
+    }
+
+    public ShipData GetData()
+    {
+        return shipData;
+    }
+
+    private void SubscribeToEventSendData(Action<Ship> method)
+    {
+        EventSendData += method;
+    }
+
+    private void UnsubscribeToEventSendData(Action<Ship> method)
+    {
+        EventSendData -= method;
     }
 
     private void SetTextQuantity()
@@ -50,10 +98,10 @@ public class Ship : MonoBehaviour
     private void SetTotalCurrencyGain()
     {
         double currencyGain = shipData.currencyGain;
-        List<Upgrade> upgrades = shipData.upgrades;
+        List<UpgradeData> upgrades = shipData.upgrades;
         float totalUpgrades = 0f;
 
-        foreach(Upgrade upgrade in upgrades.Where(x => x.isOwned))
+        foreach(UpgradeData upgrade in upgrades.Where(x => x.isOwned))
         {
             totalUpgrades += upgrade.upgradePercentage;
         }

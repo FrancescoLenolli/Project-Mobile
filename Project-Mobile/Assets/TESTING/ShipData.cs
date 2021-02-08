@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "CustomData/ShipData", fileName = "New Ship")]
+[CreateAssetMenu(menuName = "CustomData/Ship", fileName = "New Ship")]
+[System.Serializable]
 public class ShipData : ScriptableObject
 {
     public new string name;
@@ -11,5 +12,11 @@ public class ShipData : ScriptableObject
     [Space]
     public double currencyGain;
     public double cost;
-    public List<Upgrade> upgrades; // TODO: Make it a List of Upgrade class
+    public int qtForNextShip; //TODO: Fix horrendous name.
+    public List<UpgradeData> upgrades;
+
+    public bool IsQuantityEnough(int quantity)
+    {
+        return quantity >= qtForNextShip;
+    }
 }

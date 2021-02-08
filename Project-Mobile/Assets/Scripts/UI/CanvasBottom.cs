@@ -7,25 +7,27 @@ public class CanvasBottom : MonoBehaviour
     private CurrencyManager currencyManager;
     private UIManager uiManager;
 
-    public List<ShipData> shipDatas = new List<ShipData>();
     public Ship prefabShip;
     public Transform containerShips;
 
-    private void Start()
+    public void InitData(List<ShipData> ships, ShipsManager shipsManager)
     {
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
-        InitShip();
-    }
 
-    private void InitShip()
-    {
+        List<ShipData> shipDatas = ships;
+
         foreach(ShipData data in shipDatas)
         {
-            Ship ship = Instantiate(prefabShip, containerShips, false);
-            ship.InitData(data);
-            currencyManager.AddShip(ship);
-            uiManager.ResizeContainer(ship.transform, containerShips, UIManager.Resize.Add);
+            SpawnShip(data, shipsManager);
         }
+    }
+
+    public void SpawnShip(ShipData data, ShipsManager shipsManager)
+    {
+        Ship ship = Instantiate(prefabShip, containerShips, false);
+        ship.InitData(data, shipsManager);
+        currencyManager.AddShip(ship);
+        uiManager.ResizeContainer(ship.transform, containerShips, UIManager.Resize.Add);
     }
 }

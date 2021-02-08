@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80a4ed656ca282c43b36b2a83cc95bfa, type: 3}
-  m_Name: TEST_Shields
+  m_Script: {fileID: 11500000, guid: 73797c0201dbcdb478c30548607b29d8, type: 3}
+  m_Name: 2_Long Ship
   m_EditorClassIdentifier: 
-  name: Shields
-  description: Stronger shields to take more bonks
-  icon: {fileID: 21300098, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  cost: 20000
-  upgradePercentage: 45
+  name: Long Ship
+  icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  model: {fileID: 0}
+  currencyGain: 100
+  cost: 5000
+  qtForNextShip: 3
+  upgrades: []
