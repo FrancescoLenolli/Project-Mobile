@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1756084651835812196}
   - component: {fileID: 1756084651835812187}
   m_Layer: 0
-  m_Name: Prefab_GameManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,16 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4448565e221f554a8a2fb526f5ae2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyable: 1
-  additiveSingleton: 0
   file: PlayerData.json
   playerName: 
-  playerCurrency: 0
   isVolumeSFXOn: 1
   isVolumeMusicOn: 1
   isVibrationOn: 1
   adsManager: {fileID: 1376736384890412709}
-  canSave: 0
 --- !u!1 &3845930959953032987
 GameObject:
   m_ObjectHideFlags: 0
@@ -70,7 +66,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8497097672881357255
 Transform:
   m_ObjectHideFlags: 0
@@ -97,3 +93,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51873e13f70bdfa428788764eb4ef45a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doubleGainTime: 0

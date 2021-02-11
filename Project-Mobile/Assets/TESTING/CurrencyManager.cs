@@ -13,17 +13,23 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public double activeCurrencyGain;
     public List<Ship> ships = new List<Ship>();
 
-    private void Start()
-    {
-        AddPassiveCurrency();
-    }
-
     public void Update()
     {
         if (IsPlayerTapping())
         {
             //TODO: Active Currency gain
         }
+    }
+
+    public void InitData()
+    {
+        AddCurrency(SaveManager.GetData().currency);
+        AddPassiveCurrency();
+    }
+
+    public void SaveData()
+    {
+        SaveManager.GetData().currency = currency;
     }
 
     public List<Ship> GetShips()
@@ -69,15 +75,20 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return currencyGain;
     }
 
+    private void AddCurrency(double value)
+    {
+        currency += value;
+        EventSendCurrencyValue?.Invoke(currency);
+        //Debug.Log(currency.ToString());
+    }
+
     private IEnumerator PassiveCurrencyGain()
     {
         while (true)
         {
             yield return new WaitForSeconds(1f);
 
-            currency += GetTotalPassiveCurrencyGain();
-            EventSendCurrencyValue?.Invoke(currency);
-            //Debug.Log(currency.ToString());
+            AddCurrency(GetTotalPassiveCurrencyGain());
 
             yield return null;
         }

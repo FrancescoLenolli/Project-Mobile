@@ -8,7 +8,7 @@ using System;
 
 public class Ship : MonoBehaviour
 {
-    private Action<Ship> EventSendData;
+    private Action<ShipData> EventSendData;
 
     private ShipsManager shipsManager;
     private double totalCurrencyGain;
@@ -23,11 +23,12 @@ public class Ship : MonoBehaviour
     [Space]
     public ShipData shipData;
 
-    public void InitData(ShipData data, ShipsManager shipsManager)
+    public void InitData(ShipData data, ShipsManager shipsManager, int quantity)
     {
         if (data)
         {
             shipData = data;
+            this.quantity = quantity;
             SetTotalCurrencyGain();
 
             textShipName.text = data.name;
@@ -56,7 +57,7 @@ public class Ship : MonoBehaviour
 
         if (!isOwned && shipData.IsQuantityEnough(quantity))
         {
-            EventSendData?.Invoke(this);
+            EventSendData?.Invoke(shipData);
             UnsubscribeToEventSendData(shipsManager.UnlockNewShip);
             isOwned = true;
         }
@@ -80,12 +81,12 @@ public class Ship : MonoBehaviour
         return shipData;
     }
 
-    private void SubscribeToEventSendData(Action<Ship> method)
+    private void SubscribeToEventSendData(Action<ShipData> method)
     {
         EventSendData += method;
     }
 
-    private void UnsubscribeToEventSendData(Action<Ship> method)
+    private void UnsubscribeToEventSendData(Action<ShipData> method)
     {
         EventSendData -= method;
     }

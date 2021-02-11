@@ -110,9 +110,9 @@ public class CanvasDailyRewards : MonoBehaviour
 
     private void LoadData()
     {
-        currentRewardIndex = gameManager.playerData.currentRewardIndex;
-        listRewardsIndexes = gameManager.playerData.listRewardsIndexes;
-        collectionCooldownTime = gameManager.playerData.collectionCooldownTime;
+        //currentRewardIndex = gameManager.playerData.currentRewardIndex;
+        //listRewardsIndexes = gameManager.playerData.listRewardsIndexes;
+        //collectionCooldownTime = gameManager.playerData.collectionCooldownTime;
 
         if (listRewardsIndexes == null)
             listRewardsIndexes = new List<int>();
@@ -174,9 +174,9 @@ public class CanvasDailyRewards : MonoBehaviour
 
     public void SaveData()
     {
-        gameManager.playerData.listRewardsIndexes = listRewardsIndexes;
-        gameManager.playerData.collectionCooldownTime = collectionCooldownTime;
-        gameManager.playerData.currentRewardIndex = currentRewardIndex;
+        //gameManager.playerData.listRewardsIndexes = listRewardsIndexes;
+        //gameManager.playerData.collectionCooldownTime = collectionCooldownTime;
+        //gameManager.playerData.currentRewardIndex = currentRewardIndex;
     }
 
     // Once every n time (standard is 24h) the Player can collect a reward.

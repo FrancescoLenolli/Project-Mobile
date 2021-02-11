@@ -49,8 +49,8 @@ public class PanelShipsUpgrades : MonoBehaviour
 
     private void LoadData()
     {
-        listUpgradesUnlocked = gameManager.playerData.listUpgradesUnlocked;
-        listUpgradesBought = gameManager.playerData.listUpgradesBought;
+        //listUpgradesUnlocked = gameManager.playerData.listUpgradesUnlocked;
+        //listUpgradesBought = gameManager.playerData.listUpgradesBought;
     }
 
     public void InitUpgrades()
@@ -146,8 +146,8 @@ public class PanelShipsUpgrades : MonoBehaviour
 
     public void SaveData()
     {
-        gameManager.playerData.listUpgradesUnlocked = listUpgradesUnlocked;
-        gameManager.playerData.listUpgradesBought = listUpgradesBought;
+        //gameManager.playerData.listUpgradesUnlocked = listUpgradesUnlocked;
+        //gameManager.playerData.listUpgradesBought = listUpgradesBought;
 
     }
 }

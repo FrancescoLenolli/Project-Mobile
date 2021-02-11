@@ -5,16 +5,15 @@ using System.IO;
 using UnityEngine;
 
 public delegate void SendTimeFromLastGame(double seconds);
-public delegate void InitialiseData();
-public delegate void Save();
 public class GameManager : Singleton<GameManager>
 {
     public event SendTimeFromLastGame EventSendTimeFromLastGame;
-    public event InitialiseData EventInitData;
-    public event Save EventSaveData;
+
+    public Action EventSaveData;
+    public Action EventInitData;
 
     // Time when the last session ended.
-    private DateTime lastSessionTime;
+    private DateTime lastSessionTime = DateTime.Now;
     // Time when current session started.
     private DateTime currentSessionTime;
     // seconds passed from last session to current session.
@@ -35,65 +34,63 @@ public class GameManager : Singleton<GameManager>
     private new void Awake()
     {
         base.Awake();
-
-        LoadCurrentData();
-
         CalculateOfflineTime();
     }
 
     private void Start()
     {
-        PanelShips panelShips = FindObjectOfType<PanelShips>();
-        CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
+        SaveManager.Load();
         CurrencyManager currencyManager = CurrencyManager.Instance;
-        ShipsView shipsView = FindObjectOfType<ShipsView>();
+        ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
 
-        EventInitData += panelShips.InitData;
-        EventInitData += canvasDailyRewards.InitData;
-        EventInitData += shipsView.InitData;
-        //EventSendTimeFromLastGame += currencyManager.GetIdleGainSinceLastGame;
-        EventSaveData += SaveCurrentData;
-        EventSaveData += panelShips.SaveData;
-        EventSaveData += FindObjectOfType<PanelShipsUpgrades>().SaveData;
-        EventSaveData += canvasDailyRewards.SaveData;
-        //EventSaveData += currencyManager.SaveData;
-        EventSaveData += shipsView.SaveData;
+        SubscribeToEventInitData(shipsManager.InitData);
+        SubscribeToEventInitData(currencyManager.InitData);
+
+        SubscribeToEventSaveData(shipsManager.SaveData);
+        SubscribeToEventSaveData(currencyManager.SaveData);
 
         EventInitData?.Invoke();
 
-        if (playerData.currencyIdleGain != 0)
-            StartCoroutine(WaitToCalculateOfflineGain(3));
+        UnsubscribeToEventInitData(shipsManager.InitData);
+        UnsubscribeToEventInitData(currencyManager.InitData);
+
+        //if (playerData.currencyIdleGain != 0)
+        //    StartCoroutine(WaitToCalculateOfflineGain(3));
     }
 
     private void OnApplicationPause(bool pause)
     {
         if (pause)
         {
-            lastSessionTime = DateTime.Now;
-            SaveData();
+            //lastSessionTime = DateTime.Now;
+            //SaveData();
         }
     }
 
     private void OnApplicationQuit()
     {
-        lastSessionTime = DateTime.Now;
-        isFirstSession = false;
+        //lastSessionTime = DateTime.Now;
+        //isFirstSession = false;
         SaveData();
     }
 
-    private void LoadCurrentData()
+    public void SubscribeToEventInitData(Action method)
     {
-        // Load Saved data.
-        playerData = Load();
+        EventInitData += method;
+    }
+    public void UnsubscribeToEventInitData(Action method)
+    {
+        EventInitData -= method;
+    }
+    public void SubscribeToEventSaveData(Action method)
+    {
+        EventSaveData += method;
+    }
 
-        isFirstSession = playerData.isFirstSession;
-        isVolumeSFXOn = playerData.isVolumeSFXOn;
-        isVolumeMusicOn = playerData.isVolumeMusicOn;
-        isVibrationOn = playerData.isVibrationOn;
-        if (playerData.lastSessionTime != "")
-        {
-            lastSessionTime = Convert.ToDateTime(playerData.lastSessionTime);
-        }
+    private void SaveData()
+    {
+        EventSaveData?.Invoke();
+        SaveManager.Save();
     }
 
     /// <summary>
@@ -161,85 +158,4 @@ public class GameManager : Singleton<GameManager>
 
         yield return null;
     }
-
-
-    /***********  SAVE SYSTEM  ***********/
-
-    private void SaveData()
-    {
-        EventSaveData?.Invoke();
-        Save();
-    }
-
-    // Store new data in case something changed during the game.
-    public void SaveCurrentData()
-    {
-        playerData.isFirstSession = isFirstSession;
-        playerData.playerName = playerName;
-        playerData.isVolumeSFXOn = isVolumeSFXOn;
-        playerData.isVolumeMusicOn = isVolumeMusicOn;
-        playerData.isVibrationOn = isVibrationOn;
-        playerData.lastSessionTime = lastSessionTime.ToString();
-    }
-
-    // Convert data to JSON, then save it.
-    public void Save()
-    {
-        string json = JsonUtility.ToJson(playerData);
-        WriteToFile(file, json);
-    }
-
-    /// Load Saved Data, create new Data if none is found.
-    public PlayerData Load()
-    {
-        PlayerData data;
-
-        // Try to get Data from persistentDataPath...
-        try
-        {
-            string path = Application.persistentDataPath + "/" + file;
-            string _json = File.ReadAllText(path);
-            data = JsonUtility.FromJson<PlayerData>(_json);
-        }
-        // ...if no File is found, create a new one.
-        catch (FileNotFoundException)
-        {
-            data = new PlayerData();
-        }
-
-        return data;
-    }
-
-    private void WriteToFile(string fileName, string json)
-    {
-        string path = GetFilePath(fileName);
-        FileStream fileStream = new FileStream(path, FileMode.Create);
-
-        using (StreamWriter writer = new StreamWriter(fileStream))
-        {
-            writer.Write(json);
-        }
-    }
-
-    private string ReadFromFile(string fileName)
-    {
-        string path = GetFilePath(fileName);
-        if (File.Exists(path))
-        {
-            using (StreamReader reader = new StreamReader(path))
-            {
-                string json = reader.ReadToEnd();
-                return json;
-            }
-        }
-        else Debug.Log("File not found!");
-        return "";
-    }
-
-    private string GetFilePath(string fileName)
-    {
-        return Application.persistentDataPath + "/" + fileName;
-    }
-
-    /*********************************************************+*/
 }

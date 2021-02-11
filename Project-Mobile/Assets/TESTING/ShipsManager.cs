@@ -1,37 +1,71 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class ShipsManager : MonoBehaviour
 {
+    private Action<List<ShipInfo>, ShipsManager> EventSendData;
+    private Action<ShipData, ShipsManager, int> EventUnlockShip;
+
     private CanvasBottom canvasBottom;
-    private List<ShipData> ownedShips = new List<ShipData>();
-    private List<ShipData> shipsData = new List<ShipData>();
+    private List<ShipInfo> ownedShips = new List<ShipInfo>();
+    private List<ShipData> totalShips = new List<ShipData>();
 
-    private void Start()
+    public void InitData()
     {
-        shipsData = Resources.LoadAll<ShipData>("Ships").ToList();
+        ownedShips = SaveManager.GetData().ships;
+        totalShips = Resources.LoadAll<ShipData>("Ships").ToList();
         canvasBottom = FindObjectOfType<CanvasBottom>();
-        InitShips();
-    }
 
-    private void InitShips()
-    {
-        if(ownedShips.Count == 0)
+        SubscribeToEventSendData(canvasBottom.InitData);
+        SubscribeToEventUnlockShip(canvasBottom.SpawnShip);
+
+        if (ownedShips.Count == 0)
         {
-            ownedShips.Add(shipsData[0]);
+            ShipInfo firstShip = new ShipInfo(totalShips[0], 0);
+            ownedShips.Add(firstShip);
         }
 
-        canvasBottom.InitData(ownedShips, this); //TODO: Create struct ShipInfo to store ShipData and Quantity.
+        EventSendData?.Invoke(ownedShips, this);
 
     }
 
-    public void UnlockNewShip(Ship ship)
+    public void UnlockNewShip(ShipData shipData)
     {
-        int index = shipsData.IndexOf(ship.GetData()) + 1;
+        int index = totalShips.IndexOf(shipData) + 1;
 
-        if (index < shipsData.Count)
-            canvasBottom.SpawnShip(shipsData[index], this);
+        if (index < totalShips.Count)
+            EventUnlockShip?.Invoke(totalShips[index], this, 0);
+    }
+
+    public void SaveData()
+    {
+        List<Ship> ships = canvasBottom.GetShips();
+        List<ShipInfo> shipsInfo = new List<ShipInfo>();
+
+        for(int i = 0; i < ships.Count; ++i)
+        {
+            ShipInfo shipInfo = new ShipInfo(ships[i].shipData, ships[i].GetQuantity());
+            shipsInfo.Add(shipInfo);
+        }
+
+        SaveManager.GetData().ships = shipsInfo;
+    }
+
+    public void SubscribeToEventSendData(Action<List<ShipInfo>, ShipsManager> method)
+    {
+        EventSendData += method;
+    }
+
+    public void UnsubscribeToEventSendData(Action<List<ShipInfo>, ShipsManager> method)
+    {
+        EventSendData -= method;
+    }
+
+    public void SubscribeToEventUnlockShip(Action<ShipData, ShipsManager, int> method)
+    {
+        EventUnlockShip += method;
     }
 }

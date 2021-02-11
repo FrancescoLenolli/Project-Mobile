@@ -57,7 +57,7 @@ public class ShipsView : MonoBehaviour
 
     private void LoadData()
     {
-        unlockedShipsCount = gameManager.playerData.unlockedShipsCount;
+        //unlockedShipsCount = gameManager.playerData.unlockedShipsCount;
     }
 
     public void InitData()
@@ -129,6 +129,6 @@ public class ShipsView : MonoBehaviour
 
     public void SaveData()
     {
-        gameManager.playerData.unlockedShipsCount = unlockedShipsCount;
+        //gameManager.playerData.unlockedShipsCount = unlockedShipsCount;
     }
 }
