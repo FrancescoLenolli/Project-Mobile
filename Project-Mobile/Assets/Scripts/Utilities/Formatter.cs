@@ -10,7 +10,7 @@
         }
         else
         {
-            formattedValue = value.ToString();
+            formattedValue = string.Format("{0:0.0}", value);
         }
 
         return formattedValue;

@@ -17,5 +17,6 @@ MonoBehaviour:
   model: {fileID: 0}
   currencyGain: 100
   cost: 5000
+  costIncreaseMultiplier: 1.07
   qtForNextShip: 3
   upgrades: []

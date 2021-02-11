@@ -12,6 +12,7 @@ public class ShipData : ScriptableObject
     [Space]
     public double currencyGain;
     public double cost;
+    public float costIncreaseMultiplier;
     public int qtForNextShip; //TODO: Fix horrendous name.
     public List<UpgradeData> upgrades;
 

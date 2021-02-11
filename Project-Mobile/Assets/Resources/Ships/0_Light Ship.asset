@@ -16,6 +16,7 @@ MonoBehaviour:
   icon: {fileID: 21300098, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 0}
   currencyGain: 100
-  cost: 5000
+  cost: 50
+  costIncreaseMultiplier: 1.07
   qtForNextShip: 3
   upgrades: []

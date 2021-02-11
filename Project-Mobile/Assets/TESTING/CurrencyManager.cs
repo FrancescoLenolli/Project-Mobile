@@ -42,6 +42,21 @@ public class CurrencyManager : Singleton<CurrencyManager>
         ships.Add(ship);
     }
 
+    public void AddCurrency(double value)
+    {
+        currency += value;
+        EventSendCurrencyValue?.Invoke(currency);
+        //Debug.Log(currency.ToString());
+    }
+
+    public void RemoveCurrency(double value)
+    {
+
+        currency -= value;
+        EventSendCurrencyValue?.Invoke(currency);
+        //Debug.Log(currency.ToString());
+    }
+
     public void SubscribeToEventSendCurrencyValue(Action<double> method)
     {
         EventSendCurrencyValue += method;
@@ -73,13 +88,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         EventSendPassiveCurrencyGainValue?.Invoke(currencyGain);
         return currencyGain;
-    }
-
-    private void AddCurrency(double value)
-    {
-        currency += value;
-        EventSendCurrencyValue?.Invoke(currency);
-        //Debug.Log(currency.ToString());
     }
 
     private IEnumerator PassiveCurrencyGain()

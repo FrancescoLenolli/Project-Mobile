@@ -12,6 +12,7 @@ public class Ship : MonoBehaviour
 
     private ShipsManager shipsManager;
     private double totalCurrencyGain;
+    private double cost;
     private int quantity;
     private bool isOwned = false;
 
@@ -29,10 +30,10 @@ public class Ship : MonoBehaviour
         {
             shipData = data;
             this.quantity = quantity;
+            SetCost();
             SetTotalCurrencyGain();
 
             textShipName.text = data.name;
-            textShipCost.text = Formatter.FormatValue(data.cost);
             textShipCurrencyGain.text = $"+ {Formatter.FormatValue(data.currencyGain)}/s";
             imageShipIcon.sprite = data.icon;
 
@@ -53,17 +54,22 @@ public class Ship : MonoBehaviour
 
     public void Buy()
     {
-        ++quantity;
-
-        if (!isOwned && shipData.IsQuantityEnough(quantity))
+        if (CanBuy())
         {
-            EventSendData?.Invoke(shipData);
-            UnsubscribeToEventSendData(shipsManager.UnlockNewShip);
-            isOwned = true;
-        }
+            CurrencyManager.Instance.RemoveCurrency(cost);
+            ++quantity;
+            SetCost();
 
-        SetTotalCurrencyGain();
-        SetTextQuantity();
+            if (!isOwned && shipData.IsQuantityEnough(quantity))
+            {
+                EventSendData?.Invoke(shipData);
+                UnsubscribeToEventSendData(shipsManager.UnlockNewShip);
+                isOwned = true;
+            }
+
+            SetTotalCurrencyGain();
+            SetTextQuantity();
+        }
     }
 
     public double GetTotalCurrencyGain()
@@ -96,24 +102,36 @@ public class Ship : MonoBehaviour
         textShipQuantity.text = $"x{quantity}";
     }
 
+    private void SetTextCost()
+    {
+        textShipCost.text = Formatter.FormatValue(cost);
+    }
+
     private void SetTotalCurrencyGain()
     {
         double currencyGain = shipData.currencyGain;
         List<UpgradeData> upgrades = shipData.upgrades;
-        float totalUpgrades = 0f;
+        float totalUpgradesPct = 0f;
 
         foreach(UpgradeData upgrade in upgrades.Where(x => x.isOwned))
         {
-            totalUpgrades += upgrade.upgradePercentage;
+            totalUpgradesPct += upgrade.upgradePercentage;
         }
 
-        double newCurrencyGain = totalUpgrades == 0f ? currencyGain : currencyGain + (currencyGain * totalUpgrades / 100);
+        double newCurrencyGain = totalUpgradesPct == 0f ? currencyGain : currencyGain + Utility.Pct(totalUpgradesPct, currencyGain);
 
         totalCurrencyGain = newCurrencyGain * quantity;
+    }
 
-        //Debug.Log($"{name} currencyGain\n\n" +
-        //    $"CurrencyGain: {currencyGain}\nUpgrade percentage: {totalUpgrades}\n" +
-        //    $"New CurrencyGain: {currencyGain} + {currencyGain * totalUpgrades / 100} = {currencyGain + (currencyGain * totalUpgrades / 100)}\n" +
-        //    $"TotalCurrencyGain: {newCurrencyGain} * {quantity} = {newCurrencyGain * quantity}\n");
+    private void SetCost()
+    {
+        double multiplier = Math.Pow(shipData.costIncreaseMultiplier, quantity);
+        cost = shipData.cost * multiplier;
+        SetTextCost();
+    }
+
+    private bool CanBuy()
+    {
+        return cost <= CurrencyManager.Instance.currency;
     }
 }
