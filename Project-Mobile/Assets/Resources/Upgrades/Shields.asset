@@ -15,6 +15,6 @@ MonoBehaviour:
   name: Shields
   description: These are Shields
   icon: {fileID: 21300004, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  cost: 200000
+  cost: 50
   upgradePercentage: 40
   isOwned: 0

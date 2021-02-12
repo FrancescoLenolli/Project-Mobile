@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 using System.Linq;
-using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class Ship : MonoBehaviour
 {
@@ -21,8 +20,10 @@ public class Ship : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textShipCurrencyGain = null;
     [SerializeField] private TextMeshProUGUI textShipQuantity = null;
     [SerializeField] private Image imageShipIcon = null;
+
     [Space]
     public ShipData shipData;
+    public List<UpgradeInfo> upgradesInfo = new List<UpgradeInfo>();
 
     public void InitData(ShipData data, ShipsManager shipsManager, int quantity)
     {
@@ -45,7 +46,7 @@ public class Ship : MonoBehaviour
                 isOwned = false;
                 this.shipsManager = shipsManager;
             }
-            if(!isOwned && shipsManager)
+            if (!isOwned && shipsManager)
             {
                 SubscribeToEventSendData(shipsManager.UnlockNewShip);
             }
@@ -54,9 +55,11 @@ public class Ship : MonoBehaviour
 
     public void Buy()
     {
-        if (CanBuy())
+        if (CanBuy() || GameManager.Instance.isTesting)
         {
-            CurrencyManager.Instance.RemoveCurrency(cost);
+            if (!GameManager.Instance.isTesting)
+                CurrencyManager.Instance.RemoveCurrency(cost);
+
             ++quantity;
             SetCost();
 
@@ -87,6 +90,26 @@ public class Ship : MonoBehaviour
         return shipData;
     }
 
+    public void SetTotalCurrencyGain()
+    {
+        double currencyGain = shipData.currencyGain;
+        List<UpgradeData> upgrades = shipData.upgrades;
+        float totalUpgradesPct = 0f;
+
+        foreach (UpgradeData upgrade in upgrades.Where(x => x.isOwned))
+        {
+            totalUpgradesPct += upgrade.upgradePercentage;
+        }
+
+        double newCurrencyGain = totalUpgradesPct == 0f ? currencyGain : currencyGain + Utility.Pct(totalUpgradesPct, currencyGain);
+
+        totalCurrencyGain = newCurrencyGain * quantity;
+    }
+
+    public void SetUpgradeInfo(UpgradeData upgradeData)
+    {
+    }
+
     private void SubscribeToEventSendData(Action<ShipData> method)
     {
         EventSendData += method;
@@ -105,22 +128,6 @@ public class Ship : MonoBehaviour
     private void SetTextCost()
     {
         textShipCost.text = Formatter.FormatValue(cost);
-    }
-
-    private void SetTotalCurrencyGain()
-    {
-        double currencyGain = shipData.currencyGain;
-        List<UpgradeData> upgrades = shipData.upgrades;
-        float totalUpgradesPct = 0f;
-
-        foreach(UpgradeData upgrade in upgrades.Where(x => x.isOwned))
-        {
-            totalUpgradesPct += upgrade.upgradePercentage;
-        }
-
-        double newCurrencyGain = totalUpgradesPct == 0f ? currencyGain : currencyGain + Utility.Pct(totalUpgradesPct, currencyGain);
-
-        totalCurrencyGain = newCurrencyGain * quantity;
     }
 
     private void SetCost()

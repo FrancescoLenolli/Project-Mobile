@@ -24,6 +24,9 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public string file = "PlayerData.json";
     [HideInInspector] public TimeSpan timeOffline = TimeSpan.Zero;
 
+    public bool isTesting = false;
+    public bool canResetData = false;
+    [Space]
     public string playerName = "";
     public bool isVolumeSFXOn = true;
     public bool isVolumeMusicOn = true;
@@ -40,6 +43,16 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         SaveManager.Load();
+
+        if(canResetData)
+        {
+            SaveManager.ResetData();
+            foreach(UpgradeData upgrade in Resources.LoadAll<UpgradeData>("Upgrades"))
+            {
+                upgrade.isOwned = false;
+            }
+        }
+
         CurrencyManager currencyManager = CurrencyManager.Instance;
         ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
 
@@ -71,6 +84,7 @@ public class GameManager : Singleton<GameManager>
     {
         //lastSessionTime = DateTime.Now;
         //isFirstSession = false;
+        if(!isTesting)
         SaveData();
     }
 

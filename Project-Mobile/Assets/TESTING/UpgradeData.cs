@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "CustomData/Upgrade", fileName = "New Upgrade")]
+[System.Serializable]
 public class UpgradeData : ScriptableObject
 {
     public new string name;

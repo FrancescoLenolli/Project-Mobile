@@ -42,6 +42,11 @@ public static class SaveManager
         return playerData;
     }
 
+    public static void ResetData()
+    {
+        playerData = new PlayerData();
+    }
+
     private static void WriteToFile(string fileName, string json)
     {
         string path = GetFilePath(fileName);

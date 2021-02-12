@@ -27,6 +27,17 @@ public class UIManager : Singleton<UIManager>
         ChangeStatus(GetCanvasGroup(uiElement), isVisible);
     }
 
+    public void ChangeVisibility(List<Transform> uiElements, int visibleElementIndex)
+    {
+        for(int i = 0; i < uiElements.Count; ++i)
+        {
+            if (i == visibleElementIndex)
+                ChangeStatus(GetCanvasGroup(uiElements[i]), true);
+            else
+                ChangeStatus(GetCanvasGroup(uiElements[i]), false);
+        }
+    }
+
     /// <summary>
     /// Increase or Decrease size of a container by additional element.
     /// </summary>

@@ -2,23 +2,23 @@
 using System.Linq;
 using UnityEngine;
 
-[System.Serializable]
-public struct UpgradeInfo
-{
-    // Generic Data for the Ship's Upgrade.
-    // Things like cost, effects ecc...
-    public string upgradeName;
+//[System.Serializable]
+//public struct UpgradeInfo
+//{
+//    // Generic Data for the Ship's Upgrade.
+//    // Things like cost, effects ecc...
+//    public string upgradeName;
 
-    // Was this Upgrade bought or is still available to buy?
-    // Upgrades NOT owned will be visible in the Upgrades panel.
-    public bool isOwned;
+//    // Was this Upgrade bought or is still available to buy?
+//    // Upgrades NOT owned will be visible in the Upgrades panel.
+//    public bool isOwned;
 
-    public UpgradeInfo(string newUpgradeName, bool newStatus)
-    {
-        upgradeName = newUpgradeName;
-        isOwned = newStatus;
-    }
-}
+//    public UpgradeInfo(string newUpgradeName, bool newStatus)
+//    {
+//        upgradeName = newUpgradeName;
+//        isOwned = newStatus;
+//    }
+//}
 
 public class PanelShipsUpgrades : MonoBehaviour
 {

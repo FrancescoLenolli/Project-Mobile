@@ -19,4 +19,6 @@ MonoBehaviour:
   cost: 50
   costIncreaseMultiplier: 1.07
   qtForNextShip: 3
-  upgrades: []
+  upgrades:
+  - {fileID: 11400000, guid: c9df488a91e9e224f901ae2dd86ae393, type: 2}
+  - {fileID: 11400000, guid: 7165b4e0e0f38ba4ea85ca6200e326fe, type: 2}

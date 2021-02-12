@@ -15,6 +15,6 @@ MonoBehaviour:
   name: Thrusters
   description: "This are thrusters\n\t"
   icon: {fileID: 21300044, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  cost: 300000
+  cost: 50
   upgradePercentage: 20
   isOwned: 0
