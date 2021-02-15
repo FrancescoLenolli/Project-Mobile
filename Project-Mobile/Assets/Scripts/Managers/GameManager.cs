@@ -47,10 +47,6 @@ public class GameManager : Singleton<GameManager>
         if(canResetData)
         {
             SaveManager.ResetData();
-            foreach(UpgradeData upgrade in Resources.LoadAll<UpgradeData>("Upgrades"))
-            {
-                upgrade.isOwned = false;
-            }
         }
 
         CurrencyManager currencyManager = CurrencyManager.Instance;
@@ -76,7 +72,8 @@ public class GameManager : Singleton<GameManager>
         if (pause)
         {
             //lastSessionTime = DateTime.Now;
-            //SaveData();
+            if (!isTesting)
+                SaveData();
         }
     }
 

@@ -37,8 +37,7 @@ public class Upgrade : MonoBehaviour
             if (!GameManager.Instance.isTesting)
                 currencyManager.RemoveCurrency(upgradeData.cost);
 
-            upgradeData.isOwned = true;
-            ship.SetTotalCurrencyGain();
+            ship.UpgradeBought(upgradeData);
             uiManager.ResizeContainer(transform, container, UIManager.Resize.Subtract);
             Destroy(gameObject);
         }

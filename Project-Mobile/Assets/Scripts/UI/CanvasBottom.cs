@@ -16,7 +16,7 @@ public class CanvasBottom : MonoBehaviour
     public Transform containerShips;
     public Transform containerUpgrades;
 
-    public void InitData(List<ShipInfo> ships, ShipsManager shipsManager)
+    public void InitData(List<ShipInfo> shipsInfo, ShipsManager shipsManager)
     {
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
@@ -26,17 +26,16 @@ public class CanvasBottom : MonoBehaviour
 
         OpenPanel(0);
 
-        List<ShipInfo> shipDatas = ships;
-        foreach (ShipInfo ship in shipDatas)
+        for (int i = 0; i < shipsInfo.Count; ++i)
         {
-            SpawnShip(ship.data, shipsManager, ship.quantity);
+            SpawnShip(shipsInfo[i], shipsManager);
         }
     }
 
-    public void SpawnShip(ShipData data, ShipsManager shipsManager, int quantity = 0)
+    public void SpawnShip(ShipInfo shipInfo, ShipsManager shipsManager)
     {
         Ship ship = Instantiate(prefabShip, containerShips, false);
-        ship.InitData(data, shipsManager, quantity);
+        ship.InitData(shipInfo, shipsManager);
         SpawnUpgrades(ship);
         currencyManager.AddShip(ship);
         ships.Add(ship);
@@ -57,10 +56,10 @@ public class CanvasBottom : MonoBehaviour
 
     private void SpawnUpgrades(Ship ship)
     {
-        foreach (UpgradeData upgradeData in ship.GetData().upgrades.Where(x => !x.isOwned))
+        foreach(UpgradeInfo info in ship.GetUpgradesInfo().Where(x => !x.isOwned))
         {
             Upgrade upgrade = Instantiate(prefabUpgrade, containerUpgrades, false);
-            upgrade.InitData(upgradeData, ship, containerUpgrades);
+            upgrade.InitData(info.upgradeData, ship, containerUpgrades);
 
             upgrade.transform.SetAsFirstSibling();
             uiManager.ResizeContainer(upgrade.transform, containerUpgrades, UIManager.Resize.Add);

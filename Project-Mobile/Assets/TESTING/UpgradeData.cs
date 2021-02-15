@@ -14,6 +14,5 @@ public class UpgradeData : ScriptableObject
     [Space]
     public double cost;
     public float upgradePercentage;
-    public bool isOwned;
 
 }
