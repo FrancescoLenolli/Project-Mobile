@@ -1990,7 +1990,8 @@ MonoBehaviour:
   textCurrency: {fileID: 8573563757353234282}
   textPassiveGain: {fileID: 1613474398}
   textDoubleGainTime: {fileID: 0}
-  prefabTextMousePosition: {fileID: 0}
+  prefabTextMousePosition: {fileID: 3605837843935083309, guid: dd90d87e37997564bbd413f88914a9c6,
+    type: 3}
 --- !u!1001 &1901022583
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2013,6 +2014,18 @@ PrefabInstance:
       propertyPath: currency
       value: 5000
       objectReference: {fileID: 0}
+    - target: {fileID: 8681854410953474960, guid: bc54ac72d05f2a44d8cc87e821d69fe7,
+        type: 3}
+      propertyPath: spriteCurrency
+      value: 
+      objectReference: {fileID: 21300030, guid: 148a7416d4c344a42bb28cb23ee31708,
+        type: 3}
+    - target: {fileID: 8681854410953474960, guid: bc54ac72d05f2a44d8cc87e821d69fe7,
+        type: 3}
+      propertyPath: spritePremiumCurrency
+      value: 
+      objectReference: {fileID: 21300048, guid: 148a7416d4c344a42bb28cb23ee31708,
+        type: 3}
     - target: {fileID: 8945366616641214001, guid: bc54ac72d05f2a44d8cc87e821d69fe7,
         type: 3}
       propertyPath: m_Name

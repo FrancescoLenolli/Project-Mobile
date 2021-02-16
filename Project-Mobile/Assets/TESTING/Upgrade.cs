@@ -25,7 +25,7 @@ public class Upgrade : MonoBehaviour
         this.ship = ship;
 
         textName.text = upgradeData.name;
-        textDescription.text = upgradeData.description;
+        textDescription.text = $"Increase {ship.name} currency gain by {upgradeData.upgradePercentage}%";
         textCost.text = Formatter.FormatValue(upgradeData.cost);
         imageIcon.sprite = upgradeData.icon;
     }

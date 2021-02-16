@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Utility
+public static class MathUtils
 {
     /// <summary>
     /// Returns a given percentage of a value.

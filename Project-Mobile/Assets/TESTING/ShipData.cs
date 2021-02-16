@@ -15,9 +15,4 @@ public class ShipData : ScriptableObject
     public float costIncreaseMultiplier;
     public int qtForNextShip; //TODO: Fix horrendous name.
     public List<UpgradeData> upgrades;
-
-    public bool IsQuantityEnough(int quantity)
-    {
-        return quantity >= qtForNextShip;
-    }
 }

@@ -20,6 +20,7 @@ public class CanvasMain : MonoBehaviour
 
         currencyManager.SubscribeToEventSendCurrencyValue(UpdateCurrencyText);
         currencyManager.SubscribeToEventSendPassiveCurrencyGainValue(UpdatePassiveGainText);
+        currencyManager.SubscribeToEventSendActiveCurrencyValue(InstantiateTapObject);
         //textDoubleGainTime.text = "";
 
         //SubscribeToEventShowOptionsPanel(FindObjectOfType<CanvasOptions>().MoveToPosition);
@@ -55,9 +56,9 @@ public class CanvasMain : MonoBehaviour
     }
 
     // When tapping on screen, instantiate object that displays the amount of currency gained by tapping.
-    private void InstantiateTapObject(Vector3 mousePosition)
+    private void InstantiateTapObject(double value, Vector3 mousePosition)
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
-        //newTapObject.SetValues(currencyManager.currencyActiveGain * currencyManager.modifierActiveGain, currencyManager.spriteCurrency);
+        newTapObject.SetValues(value, currencyManager.spriteCurrency);
     }
 }

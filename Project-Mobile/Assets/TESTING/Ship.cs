@@ -7,18 +7,19 @@ using UnityEngine.UI;
 
 public class Ship : MonoBehaviour
 {
-    private Action<ShipData> EventSendData;
+    private Action<ShipData> EventUnlockNewShip;
 
     private ShipsManager shipsManager;
     private double totalCurrencyGain;
     private double cost;
     private int quantity;
-    private bool isOwned = false;
+    private bool isNextShipUnlocked;
     public List<UpgradeInfo> upgradesInfo = new List<UpgradeInfo>();
 
     [SerializeField] private TextMeshProUGUI textShipName = null;
     [SerializeField] private TextMeshProUGUI textShipCost = null;
-    [SerializeField] private TextMeshProUGUI textShipCurrencyGain = null;
+    [SerializeField] private TextMeshProUGUI textShipTotalCurrencyGain = null;
+    [SerializeField] private TextMeshProUGUI textShipUnitCurrencyGain = null;
     [SerializeField] private TextMeshProUGUI textShipQuantity = null;
     [SerializeField] private Image imageShipIcon = null;
 
@@ -31,25 +32,28 @@ public class Ship : MonoBehaviour
         {
             shipData = shipInfo.data;
             quantity = shipInfo.quantity;
+            gameObject.name = shipData.name;
             SetUpgradesInfo(shipInfo.upgradesInfo);
             SetCost();
             SetTotalCurrencyGain();
 
             textShipName.text = shipData.name;
-            textShipCurrencyGain.text = $"+ {Formatter.FormatValue(shipData.currencyGain)}/s";
+            textShipUnitCurrencyGain.text = $"+ {Formatter.FormatValue(GetUnitCurrencyGain())}/s";
+            textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(GetTotalCurrencyGain())}/s";
             imageShipIcon.sprite = shipData.icon;
 
-            // Get quantity from saved data.
             SetTextQuantity();
 
-            if (!shipData.IsQuantityEnough(quantity))
+            // No need to subscribe to EventUnlockNewShip if new ship is already unlocked.
+            if (!IsQuantityEnough())
             {
-                isOwned = false;
+                isNextShipUnlocked = false;
                 this.shipsManager = shipsManager;
-            }
-            if (!isOwned && shipsManager)
-            {
                 SubscribeToEventSendData(shipsManager.UnlockNewShip);
+            }
+            else
+            {
+                isNextShipUnlocked = true;
             }
         }
     }
@@ -64,11 +68,11 @@ public class Ship : MonoBehaviour
             ++quantity;
             SetCost();
 
-            if (!isOwned && shipData.IsQuantityEnough(quantity))
+            if (!isNextShipUnlocked && IsQuantityEnough())
             {
-                EventSendData?.Invoke(shipData);
+                EventUnlockNewShip?.Invoke(shipData);
                 UnsubscribeToEventSendData(shipsManager.UnlockNewShip);
-                isOwned = true;
+                isNextShipUnlocked = true;
             }
 
             SetTotalCurrencyGain();
@@ -98,9 +102,9 @@ public class Ship : MonoBehaviour
 
     public void UpgradeBought(UpgradeData upgradeData)
     {
-        for(int i = 0; i < upgradesInfo.Count; ++i)
+        for (int i = 0; i < upgradesInfo.Count; ++i)
         {
-            if(upgradesInfo[i].upgradeData == upgradeData)
+            if (upgradesInfo[i].upgradeData == upgradeData)
             {
                 upgradesInfo[i] = new UpgradeInfo(upgradesInfo[i].upgradeData, true);
                 SetTotalCurrencyGain();
@@ -111,35 +115,49 @@ public class Ship : MonoBehaviour
 
     private void SubscribeToEventSendData(Action<ShipData> method)
     {
-        EventSendData += method;
+        EventUnlockNewShip += method;
     }
 
     private void UnsubscribeToEventSendData(Action<ShipData> method)
     {
-        EventSendData -= method;
+        EventUnlockNewShip -= method;
+    }
+
+    private bool IsQuantityEnough()
+    {
+        return quantity >= shipData.qtForNextShip;
     }
 
     private void SetTotalCurrencyGain()
+    {
+        double unitCurrencyGain = GetUnitCurrencyGain();
+        totalCurrencyGain = unitCurrencyGain * quantity;
+
+        textShipUnitCurrencyGain.text = $"+ {Formatter.FormatValue(GetUnitCurrencyGain())}/s";
+        textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(GetTotalCurrencyGain())}/s";
+    }
+
+    private double GetUnitCurrencyGain()
     {
         double currencyGain = shipData.currencyGain;
         List<UpgradeData> upgrades = shipData.upgrades;
         float totalUpgradesPct = 0f;
 
-        foreach(UpgradeInfo info in upgradesInfo.Where(x => x.isOwned))
+        foreach (UpgradeInfo info in upgradesInfo.Where(x => x.isOwned))
         {
             totalUpgradesPct += info.upgradeData.upgradePercentage;
         }
 
-        double newCurrencyGain = totalUpgradesPct == 0f ? currencyGain : currencyGain + Utility.Pct(totalUpgradesPct, currencyGain);
+        double newCurrencyGain = totalUpgradesPct == 0f ? currencyGain : currencyGain + MathUtils.Pct(totalUpgradesPct, currencyGain);
 
-        totalCurrencyGain = newCurrencyGain * quantity;
+        return newCurrencyGain;
     }
 
     private void SetUpgradesInfo(List<UpgradeInfo> upgradesInfo)
     {
-        if(upgradesInfo.Count == 0)
+        if (upgradesInfo.Count == 0)
         {
-            foreach(UpgradeData data in shipData.upgrades)
+            foreach (UpgradeData data in shipData.upgrades)
             {
                 this.upgradesInfo.Add(new UpgradeInfo(data, false));
             }
