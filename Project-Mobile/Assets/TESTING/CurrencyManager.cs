@@ -2,19 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CurrencyManager : Singleton<CurrencyManager>
 {
     private Action<double> EventSendCurrencyValue;
-    private Action<double> EventSendPremiumCurrencyValue;
     private Action<double> EventSendPassiveCurrencyGainValue;
+    private Action<int> EventSendPremiumCurrencyValue;
     private Action<double, Vector3> EventSendActiveCurrencyGainValue;
+
+    private EventSystem eventSystem;
 
     public Sprite spriteCurrency;
     public Sprite spritePremiumCurrency;
     [Space]
     public double currency;
-    public double premiumCurrency;
+    public int premiumCurrency;
     public double activeCurrencyGain;
     public List<Ship> ships = new List<Ship>();
 
@@ -22,19 +25,26 @@ public class CurrencyManager : Singleton<CurrencyManager>
     {
         if (IsPlayerTapping())
         {
-            CollectActiveCurrency();
+            TapBehaviour();
         }
     }
 
     public void InitData()
     {
+        CanvasMain canvasMain = FindObjectOfType<CanvasMain>();
+        canvasMain.InitData();
+
+        eventSystem = EventSystem.current;
+
         AddCurrency(SaveManager.GetData().currency);
+        AddPremiumCurrency(SaveManager.GetData().premiumCurrency);
         AddPassiveCurrency();
     }
 
     public void SaveData()
     {
         SaveManager.GetData().currency = currency;
+        SaveManager.GetData().premiumCurrency = premiumCurrency;
     }
 
     public List<Ship> GetShips()
@@ -54,7 +64,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         //Debug.Log(currency.ToString());
     }
 
-    public void AddPremiumCurrency(double value)
+    public void AddPremiumCurrency(int value)
     {
         premiumCurrency += value;
         EventSendPremiumCurrencyValue?.Invoke(premiumCurrency);
@@ -68,29 +78,29 @@ public class CurrencyManager : Singleton<CurrencyManager>
         //Debug.Log(currency.ToString());
     }
 
-    public void RemovePremiumCurrency(double value)
+    public void RemovePremiumCurrency(int value)
     {
         premiumCurrency -= value;
         EventSendPremiumCurrencyValue?.Invoke(premiumCurrency);
     }
 
 
-    public void SubscribeToEventSendCurrencyValue(Action<double> method)
+    public void SubscribeToEventSendCurrency(Action<double> method)
     {
         EventSendCurrencyValue += method;
     }
 
-    public void SubscribeToEventSendPremiumCurrency(Action<double> method)
+    public void SubscribeToEventSendPremiumCurrency(Action<int> method)
     {
         EventSendPremiumCurrencyValue += method;
     }
 
-    public void SubscribeToEventSendPassiveCurrencyGainValue(Action<double> method)
+    public void SubscribeToEventSendPassiveCurrencyGain(Action<double> method)
     {
         EventSendPassiveCurrencyGainValue += method;
     }
 
-    public void SubscribeToEventSendActiveCurrencyValue(Action<double, Vector3> method)
+    public void SubscribeToEventSendActiveCurrencyGain(Action<double, Vector3> method)
     {
         EventSendActiveCurrencyGainValue += method;
     }
@@ -127,13 +137,16 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return activeGain;
     }
 
-    private void CollectActiveCurrency()
+    private void TapBehaviour()
     {
-        double activeGain = GetActiveCurrencyGain();
-        AddCurrency(activeGain);
-        EventSendActiveCurrencyGainValue?.Invoke(activeGain, Input.mousePosition);
+        if (!eventSystem.IsPointerOverGameObject())
+        {
+            double activeGain = GetActiveCurrencyGain();
+            AddCurrency(activeGain);
+            EventSendActiveCurrencyGainValue?.Invoke(activeGain, Input.mousePosition);
 
-        Debug.Log($"Collected {activeGain} by tapping");
+            Debug.Log($"Collected {activeGain} by tapping");
+        }
     }
 
     private IEnumerator PassiveCurrencyGain()
