@@ -11,8 +11,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private Action<int> EventSendPremiumCurrencyValue;
     private Action<double, Vector3> EventSendActiveCurrencyGainValue;
 
-    private EventSystem eventSystem;
-
     public Sprite spriteCurrency;
     public Sprite spritePremiumCurrency;
     [Space]
@@ -33,8 +31,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
     {
         CanvasMain canvasMain = FindObjectOfType<CanvasMain>();
         canvasMain.InitData();
-
-        eventSystem = EventSystem.current;
 
         AddCurrency(SaveManager.GetData().currency);
         AddPremiumCurrency(SaveManager.GetData().premiumCurrency);
@@ -139,11 +135,19 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private void TapBehaviour()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        // passing a value of 0 makes it work on mobile but not on pc, so I have to use both
+        if (EventSystem.current.IsPointerOverGameObject(0) || EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+        else
         {
             double activeGain = GetActiveCurrencyGain();
             AddCurrency(activeGain);
             EventSendActiveCurrencyGainValue?.Invoke(activeGain, Input.mousePosition);
+
+            if (GameManager.Instance.isVibrationOn)
+                Vibration.VibrateSoft();
 
             Debug.Log($"Collected {activeGain} by tapping");
         }

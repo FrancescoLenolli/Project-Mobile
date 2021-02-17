@@ -39,6 +39,10 @@ public class Upgrade : MonoBehaviour
 
             ship.UpgradeBought(upgradeData);
             uiManager.ResizeContainer(transform, container, UIManager.Resize.Subtract);
+
+            if(GameManager.Instance.isVibrationOn)
+            Vibration.VibrateSoft();
+
             Destroy(gameObject);
         }
     }

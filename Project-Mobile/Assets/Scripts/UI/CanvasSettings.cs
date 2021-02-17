@@ -108,7 +108,10 @@ public class CanvasSettings : MonoBehaviour
         imageVibration.sprite = ChangeSprite(isOn);
 
         if (isOn)
-            Handheld.Vibrate();
+        {
+            Vibration.VibrateSoft();
+        }
+
     }
 
     // Change sprite of the button. Not using a Toggle to be more flexible.

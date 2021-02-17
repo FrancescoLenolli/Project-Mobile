@@ -77,6 +77,9 @@ public class Ship : MonoBehaviour
 
             SetTotalCurrencyGain();
             SetTextQuantity();
+
+            if (GameManager.Instance.isVibrationOn)
+                Vibration.VibrateSoft();
         }
     }
 
