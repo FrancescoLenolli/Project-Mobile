@@ -19,11 +19,14 @@ public class CanvasMain : MonoBehaviour
 
     public void InitData()
     {
+        CanvasSettings canvasOptions = FindObjectOfType<CanvasSettings>();
+
         currencyManager = CurrencyManager.Instance;
         textPremiumCurrency = buttonPremiumCurrency.GetComponentInChildren<TextMeshProUGUI>();
 
         buttonPremiumCurrency.image.sprite = currencyManager.spritePremiumCurrency;
 
+        SubscribeToEventShowOptionsPanel(canvasOptions.MoveToPosition);
         currencyManager.SubscribeToEventSendCurrency(UpdateCurrencyText);
         currencyManager.SubscribeToEventSendPremiumCurrency(UpdatePremiumCurrencyText);
         currencyManager.SubscribeToEventSendPassiveCurrencyGain(UpdatePassiveGainText);

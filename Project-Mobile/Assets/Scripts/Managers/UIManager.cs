@@ -59,7 +59,16 @@ public class UIManager : Singleton<UIManager>
     /// <summary>
     /// Move Canvas Element to newPosition in n seconds, with a Fade effect.
     /// </summary>
-    public void MoveRectObjectAndFade(float time, Transform animatedObject, Transform newPosition, Fade fadeType)
+    public void MoveRectObjectAndFade(Transform animatedObject, Transform newPosition, float time, Fade fadeType)
+    {
+        if (canAnimate)
+            StartCoroutine(MoveRectAndFade(time, animatedObject, newPosition, fadeType));
+    }
+
+    /// <summary>
+    /// Move Canvas Element to newPosition in n seconds, with a Fade effect.
+    /// </summary>
+    public void MoveRectObjectAndFade(Transform animatedObject, Vector3 newPosition, float time, Fade fadeType)
     {
         if (canAnimate)
             StartCoroutine(MoveRectAndFade(time, animatedObject, newPosition, fadeType));
@@ -228,6 +237,31 @@ public class UIManager : Singleton<UIManager>
         float duration = 0;
         Vector3 originalPosition = animatedObject.localPosition;
         Vector3 endPosition = newPosition.localPosition;
+        CanvasGroup canvasGroup = animatedObject.GetComponent<CanvasGroup>();
+
+        while (duration < time)
+        {
+            float t2 = Time.unscaledDeltaTime + duration / time > 1 ? 1 : Time.unscaledDeltaTime + duration / time;
+            animatedObject.localPosition = Vector3.Lerp(originalPosition, endPosition, t2);
+            canvasGroup.alpha = fadeType == Fade.In ? t2 : 1 - t2;
+            duration += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        animatedObject.localPosition = endPosition;
+        ChangeStatus(canvasGroup, fadeType == Fade.In);
+
+        canAnimate = true;
+
+        yield return null;
+    }
+
+    private IEnumerator MoveRectAndFade(float time, Transform animatedObject, Vector3 newPosition, Fade fadeType)
+    {
+        canAnimate = false;
+
+        float duration = 0;
+        Vector3 originalPosition = animatedObject.localPosition;
+        Vector3 endPosition = newPosition;
         CanvasGroup canvasGroup = animatedObject.GetComponent<CanvasGroup>();
 
         while (duration < time)

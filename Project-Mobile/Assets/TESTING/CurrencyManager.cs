@@ -139,7 +139,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private void TapBehaviour()
     {
-        if (!eventSystem.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
             double activeGain = GetActiveCurrencyGain();
             AddCurrency(activeGain);
