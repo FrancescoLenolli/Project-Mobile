@@ -33,9 +33,10 @@ public static class Vibration
 
     public static void VibrateSoft()
     {
+        long milliseconds = 20;
 
         if (isAndroid())
-            vibrator.Call("vibrate", 10);
+            vibrator.Call("vibrate", milliseconds);
         else
             Handheld.Vibrate();
     }
