@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,11 @@ public class CanvasBottom : MonoBehaviour
         for (int i = 0; i < shipsInfo.Count; ++i)
         {
             SpawnShip(shipsInfo[i], shipsManager);
+
+            if(i == shipsInfo.Count - 1 && shipsInfo[i].quantity > 0)
+            {
+                shipsManager.ViewShip();
+            }
         }
     }
 

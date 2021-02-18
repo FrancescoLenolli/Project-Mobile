@@ -7,6 +7,7 @@ public delegate void ShowOptionsPanel();
 public class CanvasMain : MonoBehaviour
 {
     private Action EventShowOptionsPanel;
+    private Action<UIManager.Cycle> EventCycleShipsModel;
 
     private CurrencyManager currencyManager;
     private TextMeshProUGUI textPremiumCurrency;
@@ -20,6 +21,7 @@ public class CanvasMain : MonoBehaviour
     public void InitData()
     {
         CanvasSettings canvasOptions = FindObjectOfType<CanvasSettings>();
+        ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
 
         currencyManager = CurrencyManager.Instance;
         textPremiumCurrency = buttonPremiumCurrency.GetComponentInChildren<TextMeshProUGUI>();
@@ -27,6 +29,7 @@ public class CanvasMain : MonoBehaviour
         buttonPremiumCurrency.image.sprite = currencyManager.spritePremiumCurrency;
 
         SubscribeToEventShowOptionsPanel(canvasOptions.MoveToPosition);
+        SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
         currencyManager.SubscribeToEventSendCurrency(UpdateCurrencyText);
         currencyManager.SubscribeToEventSendPremiumCurrency(UpdatePremiumCurrencyText);
         currencyManager.SubscribeToEventSendPassiveCurrencyGain(UpdatePassiveGainText);
@@ -36,6 +39,16 @@ public class CanvasMain : MonoBehaviour
     public void ShowOptionsPanel()
     {
         EventShowOptionsPanel?.Invoke();
+    }
+
+    public void CycleModelsLeft()
+    {
+        EventCycleShipsModel?.Invoke(UIManager.Cycle.Left);
+    }
+
+    public void CycleModelsRight()
+    {
+        EventCycleShipsModel?.Invoke(UIManager.Cycle.Right);
     }
 
     public void UpdatePassiveGainText(double value)
@@ -65,8 +78,14 @@ public class CanvasMain : MonoBehaviour
         newTapObject.SetValues(value, currencyManager.spriteCurrency);
     }
 
+
     public void SubscribeToEventShowOptionsPanel(Action method)
     {
         EventShowOptionsPanel += method;
+    }
+
+    public void SubscribeToEventCycleShipsModel(Action<UIManager.Cycle> method)
+    {
+        EventCycleShipsModel += method;
     }
 }

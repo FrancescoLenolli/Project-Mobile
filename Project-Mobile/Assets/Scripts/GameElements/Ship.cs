@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -8,12 +9,15 @@ using UnityEngine.UI;
 public class Ship : MonoBehaviour
 {
     private Action<ShipData> EventUnlockNewShip;
+    private Action<ShipData> EventSpawnShipModel;
 
     private ShipsManager shipsManager;
     private double totalCurrencyGain;
     private double cost;
     private int quantity;
     private bool isNextShipUnlocked;
+    private bool canAutoBuy;
+    private bool isButtonHeld;
     public List<UpgradeInfo> upgradesInfo = new List<UpgradeInfo>();
 
     [SerializeField] private TextMeshProUGUI textShipName = null;
@@ -55,6 +59,20 @@ public class Ship : MonoBehaviour
             {
                 isNextShipUnlocked = true;
             }
+
+            canAutoBuy = false;
+            StartCoroutine(AutoBuy());
+
+            if(quantity > 0)
+            {
+                SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+                EventSpawnShipModel?.Invoke(shipData);
+                UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+            }
+            else
+            {
+                SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+            }    
         }
     }
 
@@ -66,17 +84,23 @@ public class Ship : MonoBehaviour
                 CurrencyManager.Instance.RemoveCurrency(cost);
 
             ++quantity;
+            if(quantity > 0)
+            {
+                EventSpawnShipModel?.Invoke(shipData);
+                UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+            }
+
             SetCost();
+            SetTotalCurrencyGain();
+            SetTextQuantity();
 
             if (!isNextShipUnlocked && IsQuantityEnough())
             {
                 EventUnlockNewShip?.Invoke(shipData);
                 UnsubscribeToEventSendData(shipsManager.UnlockNewShip);
                 isNextShipUnlocked = true;
+                canAutoBuy = false;
             }
-
-            SetTotalCurrencyGain();
-            SetTextQuantity();
 
             if (GameManager.Instance.isVibrationOn)
                 Vibration.VibrateSoft();
@@ -116,6 +140,19 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public void StartAutoBuy()
+    {
+        isButtonHeld = true;
+        StartCoroutine(AutoBuyStartingDelay());
+    }
+
+    public void StopAutoBuy()
+    {
+        canAutoBuy = false;
+        isButtonHeld = false;
+    }
+
+
     private void SubscribeToEventSendData(Action<ShipData> method)
     {
         EventUnlockNewShip += method;
@@ -125,6 +162,17 @@ public class Ship : MonoBehaviour
     {
         EventUnlockNewShip -= method;
     }
+
+    private void SubscribeToEventSpawnShip(Action<ShipData> method)
+    {
+        EventSpawnShipModel += method;
+    }
+
+    private void UnsubscribeToEventSpawnShip(Action<ShipData> method)
+    {
+        EventSpawnShipModel -= method;
+    }
+
 
     private bool IsQuantityEnough()
     {
@@ -191,5 +239,30 @@ public class Ship : MonoBehaviour
     private bool CanBuy()
     {
         return cost <= CurrencyManager.Instance.currency;
+    }
+
+    private IEnumerator AutoBuy()
+    {
+        while(true)
+        {
+            if (canAutoBuy)
+            {
+                yield return new WaitForSeconds(.05f);
+                Buy();
+                yield return null;
+            }
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator AutoBuyStartingDelay()
+    {
+        yield return new WaitForSeconds(1.3f);
+
+        if(isButtonHeld)
+        canAutoBuy = true;
+
+        yield return null;
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Long Ship
   icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  model: {fileID: 0}
+  model: {fileID: 1578151531806032, guid: 8247a213e30c0734a98bcb0af9f4d340, type: 3}
   currencyGain: 100
   cost: 5000
   costIncreaseMultiplier: 1.07
