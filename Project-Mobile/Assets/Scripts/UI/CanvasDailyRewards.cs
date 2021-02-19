@@ -129,7 +129,7 @@ public class CanvasDailyRewards : MonoBehaviour
         textButtonCollect = buttonCollect.gameObject.GetComponentInChildren<TextMeshProUGUI>();
 
         LoadData();
-        collectionCooldownTime -= gameManager.GetOfflineTime();
+        //collectionCooldownTime -= gameManager.GetOfflineTime();
         if (collectionCooldownTime < 0)
             collectionCooldownTime = 0;
         canCollect = collectionCooldownTime > 0 ? false : true;

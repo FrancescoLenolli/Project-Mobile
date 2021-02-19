@@ -8,6 +8,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 {
     private Action<double> EventSendCurrencyValue;
     private Action<double> EventSendPassiveCurrencyGainValue;
+    private Action<TimeSpan, double> EventGainedOfflineCurrency;
     private Action<int> EventSendPremiumCurrencyValue;
     private Action<double, Vector3> EventSendActiveCurrencyGainValue;
 
@@ -30,11 +31,15 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public void InitData()
     {
         CanvasMain canvasMain = FindObjectOfType<CanvasMain>();
+        CanvasOfflineEarning canvasOfflineEarning = FindObjectOfType<CanvasOfflineEarning>();
+
         canvasMain.InitData();
 
         AddCurrency(SaveManager.GetData().currency);
         AddPremiumCurrency(SaveManager.GetData().premiumCurrency);
         AddPassiveCurrency();
+
+        SubscribeToEventGainedPassiveCurrency(canvasOfflineEarning.ShowPanel);
     }
 
     public void SaveData()
@@ -80,25 +85,36 @@ public class CurrencyManager : Singleton<CurrencyManager>
         EventSendPremiumCurrencyValue?.Invoke(premiumCurrency);
     }
 
+    public void CalculateOfflineGain(TimeSpan timeOffline)
+    {
+        double secondsOffline = timeOffline.TotalSeconds;
+        double currencyGained = (GetTotalPassiveCurrencyGain() * secondsOffline) / 3;
+
+        if(currencyGained > 0)
+        {
+            EventGainedOfflineCurrency?.Invoke(timeOffline, currencyGained);
+        }    
+    }
 
     public void SubscribeToEventSendCurrency(Action<double> method)
     {
         EventSendCurrencyValue += method;
     }
-
     public void SubscribeToEventSendPremiumCurrency(Action<int> method)
     {
         EventSendPremiumCurrencyValue += method;
     }
-
     public void SubscribeToEventSendPassiveCurrencyGain(Action<double> method)
     {
         EventSendPassiveCurrencyGainValue += method;
     }
-
     public void SubscribeToEventSendActiveCurrencyGain(Action<double, Vector3> method)
     {
         EventSendActiveCurrencyGainValue += method;
+    }
+    public void SubscribeToEventGainedPassiveCurrency(Action<TimeSpan, double> method)
+    {
+        EventGainedOfflineCurrency += method;
     }
 
 

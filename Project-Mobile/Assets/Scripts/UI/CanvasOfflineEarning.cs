@@ -1,21 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public delegate void CollectOfflineEarning(CanvasOfflineEarning.CollectionType collectionType);
-
 public class CanvasOfflineEarning : MonoBehaviour
 {
-    public event CollectOfflineEarning EventCollectOfflineEarning;
-    public event WatchAd EventWatchAd;
-
     public enum CollectionType { Normal, DoubleAd }
 
-    private UIManager uIManager = null;
-    private GameManager gameManager = null;
-    private CurrencyManager currencyManager = null;
-    private Vector3 originalPosition = Vector3.zero;
+    private UIManager uiManager;
+    private GameManager gameManager;
+    private CurrencyManager currencyManager;
+    private Vector3 originalPosition;
+    private double offlineEarnings;
 
     public Transform panelOfflineEarning = null;
     public Transform newPosition = null;
@@ -27,60 +24,44 @@ public class CanvasOfflineEarning : MonoBehaviour
 
     private void Start()
     {
-        uIManager = UIManager.Instance;
+        uiManager = UIManager.Instance;
         gameManager = GameManager.Instance;
         currencyManager = CurrencyManager.Instance;
 
+        gameManager.adsManager.SubscribeToEventAdDoubleOfflineEarnings(CollectDoubleEarnings);
         originalPosition = panelOfflineEarning.localPosition;
+    }
+    
+    public void CollectEarnings()
+    {
+        currencyManager.AddCurrency(offlineEarnings);
+        HidePanel();
+    }
 
-        EventWatchAd += gameManager.adsManager.ShowAd;
-        //EventCollectOfflineEarning += currencyManager.AddOfflineEarnings;
-        //currencyManager.EventSendBackgroundGainValue += ShowPanel;
+    public void WatchAdForDoubleEarnings()
+    {
+        gameManager.adsManager.ShowAd(AdsManager.AdType.DoubleOfflineEarnings);
+    }
+
+    public void ShowPanel(TimeSpan timeOffline, double currencyGained)
+    {
+        offlineEarnings = currencyGained;
+
+        uiManager.MoveRectObjectAndFade(panelOfflineEarning, newPosition, animationTime, UIManager.Fade.In);
+
+        textCurrencyGained.text = Formatter.FormatValue(currencyGained);
+        textOfflineTime.text = string.Format("{0:hh\\:mm\\:ss}", timeOffline);
+    }
+
+    private void CollectDoubleEarnings()
+    {
+        currencyManager.AddCurrency(offlineEarnings * 2);
+        HidePanel();
     }
 
     private void HidePanel()
     {
-        //uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, originalPosition, UIManager.Fade.Out);
+        uiManager.MoveRectObjectAndFade(panelOfflineEarning, originalPosition, animationTime, UIManager.Fade.Out);
     }
-
-    // Display panel on screen.
-    // Don't do it if it's the first time the Player plays the game.
-    public void ShowPanel(double currencyGained)
-    {
-        //uIManager.MoveRectObjectAndFade(animationTime, panelOfflineEarning, newPosition.localPosition, UIManager.Fade.In);
-        textCurrencyGained.text = Formatter.FormatValue(currencyGained);
-        textOfflineTime.text = string.Format("While you were on vacation for {0:hh\\:mm\\:ss}, LunaSolution gained:", GameManager.Instance.timeOffline);
-    }
-
-    // Called when the Player chooses to double the offline earnings by watching an Ad.
-    public void DoubleGain()
-    {
-        EventWatchAd?.Invoke(AdsManager.AdType.DoubleOfflineEarnings);
-    }
-
-    // Called by AdsManager after watching ad, doubles offline earnings.
-    public void CollectDouble()
-    {
-        InvokeEventAndClose(CollectionType.DoubleAd);
-    }
-
-    // Collect offline earnings without doubling them.
-    public void Collect()
-    {
-        InvokeEventAndClose(CollectionType.Normal);
-    }
-
-    // Collect Offline Earnings and close the panel.
-    private void InvokeEventAndClose(CollectionType collectionType)
-    {
-        EventCollectOfflineEarning?.Invoke(collectionType);
-
-        uIManager.ChangeAllButtons(listPanelButtons, false);
-        HidePanel();
-    }
-
-
-
-
 
 }

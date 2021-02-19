@@ -4,25 +4,18 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public delegate void SendTimeFromLastGame(double seconds);
 public class GameManager : Singleton<GameManager>
 {
-    public event SendTimeFromLastGame EventSendTimeFromLastGame;
-
     public Action EventSaveData;
     public Action EventInitData;
+    public Action<TimeSpan> EventSendOfflineTime;
 
-    // Time when the last session ended.
-    private DateTime lastSessionTime = DateTime.Now;
-    // Time when current session started.
-    private DateTime currentSessionTime;
-    // seconds passed from last session to current session.
-    private int secondsOffline;
     private bool isFirstSession = true;
+    private DateTime logInTime;
+    private DateTime logOutTime;
 
     [HideInInspector] public PlayerData playerData = null;
     [HideInInspector] public string file = "PlayerData.json";
-    [HideInInspector] public TimeSpan timeOffline = TimeSpan.Zero;
 
     public bool isTesting = false;
     public bool canResetData = false;
@@ -37,7 +30,7 @@ public class GameManager : Singleton<GameManager>
     private new void Awake()
     {
         base.Awake();
-        CalculateOfflineTime();
+        LogIn();
     }
 
     private void Start()
@@ -52,28 +45,39 @@ public class GameManager : Singleton<GameManager>
         CurrencyManager currencyManager = CurrencyManager.Instance;
         ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
 
+        SubscribeToEventInitData(InitData);
         SubscribeToEventInitData(shipsManager.InitData);
         SubscribeToEventInitData(currencyManager.InitData);
 
+        SubscribeToEventSaveData(SaveData);
         SubscribeToEventSaveData(shipsManager.SaveData);
         SubscribeToEventSaveData(currencyManager.SaveData);
 
+        SubscribeToEventSendOfflineTime(currencyManager.CalculateOfflineGain);
+
         EventInitData?.Invoke();
 
+        UnsubscribeToEventInitData(InitData);
         UnsubscribeToEventInitData(shipsManager.InitData);
         UnsubscribeToEventInitData(currencyManager.InitData);
 
-        //if (playerData.currencyIdleGain != 0)
-        //    StartCoroutine(WaitToCalculateOfflineGain(3));
+        StartCoroutine(WaitToCalculateOfflineGain(3));
     }
 
     private void OnApplicationPause(bool pause)
     {
-        if (pause)
+        if (!isTesting)
         {
-            //lastSessionTime = DateTime.Now;
-            if (!isTesting)
-                SaveData();
+            if (pause)
+            {
+                //lastSessionTime = DateTime.Now;
+                LogOut();
+                Save();
+            }
+            else
+            {
+                LogIn();
+            }
         }
     }
 
@@ -81,68 +85,16 @@ public class GameManager : Singleton<GameManager>
     {
         //lastSessionTime = DateTime.Now;
         //isFirstSession = false;
-        if(!isTesting)
-        SaveData();
-    }
-
-    public void SubscribeToEventInitData(Action method)
-    {
-        EventInitData += method;
-    }
-    public void UnsubscribeToEventInitData(Action method)
-    {
-        EventInitData -= method;
-    }
-    public void SubscribeToEventSaveData(Action method)
-    {
-        EventSaveData += method;
-    }
-
-    private void SaveData()
-    {
-        EventSaveData?.Invoke();
-        SaveManager.Save();
-    }
-
-    /// <summary>
-    /// Calculate how much time has passed since last session.
-    /// </summary>
-    private void CalculateOfflineTime()
-    {
-        if (lastSessionTime != DateTime.MinValue)
+        if (!isTesting)
         {
-            currentSessionTime = DateTime.Now;
-            timeOffline = currentSessionTime.Subtract(lastSessionTime);
-
-            secondsOffline = (int)timeOffline.TotalSeconds;
+            LogOut();
+            Save();
         }
     }
 
-    /// <summary>
-    /// Return true if this is the first time the game is being played.
-    /// </summary>
-    /// <returns></returns>
     public bool IsFirstSession()
     {
         return isFirstSession;
-    }
-
-    /// <summary>
-    /// Return time from last session to the current one in seconds.
-    /// </summary>
-    /// <returns></returns>
-    public long GetOfflineTime()
-    {
-        return secondsOffline;
-    }
-
-    /// <summary>
-    /// Return true if 24 hours or more have passed since last game session.
-    /// </summary>
-    /// <returns></returns>
-    public bool HasDayPassed()
-    {
-        return timeOffline.TotalDays >= 1;
     }
 
     public void SetVolumeSFX(bool isOn)
@@ -160,12 +112,62 @@ public class GameManager : Singleton<GameManager>
         isVibrationOn = isOn;
     }
 
+
+    public void SubscribeToEventInitData(Action method)
+    {
+        EventInitData += method;
+    }
+    public void UnsubscribeToEventInitData(Action method)
+    {
+        EventInitData -= method;
+    }
+    public void SubscribeToEventSaveData(Action method)
+    {
+        EventSaveData += method;
+    }
+    public void SubscribeToEventSendOfflineTime(Action<TimeSpan> method)
+    {
+        EventSendOfflineTime += method;
+    }
+
+
+    private void InitData()
+    {
+        string lastLogOut = SaveManager.GetData().lastLogOutTime;
+
+        if (lastLogOut != "")
+            logOutTime = Convert.ToDateTime(lastLogOut);
+        else
+            logOutTime = logInTime;
+    }
+
+    private void SaveData()
+    {
+        SaveManager.GetData().lastLogOutTime = logOutTime.ToString();
+    }
+
+    private void Save()
+    {
+        EventSaveData?.Invoke();
+        SaveManager.Save();
+    }
+
+    private void LogIn()
+    {
+        logInTime = DateTime.Now;
+    }
+
+    private void LogOut()
+    {
+        logOutTime = DateTime.Now;
+    }    
+
     private IEnumerator WaitToCalculateOfflineGain(float waitTime)
     {
-        long secondsOffline = GetOfflineTime();
+        TimeSpan timeOffline = logInTime.Subtract(logOutTime);
 
         yield return new WaitForSeconds(waitTime);
-        EventSendTimeFromLastGame?.Invoke(secondsOffline);
+        EventSendOfflineTime?.Invoke(timeOffline);
 
         yield return null;
     }

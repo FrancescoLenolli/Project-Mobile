@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
@@ -7,46 +8,27 @@ public delegate void AdDoubleEarnings(int doubleGainTime);
 public delegate void AdDoubleOfflineEarnings();
 public class AdsManager : MonoBehaviour, IUnityAdsListener
 {
-    public event AdBaseCurrency EventAdBaseCurrency;
-    public event AdDoubleEarnings EventAdDoubleEarnings;
-    public event AdDoubleOfflineEarnings EventAdDoubleOfflineEarnings;
-
     public enum AdType { BaseCurrency, DoubleIdleEarnings, DoubleOfflineEarnings }
 
-    private CurrencyManager currencyManager = null;
+    private Action EventAdBaseCurrency;
+    private Action EventAdDoubleOfflineEarnings;
+    private Action<double> EventAdDoubleEarnings;
+
     private string placement = "rewardedVideo";
     private AdType adType;
 
     [Tooltip("Time in HOURS where idle currency gain is doubled.")]
     public int doubleGainTime = 0;
 
-    private void Awake()
-    {
-        currencyManager = CurrencyManager.Instance;
-    }
-
     private void Start()
     {
         StartCoroutine(InitAd());
-
-        //TODO: AdsManager
-        //EventAdBaseCurrency += currencyManager.AddCurrencyAdvertisement;
-        //EventAdDoubleEarnings += currencyManager.AddDoubleIdleGainTime;
-        EventAdDoubleOfflineEarnings += FindObjectOfType<CanvasOfflineEarning>().CollectDouble;
     }
 
-    // Set which type of Ad will be watched next.
-    private void SetCurrentAdType(AdType newType)
-    {
-        adType = newType;
-    }
-
-    // When the Ad has been completely watched, give the right reward to the Player.
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
         if (showResult == ShowResult.Finished)
         {
-            // Different behaviour depending on the Ad watched.
             switch (adType)
             {
                 case AdType.BaseCurrency:
@@ -67,8 +49,43 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
         }
     }
 
-    // Normally it's not the best idea to use a Region when organizing code.
-    // Here I'm simply hiding some unused standard methods.
+    public void ShowAd(AdType adType)
+    {
+        SetCurrentAdType(adType);
+        Advertisement.Show(placement);
+    }
+
+
+    public void SubscribeToEventAdBaseCurrency(Action method)
+    {
+        EventAdBaseCurrency += method;
+    }
+    public void SubscribeToEventAdDoubleOfflineEarnings(Action method)
+    {
+        EventAdDoubleOfflineEarnings += method;
+    }
+    public void SubscribeToEventAdDoubleEarnings(Action<double> method)
+    {
+        EventAdDoubleEarnings += method;
+    }
+
+
+    private void SetCurrentAdType(AdType newType)
+    {
+        adType = newType;
+    }
+
+    private IEnumerator InitAd()
+    {
+        Advertisement.AddListener(this);
+        Advertisement.Initialize("3884039", true);
+
+        while (!Advertisement.IsReady(placement))
+        {
+            yield return null;
+        }
+    }
+
     #region UNUSED ADS METHODS
     public void OnUnityAdsReady(string placementId)
     {
@@ -82,24 +99,4 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     {
     }
     #endregion
-
-    // Set the type of the Ad to watch, then show it.
-    public void ShowAd(AdType adType)
-    {
-        SetCurrentAdType(adType);
-        Advertisement.Show(placement);
-    }
-
-    // Prepare the Advertisement.
-    // Avoid delays when the Player wants to watch an Ad.
-    private IEnumerator InitAd()
-    {
-        Advertisement.AddListener(this);
-        Advertisement.Initialize("3884039", true);
-
-        while (!Advertisement.IsReady(placement))
-        {
-            yield return null;
-        }
-    }
 }

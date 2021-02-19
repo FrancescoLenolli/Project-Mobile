@@ -12,7 +12,7 @@ public class PlayerData
     public List<ShipInfo> ships = new List<ShipInfo>();
     //public double currencyIdleGain = 0;
     //public float modifierIdleGain = 0;
-    //public string lastSessionTime = "";
+    public string lastLogOutTime = "";
     //public int timeDoubledIdleGain = 0;
 
     ////********** SETTINGS **********
