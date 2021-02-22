@@ -8,9 +8,12 @@ public class CurrencyManager : Singleton<CurrencyManager>
 {
     private Action<double> EventSendCurrencyValue;
     private Action<double> EventSendPassiveCurrencyGainValue;
+    private Action<double> EventSendDoubleGainTime;
     private Action<TimeSpan, double> EventGainedOfflineCurrency;
     private Action<int> EventSendPremiumCurrencyValue;
     private Action<double, Vector3> EventSendActiveCurrencyGainValue;
+
+    private double secondsDoubleGain = 0;
 
     public Sprite spriteCurrency;
     public Sprite spritePremiumCurrency;
@@ -35,6 +38,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         canvasMain.InitData();
 
+        secondsDoubleGain = SaveManager.GetData().secondsDoubleGain;
         AddCurrency(SaveManager.GetData().currency);
         AddPremiumCurrency(SaveManager.GetData().premiumCurrency);
         AddPassiveCurrency();
@@ -46,6 +50,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     {
         SaveManager.GetData().currency = currency;
         SaveManager.GetData().premiumCurrency = premiumCurrency;
+        SaveManager.GetData().secondsDoubleGain = secondsDoubleGain;
     }
 
     public List<Ship> GetShips()
@@ -88,12 +93,39 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public void CalculateOfflineGain(TimeSpan timeOffline)
     {
         double secondsOffline = timeOffline.TotalSeconds;
-        double currencyGained = (GetTotalPassiveCurrencyGain() * secondsOffline) / 3;
+        double totalOfflineGain = 0;
 
-        if(currencyGained > 0)
+        if(secondsOffline >= secondsDoubleGain)
         {
-            EventGainedOfflineCurrency?.Invoke(timeOffline, currencyGained);
-        }    
+            double baseSecondsOffline = secondsOffline - secondsDoubleGain;
+            double currencyGainedOffline = (GetTotalPassiveCurrencyGain() * baseSecondsOffline) / 3;
+            double currencyDoubledOffline = ((GetTotalPassiveCurrencyGain() * secondsDoubleGain) / 3) * 2;
+
+            totalOfflineGain = currencyGainedOffline + currencyDoubledOffline;
+            secondsDoubleGain = 0;
+        }
+        else
+        {
+            secondsDoubleGain -= secondsOffline;
+            totalOfflineGain = ((GetTotalPassiveCurrencyGain() * secondsDoubleGain) / 3) * 2;
+        }
+
+        if (totalOfflineGain > 0)
+        {
+            EventGainedOfflineCurrency?.Invoke(timeOffline, totalOfflineGain);
+        }
+    }
+
+    public void AddCurrencyFixedValue()
+    {
+        double value = MathUtils.Pct(20, currency);
+        AddCurrency(value);
+    }
+
+
+    public void AddDoubleGainTime(double value)
+    {
+        secondsDoubleGain += value;
     }
 
     public void SubscribeToEventSendCurrency(Action<double> method)
@@ -115,6 +147,10 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public void SubscribeToEventGainedPassiveCurrency(Action<TimeSpan, double> method)
     {
         EventGainedOfflineCurrency += method;
+    }
+    public void SubscribeToEventSendDoubleGainTime(Action<double> method)
+    {
+        EventSendDoubleGainTime += method;
     }
 
 
@@ -176,8 +212,16 @@ public class CurrencyManager : Singleton<CurrencyManager>
             yield return new WaitForSeconds(1f);
 
             double totalPassiveCurrency = GetTotalPassiveCurrencyGain();
-            EventSendPassiveCurrencyGainValue?.Invoke(totalPassiveCurrency);
+            if(secondsDoubleGain > 0)
+            {
+                totalPassiveCurrency *= 2;
+                secondsDoubleGain = secondsDoubleGain < 0 ? 0 : --secondsDoubleGain;
+            }
+
             AddCurrency(totalPassiveCurrency);
+
+            EventSendDoubleGainTime?.Invoke(secondsDoubleGain);
+            EventSendPassiveCurrencyGainValue?.Invoke(totalPassiveCurrency);
 
             yield return null;
         }

@@ -32,10 +32,12 @@ public class CanvasMain : MonoBehaviour
 
         SubscribeToEventShowOptionsPanel(canvasOptions.MoveToPosition);
         SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
+
         currencyManager.SubscribeToEventSendCurrency(UpdateCurrencyText);
         currencyManager.SubscribeToEventSendPremiumCurrency(UpdatePremiumCurrencyText);
         currencyManager.SubscribeToEventSendPassiveCurrencyGain(UpdatePassiveGainText);
         currencyManager.SubscribeToEventSendActiveCurrencyGain(InstantiateTapObject);
+        currencyManager.SubscribeToEventSendDoubleGainTime(UpdateDoubleGainTime);
     }
 
     public void ShowOptionsPanel()
@@ -60,7 +62,7 @@ public class CanvasMain : MonoBehaviour
 
     public void UpdatePassiveGainText(double value)
     {
-        textPassiveGain.text =  value != 0 ? $"+{Formatter.FormatValue(value)}/s" : "";
+        textPassiveGain.text = $"+{Formatter.FormatValue(value)}/s";
     }
 
     public void UpdateCurrencyText(double value)
@@ -73,7 +75,7 @@ public class CanvasMain : MonoBehaviour
         textPremiumCurrency.text = Formatter.FormatValue(value);
     }
 
-    public void UpdateDoubleGainTime(int value)
+    public void UpdateDoubleGainTime(double value)
     {
         textDoubleGainTime.text = value == 0 ? "" : $"x2 {TimeSpan.FromSeconds(value)}";
     }

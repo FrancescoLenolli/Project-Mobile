@@ -23,6 +23,9 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     private void Start()
     {
         StartCoroutine(InitAd());
+
+        SubscribeToEventAdBaseCurrency(CurrencyManager.Instance.AddCurrencyFixedValue);
+        SubscribeToEventAdDoubleEarnings(CurrencyManager.Instance.AddDoubleGainTime);
     }
 
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)

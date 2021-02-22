@@ -61,7 +61,7 @@ public class GameManager : Singleton<GameManager>
         UnsubscribeToEventInitData(shipsManager.InitData);
         UnsubscribeToEventInitData(currencyManager.InitData);
 
-        StartCoroutine(WaitToCalculateOfflineGain(3));
+        CalculateOfflineTime();
     }
 
     private void OnApplicationPause(bool pause)
@@ -162,13 +162,9 @@ public class GameManager : Singleton<GameManager>
         logOutTime = DateTime.Now;
     }    
 
-    private IEnumerator WaitToCalculateOfflineGain(float waitTime)
+    private void CalculateOfflineTime()
     {
         TimeSpan timeOffline = logInTime.Subtract(logOutTime);
-
-        yield return new WaitForSeconds(waitTime);
         EventSendOfflineTime?.Invoke(timeOffline);
-
-        yield return null;
     }
 }

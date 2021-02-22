@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -45,12 +46,7 @@ public class CanvasOfflineEarning : MonoBehaviour
 
     public void ShowPanel(TimeSpan timeOffline, double currencyGained)
     {
-        offlineEarnings = currencyGained;
-
-        uiManager.MoveRectObjectAndFade(panelOfflineEarning, newPosition, animationTime, UIManager.Fade.In);
-
-        textCurrencyGained.text = Formatter.FormatValue(currencyGained);
-        textOfflineTime.text = string.Format("{0:hh\\:mm\\:ss}", timeOffline);
+        StartCoroutine(WaitToShowPanel(3, timeOffline, currencyGained));
     }
 
     private void CollectDoubleEarnings()
@@ -62,6 +58,20 @@ public class CanvasOfflineEarning : MonoBehaviour
     private void HidePanel()
     {
         uiManager.MoveRectObjectAndFade(panelOfflineEarning, originalPosition, animationTime, UIManager.Fade.Out);
+    }
+
+    private IEnumerator WaitToShowPanel(float time, TimeSpan timeOffline, double currencyGained)
+    {
+        yield return new WaitForSeconds(time);
+
+        offlineEarnings = currencyGained;
+
+        uiManager.MoveRectObjectAndFade(panelOfflineEarning, newPosition, animationTime, UIManager.Fade.In);
+
+        textCurrencyGained.text = Formatter.FormatValue(currencyGained);
+        textOfflineTime.text = string.Format("{0:hh\\:mm\\:ss}", timeOffline);
+
+        yield return null;
     }
 
 }

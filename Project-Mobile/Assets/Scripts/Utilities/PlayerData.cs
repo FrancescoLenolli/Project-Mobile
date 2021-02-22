@@ -13,7 +13,7 @@ public class PlayerData
     //public double currencyIdleGain = 0;
     //public float modifierIdleGain = 0;
     public string lastLogOutTime = "";
-    //public int timeDoubledIdleGain = 0;
+    public double secondsDoubleGain = 0;
 
     ////********** SETTINGS **********
     //public bool isVolumeSFXOn = true;

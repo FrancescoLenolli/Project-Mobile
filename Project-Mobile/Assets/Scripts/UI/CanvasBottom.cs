@@ -60,6 +60,16 @@ public class CanvasBottom : MonoBehaviour
         uiManager.ChangeVisibility(containers, index);
     }
 
+    public void AddExtraCurrency()
+    {
+        GameManager.Instance.adsManager.ShowAd(AdsManager.AdType.BaseCurrency);
+    }
+
+    public void AddExtraDoubleGainTime()
+    {
+        GameManager.Instance.adsManager.ShowAd(AdsManager.AdType.DoubleIdleEarnings);
+    }
+
     private void SpawnUpgrades(Ship ship)
     {
         foreach(UpgradeInfo info in ship.GetUpgradesInfo().Where(x => !x.isOwned))
