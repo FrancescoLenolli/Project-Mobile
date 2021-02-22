@@ -27,6 +27,14 @@ public class UIManager : Singleton<UIManager>
         ChangeStatus(GetCanvasGroup(uiElement), isVisible);
     }
 
+    public void ChangeVisibility(List<Transform> uiElements, bool isVisible)
+    {
+        foreach(Transform element in uiElements)
+        {
+            ChangeStatus(GetCanvasGroup(element), isVisible);
+        }
+    }
+
     public void ChangeVisibility(List<Transform> uiElements, int visibleElementIndex)
     {
         for(int i = 0; i < uiElements.Count; ++i)

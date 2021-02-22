@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ public class CanvasMain : MonoBehaviour
     private CurrencyManager currencyManager;
     private TextMeshProUGUI textPremiumCurrency;
 
+    public List<Transform> cycleButtons;
     public TextMeshProUGUI textCurrency;
     public TextMeshProUGUI textPassiveGain;
     public TextMeshProUGUI textDoubleGainTime;
@@ -49,6 +51,11 @@ public class CanvasMain : MonoBehaviour
     public void CycleModelsRight()
     {
         EventCycleShipsModel?.Invoke(UIManager.Cycle.Right);
+    }
+
+    public void ShowCycleButtons()
+    {
+        UIManager.Instance.ChangeVisibility(cycleButtons, true);
     }
 
     public void UpdatePassiveGainText(double value)

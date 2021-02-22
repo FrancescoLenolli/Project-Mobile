@@ -766,6 +766,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 252107145}
   m_CullTransparentMesh: 0
+--- !u!1 &320898446 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7960734366691397121, guid: 9dcf8003cee7ed14c82f6ebbc966b783,
+    type: 3}
+  m_PrefabInstance: {fileID: 2086641992}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &320898450
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320898446}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &365251089
 GameObject:
   m_ObjectHideFlags: 0
@@ -4441,7 +4459,7 @@ PrefabInstance:
     - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
       propertyPath: canResetData
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1756084651835812196, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
@@ -5947,6 +5965,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cea1cd52a4858254783892f6688f8180, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cycleButtons:
+  - {fileID: 2086641993}
+  - {fileID: 172659550}
   textCurrency: {fileID: 8573563757353234282}
   textPassiveGain: {fileID: 1613474398}
   textDoubleGainTime: {fileID: 0}
@@ -6249,6 +6270,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -770}
   m_SizeDelta: {x: 1080, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1923321514 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7960734366691397121, guid: 9dcf8003cee7ed14c82f6ebbc966b783,
+    type: 3}
+  m_PrefabInstance: {fileID: 172659549}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &1923321518
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1923321514}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1945938944
 PrefabInstance:
   m_ObjectHideFlags: 0

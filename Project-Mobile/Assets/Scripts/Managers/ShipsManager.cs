@@ -53,6 +53,9 @@ public class ShipsManager : MonoBehaviour
 
     public void SpawnShipModel(ShipData shipData)
     {
+        if (shipsModel.Count == 1)
+            FindObjectOfType<CanvasMain>().ShowCycleButtons();
+
         GameObject shipModel = Instantiate(shipData.model, shipsStartingPosition, Quaternion.identity);
         shipsModel.Add(shipModel);
         CycleModels(UIManager.Cycle.Right);
