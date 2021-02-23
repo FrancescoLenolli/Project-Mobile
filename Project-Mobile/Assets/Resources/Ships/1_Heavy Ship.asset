@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73797c0201dbcdb478c30548607b29d8, type: 3}
   m_Name: 1_Heavy Ship
   m_EditorClassIdentifier: 
+  index: 1
   name: Heavy Ship
   icon: {fileID: 21300004, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1261967083292032, guid: 8473f9776d8295943a5758049686e69c, type: 3}

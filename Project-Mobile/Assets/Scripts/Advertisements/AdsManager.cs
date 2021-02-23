@@ -12,7 +12,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
 
     private Action EventAdBaseCurrency;
     private Action EventAdDoubleOfflineEarnings;
-    private Action<double> EventAdDoubleEarnings;
+    private Action EventAdDoubleEarnings;
 
     private string placement = "rewardedVideo";
     private AdType adType;
@@ -39,7 +39,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
                     break;
 
                 case AdType.DoubleIdleEarnings:
-                    EventAdDoubleEarnings?.Invoke(doubleGainTime * 3600);
+                    EventAdDoubleEarnings?.Invoke();
                     break;
 
                 case AdType.DoubleOfflineEarnings:
@@ -67,7 +67,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     {
         EventAdDoubleOfflineEarnings += method;
     }
-    public void SubscribeToEventAdDoubleEarnings(Action<double> method)
+    public void SubscribeToEventAdDoubleEarnings(Action method)
     {
         EventAdDoubleEarnings += method;
     }

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d29799469370c24f9e057ba9bd2fb1e, type: 3}
   m_Name: Thrusters
   m_EditorClassIdentifier: 
+  index: 2
   name: Thrusters
   description: "This are thrusters\n\t"
   icon: {fileID: 21300044, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   cost: 50
   upgradePercentage: 20
-  isOwned: 0

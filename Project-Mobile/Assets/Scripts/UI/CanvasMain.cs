@@ -77,7 +77,7 @@ public class CanvasMain : MonoBehaviour
 
     public void UpdateDoubleGainTime(double value)
     {
-        textDoubleGainTime.text = value == 0 ? "" : $"x2 {TimeSpan.FromSeconds(value)}";
+        textDoubleGainTime.text = value == 0 ? "" : $"x2 {TimeSpan.FromSeconds(value):hh\\:mm\\:ss}";
     }
 
     // When tapping on screen, instantiate object that displays the amount of currency gained by tapping.

@@ -1,27 +1,78 @@
-﻿using UnityEngine;
+﻿using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-public delegate void WatchAd(AdsManager.AdType adType);
 public class PanelExtra : MonoBehaviour
 {
-    public event WatchAd EventWatchCurrencyAd;
+    private Action<AdsManager.AdType> EventWatchCurrencyAd;
 
-    private GameManager gameManager = null;
+    private GameManager gameManager;
+    private CurrencyManager currencyManager;
+    private CanvasBottom canvasBottom;
 
-    private void Start()
+    public TextMeshProUGUI textTitle;
+    public TextMeshProUGUI textDescription;
+    public Button buttonAd;
+    public Button buttonBuy;
+
+    public void InitData(CanvasBottom canvasBottom)
     {
         gameManager = GameManager.Instance;
+        currencyManager = CurrencyManager.Instance;
+        this.canvasBottom = canvasBottom;
 
-        EventWatchCurrencyAd += gameManager.adsManager.ShowAd;
+        SubscribeToEventWatchAd(gameManager.adsManager.ShowAd);
     }
 
-    // Add a percentage of currency to the actual value.
-    public void WatchAdCurrency()
+    public void SetUpPanel(AdsManager.AdType adType)
     {
+        switch (adType)
+        {
+            case AdsManager.AdType.BaseCurrency:
+                textTitle.text = "Get Currency";
+                textDescription.text = $"Get {currencyManager.adPctGain}% of the actual Currency.\n{MathUtils.Pct(currencyManager.adPctGain, currencyManager.currency)}";
+                buttonAd.onClick.RemoveAllListeners();
+                buttonBuy.onClick.RemoveAllListeners();
+                buttonAd.onClick.AddListener(WatchAdExtraCurrency);
+                buttonBuy.onClick.AddListener(BuyExtraCurrency);
+                break;
+            case AdsManager.AdType.DoubleIdleEarnings:
+                textTitle.text = "Double your IdleGain";
+                textDescription.text = $"Get {currencyManager.adHoursDoubleGain} hours of doubled idle gain";
+                buttonAd.onClick.RemoveAllListeners();
+                buttonBuy.onClick.RemoveAllListeners();
+                buttonAd.onClick.AddListener(WatchAdDoubleEarnings);
+                buttonBuy.onClick.AddListener(BuyDoubleEarnings);
+                break;
+        }
+    }
+
+    public void WatchAdExtraCurrency()
+    {
+        canvasBottom.MovePanelToPosition(true);
         EventWatchCurrencyAd?.Invoke(AdsManager.AdType.BaseCurrency);
+    }
+    public void BuyExtraCurrency()
+    {
+        if (currencyManager.BuyCurrencyFixedValue())
+            canvasBottom.MovePanelToPosition(true);
     }
 
     public void WatchAdDoubleEarnings()
     {
+        canvasBottom.MovePanelToPosition(true);
         EventWatchCurrencyAd?.Invoke(AdsManager.AdType.DoubleIdleEarnings);
+    }
+    public void BuyDoubleEarnings()
+    {
+        if (currencyManager.BuyDoubleGainTime())
+            canvasBottom.MovePanelToPosition(true);
+    }
+
+
+    private void SubscribeToEventWatchAd(Action<AdsManager.AdType> method)
+    {
+        EventWatchCurrencyAd += method;
     }
 }

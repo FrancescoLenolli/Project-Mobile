@@ -14,6 +14,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private Action<double, Vector3> EventSendActiveCurrencyGainValue;
 
     private double secondsDoubleGain = 0;
+    private List<Ship> ships = new List<Ship>();
 
     public Sprite spriteCurrency;
     public Sprite spritePremiumCurrency;
@@ -21,7 +22,10 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public double currency;
     public int premiumCurrency;
     public double activeCurrencyGain;
-    public List<Ship> ships = new List<Ship>();
+    public int extrasCost;
+    [Space]
+    public int adPctGain;
+    public int adHoursDoubleGain;
 
     public void Update()
     {
@@ -95,7 +99,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         double secondsOffline = timeOffline.TotalSeconds;
         double totalOfflineGain = 0;
 
-        if(secondsOffline >= secondsDoubleGain)
+        if (secondsOffline >= secondsDoubleGain)
         {
             double baseSecondsOffline = secondsOffline - secondsDoubleGain;
             double currencyGainedOffline = (GetTotalPassiveCurrencyGain() * baseSecondsOffline) / 3;
@@ -118,14 +122,34 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     public void AddCurrencyFixedValue()
     {
-        double value = MathUtils.Pct(20, currency);
+        double value = MathUtils.Pct(adPctGain, currency);
         AddCurrency(value);
+    }
+    public bool BuyCurrencyFixedValue()
+    {
+        if (premiumCurrency >= extrasCost)
+        {
+            premiumCurrency -= extrasCost;
+            AddCurrencyFixedValue();
+            return true;
+        }
+        return false;
     }
 
 
-    public void AddDoubleGainTime(double value)
+    public void AddDoubleGainTime()
     {
-        secondsDoubleGain += value;
+        secondsDoubleGain += adHoursDoubleGain * 3600;
+    }
+    public bool BuyDoubleGainTime()
+    {
+        if (premiumCurrency >= extrasCost)
+        {
+            premiumCurrency -= extrasCost;
+            AddDoubleGainTime();
+            return true;
+        }
+        return false;
     }
 
     public void SubscribeToEventSendCurrency(Action<double> method)
@@ -212,7 +236,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
             yield return new WaitForSeconds(1f);
 
             double totalPassiveCurrency = GetTotalPassiveCurrencyGain();
-            if(secondsDoubleGain > 0)
+            if (secondsDoubleGain > 0)
             {
                 totalPassiveCurrency *= 2;
                 secondsDoubleGain = secondsDoubleGain < 0 ? 0 : --secondsDoubleGain;

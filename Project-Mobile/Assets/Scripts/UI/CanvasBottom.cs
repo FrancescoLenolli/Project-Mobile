@@ -10,17 +10,26 @@ public class CanvasBottom : MonoBehaviour
     private UIManager uiManager;
     private List<Transform> containers = new List<Transform>();
     private List<Ship> ships = new List<Ship>();
+    private Vector3 originalPanelPosition;
+    private Vector3 targetPanelPosition;
 
     public Ship prefabShip;
     public Upgrade prefabUpgrade;
     public Transform containersParent;
     public Transform containerShips;
     public Transform containerUpgrades;
+    [Space]
+    public PanelExtra panelExtra;
+    public Transform panelTargetPosition;
+    public float animationTime;
 
     public void InitData(List<ShipInfo> shipsInfo, ShipsManager shipsManager)
     {
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
+        originalPanelPosition = panelExtra.transform.localPosition;
+        targetPanelPosition = panelTargetPosition.localPosition;
+        panelExtra.InitData(this);
 
         List<ScrollRect> list = containersParent.GetComponentsInChildren<ScrollRect>().ToList();
         list.ForEach(x => containers.Add(x.transform));
@@ -62,12 +71,22 @@ public class CanvasBottom : MonoBehaviour
 
     public void AddExtraCurrency()
     {
-        GameManager.Instance.adsManager.ShowAd(AdsManager.AdType.BaseCurrency);
+        MovePanelToPosition(false);
+        panelExtra.SetUpPanel(AdsManager.AdType.BaseCurrency);
     }
 
     public void AddExtraDoubleGainTime()
     {
-        GameManager.Instance.adsManager.ShowAd(AdsManager.AdType.DoubleIdleEarnings);
+        MovePanelToPosition(false);
+        panelExtra.SetUpPanel(AdsManager.AdType.DoubleIdleEarnings);
+    }
+
+    public void MovePanelToPosition(bool isPanelVisible)
+    {
+        Vector3 targetPosition = isPanelVisible ? originalPanelPosition : targetPanelPosition;
+        UIManager.Fade fadeType = isPanelVisible ? UIManager.Fade.Out : UIManager.Fade.In;
+
+        uiManager.MoveRectObjectAndFade(panelExtra.transform, targetPosition, animationTime, fadeType);
     }
 
     private void SpawnUpgrades(Ship ship)
