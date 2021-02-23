@@ -6,6 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class ShipData : ScriptableObject
 {
+    public int index;
     public new string name;
     public Sprite icon;
     public GameObject model;

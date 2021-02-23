@@ -6,6 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class UpgradeData : ScriptableObject
 {
+    public int index;
     public new string name;
     [TextArea]
     public string description;

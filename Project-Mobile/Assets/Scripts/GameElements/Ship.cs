@@ -133,7 +133,7 @@ public class Ship : MonoBehaviour
         {
             if (upgradesInfo[i].upgradeData == upgradeData)
             {
-                upgradesInfo[i] = new UpgradeInfo(upgradesInfo[i].upgradeData, true);
+                upgradesInfo[i] = new UpgradeInfo(upgradesInfo[i].index, upgradesInfo[i].upgradeData, true);
                 SetTotalCurrencyGain();
                 return;
             }
@@ -210,7 +210,7 @@ public class Ship : MonoBehaviour
         {
             foreach (UpgradeData data in shipData.upgrades)
             {
-                this.upgradesInfo.Add(new UpgradeInfo(data, false));
+                this.upgradesInfo.Add(new UpgradeInfo(data.index, data, false));
             }
         }
         else

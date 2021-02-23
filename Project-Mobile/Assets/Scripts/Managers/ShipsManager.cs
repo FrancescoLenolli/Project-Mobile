@@ -13,6 +13,7 @@ public class ShipsManager : MonoBehaviour
     private CanvasBottom canvasBottom;
     private List<ShipInfo> savedShipsInfo;
     private List<ShipData> totalShips = new List<ShipData>();
+    private List<UpgradeData> totalUpgrades = new List<UpgradeData>();
     private List<GameObject> shipsModel = new List<GameObject>();
     private Vector3 shipsStartingPosition = new Vector3(0f, 0f, -500f);
     private int currentModelIndex = 0;
@@ -23,6 +24,7 @@ public class ShipsManager : MonoBehaviour
     {
         savedShipsInfo = SaveManager.GetData().ships;
         totalShips = Resources.LoadAll<ShipData>("Ships").ToList();
+        totalUpgrades = Resources.LoadAll<UpgradeData>("Upgrades").ToList();
         canvasBottom = FindObjectOfType<CanvasBottom>();
         uiManager = UIManager.Instance;
 
@@ -31,11 +33,14 @@ public class ShipsManager : MonoBehaviour
 
         if (savedShipsInfo.Count == 0)
         {
-            ShipInfo firstShip = new ShipInfo(totalShips[0], 0, new List<UpgradeInfo>());
+            ShipInfo firstShip = new ShipInfo(totalShips[0].index, totalShips[0], 0, new List<UpgradeInfo>());
 
             savedShipsInfo.Add(firstShip);
         }
-
+        else
+        {
+            GetShipsData();
+        }
         EventSendData?.Invoke(savedShipsInfo, this);
 
     }
@@ -46,7 +51,7 @@ public class ShipsManager : MonoBehaviour
 
         if (index < totalShips.Count)
         {
-            ShipInfo newShipInfo = new ShipInfo(totalShips[index], 0, new List<UpgradeInfo>());
+            ShipInfo newShipInfo = new ShipInfo(totalShips[index].index, totalShips[index], 0, new List<UpgradeInfo>());
             EventUnlockShip?.Invoke(newShipInfo, this);
         }
     }
@@ -94,7 +99,7 @@ public class ShipsManager : MonoBehaviour
 
         for(int i = 0; i < ships.Count; ++i)
         {
-            ShipInfo shipInfo = new ShipInfo(ships[i].shipData, ships[i].GetQuantity(), ships[i].GetUpgradesInfo());
+            ShipInfo shipInfo = new ShipInfo(ships[i].shipData.index, ships[i].shipData, ships[i].GetQuantity(), ships[i].GetUpgradesInfo());
             shipsInfo.Add(shipInfo);
         }
 
@@ -114,5 +119,41 @@ public class ShipsManager : MonoBehaviour
     public void SubscribeToEventUnlockShip(Action<ShipInfo, ShipsManager> method)
     {
         EventUnlockShip += method;
+    }
+
+    private void GetShipsData()
+    {
+        for(int i = 0; i < savedShipsInfo.Count; ++i)
+        {
+            ShipInfo info = savedShipsInfo[i];
+            ShipData data = null;
+            List<UpgradeInfo> upgrades = new List<UpgradeInfo>();
+
+            foreach(ShipData shipData in totalShips)
+            {
+                if(info.dataIndex == shipData.index)
+                {
+                    data = shipData;
+                    break;
+                }
+            }
+
+            for(int j = 0; j < info.upgradesInfo.Count; ++j)
+            {
+                UpgradeInfo upgrade = info.upgradesInfo[j];
+
+                foreach(UpgradeData upgradeData in totalUpgrades)
+                {
+                    if(upgrade.index == upgradeData.index)
+                    {
+                        upgrade = new UpgradeInfo(upgrade.index, upgradeData, upgrade.isOwned);
+                        upgrades.Add(upgrade);
+                        break;
+                    }
+                }
+            }
+
+            info = new ShipInfo(info.dataIndex, data, info.quantity, upgrades);
+        }
     }
 }
