@@ -28,7 +28,7 @@ public class CanvasMain : MonoBehaviour
         currencyManager = CurrencyManager.Instance;
         textPremiumCurrency = buttonPremiumCurrency.GetComponentInChildren<TextMeshProUGUI>();
 
-        buttonPremiumCurrency.image.sprite = currencyManager.spritePremiumCurrency;
+        buttonPremiumCurrency.image.sprite = currencyManager.data.premiumCurrencySprite;
 
         SubscribeToEventShowOptionsPanel(canvasOptions.MoveToPosition);
         SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
@@ -84,7 +84,7 @@ public class CanvasMain : MonoBehaviour
     public void InstantiateTapObject(double value, Vector3 mousePosition)
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
-        newTapObject.SetValues(value, currencyManager.spriteCurrency);
+        newTapObject.SetValues(value, currencyManager.data.currencySprite);
     }
 
 

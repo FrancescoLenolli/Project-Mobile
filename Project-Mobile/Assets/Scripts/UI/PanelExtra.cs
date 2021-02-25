@@ -31,7 +31,7 @@ public class PanelExtra : MonoBehaviour
         {
             case AdsManager.AdType.BaseCurrency:
                 textTitle.text = "Get Currency";
-                textDescription.text = $"Get {currencyManager.adPctGain}% of the actual Currency.\n{MathUtils.Pct(currencyManager.adPctGain, currencyManager.currency)}";
+                textDescription.text = $"Get {currencyManager.data.adPctGain}% of the actual Currency.\n{MathUtils.Pct(currencyManager.data.adPctGain, currencyManager.currency)}";
                 buttonAd.onClick.RemoveAllListeners();
                 buttonBuy.onClick.RemoveAllListeners();
                 buttonAd.onClick.AddListener(WatchAdExtraCurrency);
@@ -39,7 +39,7 @@ public class PanelExtra : MonoBehaviour
                 break;
             case AdsManager.AdType.DoubleIdleEarnings:
                 textTitle.text = "Double your IdleGain";
-                textDescription.text = $"Get {currencyManager.adHoursDoubleGain} hours of doubled idle gain";
+                textDescription.text = $"Get {currencyManager.data.adHoursDoubleGain} hours of doubled idle gain";
                 buttonAd.onClick.RemoveAllListeners();
                 buttonBuy.onClick.RemoveAllListeners();
                 buttonAd.onClick.AddListener(WatchAdDoubleEarnings);

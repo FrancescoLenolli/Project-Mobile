@@ -6,15 +6,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Ship : MonoBehaviour
+public class Ship : Collectible
 {
     private Action<ShipData> EventUnlockNewShip;
     private Action<ShipData> EventSpawnShipModel;
 
     private ShipsManager shipsManager;
-    private double totalCurrencyGain;
-    private double cost;
-    private int quantity;
     private bool isNextShipUnlocked;
     private bool canAutoBuy;
     private bool isButtonHeld;
@@ -76,7 +73,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void Buy()
+    public override void Buy()
     {
         if (CanBuy() || GameManager.Instance.isTesting)
         {
@@ -105,21 +102,6 @@ public class Ship : MonoBehaviour
             if (GameManager.Instance.isVibrationOn)
                 Vibration.VibrateSoft();
         }
-    }
-
-    public double GetTotalCurrencyGain()
-    {
-        return totalCurrencyGain;
-    }
-
-    public int GetQuantity()
-    {
-        return quantity;
-    }
-
-    public ShipData GetData()
-    {
-        return shipData;
     }
 
     public List<UpgradeInfo> GetUpgradesInfo()
@@ -179,16 +161,7 @@ public class Ship : MonoBehaviour
         return quantity >= shipData.qtForNextShip;
     }
 
-    private void SetTotalCurrencyGain()
-    {
-        double unitCurrencyGain = GetUnitCurrencyGain();
-        totalCurrencyGain = unitCurrencyGain * quantity;
-
-        textShipUnitCurrencyGain.text = $"+ {Formatter.FormatValue(GetUnitCurrencyGain())}/s";
-        textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(GetTotalCurrencyGain())}/s";
-    }
-
-    private double GetUnitCurrencyGain()
+    protected override double GetUnitCurrencyGain()
     {
         double currencyGain = shipData.currencyGain;
         List<UpgradeData> upgrades = shipData.upgrades;
@@ -202,6 +175,22 @@ public class Ship : MonoBehaviour
         double newCurrencyGain = totalUpgradesPct == 0f ? currencyGain : currencyGain + MathUtils.Pct(totalUpgradesPct, currencyGain);
 
         return newCurrencyGain;
+    }
+
+    protected override void SetTotalCurrencyGain()
+    {
+        double unitCurrencyGain = GetUnitCurrencyGain();
+        totalCurrencyGain = unitCurrencyGain * quantity;
+
+        textShipUnitCurrencyGain.text = $"+ {Formatter.FormatValue(GetUnitCurrencyGain())}/s";
+        textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(GetTotalCurrencyGain())}/s";
+    }
+
+    protected override void SetCost()
+    {
+        double multiplier = Math.Pow(shipData.costIncreaseMultiplier, quantity);
+        cost = shipData.cost * multiplier;
+        SetTextCost();
     }
 
     private void SetUpgradesInfo(List<UpgradeInfo> upgradesInfo)
@@ -227,18 +216,6 @@ public class Ship : MonoBehaviour
     private void SetTextCost()
     {
         textShipCost.text = Formatter.FormatValue(cost);
-    }
-
-    private void SetCost()
-    {
-        double multiplier = Math.Pow(shipData.costIncreaseMultiplier, quantity);
-        cost = shipData.cost * multiplier;
-        SetTextCost();
-    }
-
-    private bool CanBuy()
-    {
-        return cost <= CurrencyManager.Instance.currency;
     }
 
     private IEnumerator AutoBuy()

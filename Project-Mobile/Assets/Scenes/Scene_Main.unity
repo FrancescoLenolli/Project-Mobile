@@ -7710,6 +7710,12 @@ PrefabInstance:
       propertyPath: extrasCost
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8681854410953474960, guid: bc54ac72d05f2a44d8cc87e821d69fe7,
+        type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: e087d403bea491841aff5dcb15b814f4,
+        type: 2}
     - target: {fileID: 8945366616641214001, guid: bc54ac72d05f2a44d8cc87e821d69fe7,
         type: 3}
       propertyPath: m_Name

@@ -52,7 +52,7 @@ public class CanvasBottom : MonoBehaviour
         Ship ship = Instantiate(prefabShip, containerShips, false);
         ship.InitData(shipInfo, shipsManager);
         SpawnUpgrades(ship);
-        currencyManager.AddShip(ship);
+        currencyManager.AddCollectible(ship);
         ships.Add(ship);
 
         ship.transform.SetAsFirstSibling();

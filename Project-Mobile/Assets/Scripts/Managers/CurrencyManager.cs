@@ -14,18 +14,11 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private Action<double, Vector3> EventSendActiveCurrencyGainValue;
 
     private double secondsDoubleGain = 0;
-    private List<Ship> ships = new List<Ship>();
+    private List<Collectible> collectibles = new List<Collectible>();
 
-    public Sprite spriteCurrency;
-    public Sprite spritePremiumCurrency;
-    [Space]
     public double currency;
     public int premiumCurrency;
-    public double activeCurrencyGain;
-    public int extrasCost;
-    [Space]
-    public int adPctGain;
-    public int adHoursDoubleGain;
+    public CurrencyData data;
 
     public void Update()
     {
@@ -57,21 +50,20 @@ public class CurrencyManager : Singleton<CurrencyManager>
         SaveManager.GetData().secondsDoubleGain = secondsDoubleGain;
     }
 
-    public List<Ship> GetShips()
+    public List<Collectible> GetCollectibles()
     {
-        return ships;
+        return collectibles;
     }
 
-    public void AddShip(Ship ship)
+    public void AddCollectible(Collectible collectible)
     {
-        ships.Add(ship);
+        collectibles.Add(collectible);
     }
 
     public void AddCurrency(double value)
     {
         currency += value;
         EventSendCurrencyValue?.Invoke(currency);
-        //Debug.Log(currency.ToString());
     }
 
     public void AddPremiumCurrency(int value)
@@ -85,7 +77,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         currency -= value;
         EventSendCurrencyValue?.Invoke(currency);
-        //Debug.Log(currency.ToString());
     }
 
     public void RemovePremiumCurrency(int value)
@@ -122,14 +113,14 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     public void AddCurrencyFixedValue()
     {
-        double value = MathUtils.Pct(adPctGain, currency);
+        double value = MathUtils.Pct(data.adPctGain, currency);
         AddCurrency(value);
     }
     public bool BuyCurrencyFixedValue()
     {
-        if (premiumCurrency >= extrasCost)
+        if (premiumCurrency >= data.extrasPremiumCost)
         {
-            premiumCurrency -= extrasCost;
+            premiumCurrency -= data.extrasPremiumCost;
             AddCurrencyFixedValue();
             return true;
         }
@@ -139,13 +130,13 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     public void AddDoubleGainTime()
     {
-        secondsDoubleGain += adHoursDoubleGain * 3600;
+        secondsDoubleGain += data.adHoursDoubleGain * 3600;
     }
     public bool BuyDoubleGainTime()
     {
-        if (premiumCurrency >= extrasCost)
+        if (premiumCurrency >= data.extrasPremiumCost)
         {
-            premiumCurrency -= extrasCost;
+            premiumCurrency -= data.extrasPremiumCost;
             AddDoubleGainTime();
             return true;
         }
@@ -192,7 +183,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     {
         double currencyGain = 0f;
 
-        foreach (Ship ship in ships)
+        foreach (Ship ship in collectibles)
         {
             currencyGain += ship.GetTotalCurrencyGain();
         }
@@ -202,11 +193,16 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private double GetActiveCurrencyGain()
     {
-        double activeGain = Math.Round(GetTotalPassiveCurrencyGain() / 3);
+        double activeGain = MathUtils.Pct(GetTotalActiveGainPercentage(), GetTotalPassiveCurrencyGain());
         if (activeGain == 0)
-            activeGain = 5;
+            activeGain = data.baseActiveGainValue;
 
         return activeGain;
+    }
+
+    private int GetTotalActiveGainPercentage()
+    {
+        return data.baseActiveGainPercentage; // TODO: Upgrades that increase the active gain percentage
     }
 
     private void TapBehaviour()
@@ -224,8 +220,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
             if (GameManager.Instance.isVibrationOn)
                 Vibration.VibrateSoft();
-
-            Debug.Log($"Collected {activeGain} by tapping");
         }
     }
 

@@ -4,16 +4,11 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "CustomData/Ship", fileName = "New Ship")]
 [System.Serializable]
-public class ShipData : ScriptableObject
+public class ShipData : CollectibleData
 {
-    public int index;
-    public new string name;
     public Sprite icon;
     public GameObject model;
     [Space]
-    public double currencyGain;
-    public double cost;
-    public float costIncreaseMultiplier;
     public int qtForNextShip; //TODO: Fix horrendous name.
     public List<UpgradeData> upgrades;
 }
