@@ -81,6 +81,12 @@ public class CanvasBottom : MonoBehaviour
         panelExtra.SetUpPanel(AdsManager.AdType.DoubleIdleEarnings);
     }
 
+    public void AddExtraPremiumCurrency()
+    {
+        MovePanelToPosition(false);
+        panelExtra.SetUpPanel(AdsManager.AdType.PremiumCurrency);
+    }
+
     public void MovePanelToPosition(bool isPanelVisible)
     {
         Vector3 targetPosition = isPanelVisible ? originalPanelPosition : targetPanelPosition;

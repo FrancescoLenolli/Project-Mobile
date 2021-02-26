@@ -35,6 +35,12 @@ public static class SaveManager
         }
 
         playerData = data;
+
+        if(playerData == null)
+        {
+            playerData = new PlayerData();
+            Debug.LogWarning("Save file corrupted, new file created.");
+        }
     }
 
     public static PlayerData GetData()

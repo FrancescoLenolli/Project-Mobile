@@ -12,4 +12,5 @@ public class CurrencyData : ScriptableObject
     public int extrasPremiumCost;
     public int adPctGain;
     public int adHoursDoubleGain;
+    public int adPremiumCurrencyGain;
 }

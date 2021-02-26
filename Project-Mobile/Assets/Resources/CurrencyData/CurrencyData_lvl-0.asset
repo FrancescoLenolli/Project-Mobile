@@ -20,3 +20,4 @@ MonoBehaviour:
   extrasPremiumCost: 3
   adPctGain: 25
   adHoursDoubleGain: 4
+  adPremiumCurrencyGain: 1

@@ -9,6 +9,7 @@ public class PanelExtra : MonoBehaviour
 
     private GameManager gameManager;
     private CurrencyManager currencyManager;
+    private UIManager uiManager;
     private CanvasBottom canvasBottom;
 
     public TextMeshProUGUI textTitle;
@@ -20,6 +21,7 @@ public class PanelExtra : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         currencyManager = CurrencyManager.Instance;
+        uiManager = UIManager.Instance;
         this.canvasBottom = canvasBottom;
 
         SubscribeToEventWatchAd(gameManager.adsManager.ShowAd);
@@ -30,20 +32,15 @@ public class PanelExtra : MonoBehaviour
         switch (adType)
         {
             case AdsManager.AdType.BaseCurrency:
-                textTitle.text = "Get Currency";
-                textDescription.text = $"Get {currencyManager.data.adPctGain}% of the actual Currency.\n{MathUtils.Pct(currencyManager.data.adPctGain, currencyManager.currency)}";
-                buttonAd.onClick.RemoveAllListeners();
-                buttonBuy.onClick.RemoveAllListeners();
-                buttonAd.onClick.AddListener(WatchAdExtraCurrency);
-                buttonBuy.onClick.AddListener(BuyExtraCurrency);
+                SetUpExtraGetCurrency();
                 break;
             case AdsManager.AdType.DoubleIdleEarnings:
-                textTitle.text = "Double your IdleGain";
-                textDescription.text = $"Get {currencyManager.data.adHoursDoubleGain} hours of doubled idle gain";
-                buttonAd.onClick.RemoveAllListeners();
-                buttonBuy.onClick.RemoveAllListeners();
-                buttonAd.onClick.AddListener(WatchAdDoubleEarnings);
-                buttonBuy.onClick.AddListener(BuyDoubleEarnings);
+                SetUpExtraDoubleIdleEarnings();
+                break;
+            case AdsManager.AdType.PremiumCurrency:
+                SetUpExtraGetCurrencyPremium();
+                break;
+            default:
                 break;
         }
     }
@@ -53,6 +50,7 @@ public class PanelExtra : MonoBehaviour
         canvasBottom.MovePanelToPosition(true);
         EventWatchCurrencyAd?.Invoke(AdsManager.AdType.BaseCurrency);
     }
+
     public void BuyExtraCurrency()
     {
         if (currencyManager.BuyCurrencyFixedValue())
@@ -64,15 +62,59 @@ public class PanelExtra : MonoBehaviour
         canvasBottom.MovePanelToPosition(true);
         EventWatchCurrencyAd?.Invoke(AdsManager.AdType.DoubleIdleEarnings);
     }
+
     public void BuyDoubleEarnings()
     {
         if (currencyManager.BuyDoubleGainTime())
             canvasBottom.MovePanelToPosition(true);
     }
 
+    public void WatchAdGetPremiumCurrency()
+    {
+        canvasBottom.MovePanelToPosition(true);
+        EventWatchCurrencyAd?.Invoke(AdsManager.AdType.PremiumCurrency);
+    }
+
 
     private void SubscribeToEventWatchAd(Action<AdsManager.AdType> method)
     {
         EventWatchCurrencyAd += method;
+    }
+
+
+    private void SetUpExtraGetCurrency()
+    {
+        uiManager.ChangeVisibility(buttonBuy.transform, true);
+
+        textTitle.text = "Get Currency";
+        textDescription.text = $"Get {currencyManager.data.adPctGain}% of the actual Currency." +
+            $"\n{MathUtils.Pct(currencyManager.data.adPctGain, currencyManager.currency)}";
+        buttonAd.onClick.RemoveAllListeners();
+        buttonBuy.onClick.RemoveAllListeners();
+        buttonAd.onClick.AddListener(WatchAdExtraCurrency);
+        buttonBuy.onClick.AddListener(BuyExtraCurrency);
+    }
+
+    private void SetUpExtraDoubleIdleEarnings()
+    {
+        uiManager.ChangeVisibility(buttonBuy.transform, true);
+
+        textTitle.text = "Double your IdleGain";
+        textDescription.text = $"Get {currencyManager.data.adHoursDoubleGain} hours of doubled idle gain";
+        buttonAd.onClick.RemoveAllListeners();
+        buttonBuy.onClick.RemoveAllListeners();
+        buttonAd.onClick.AddListener(WatchAdDoubleEarnings);
+        buttonBuy.onClick.AddListener(BuyDoubleEarnings);
+    }
+
+    private void SetUpExtraGetCurrencyPremium()
+    {
+        uiManager.ChangeVisibility(buttonBuy.transform, false);
+
+        textTitle.text = "Get Premium Currency";
+        textDescription.text = $"Gain {currencyManager.data.adPremiumCurrencyGain} premium currency";
+        buttonAd.onClick.RemoveAllListeners();
+        buttonBuy.onClick.RemoveAllListeners();
+        buttonAd.onClick.AddListener(WatchAdGetPremiumCurrency);
     }
 }

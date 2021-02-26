@@ -143,6 +143,11 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return false;
     }
 
+    public void AddPremiumCurrencyFixedValue()
+    {
+        AddPremiumCurrency(data.adPremiumCurrencyGain);
+    }
+
     public void SubscribeToEventSendCurrency(Action<double> method)
     {
         EventSendCurrencyValue += method;

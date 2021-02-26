@@ -8,11 +8,12 @@ public delegate void AdDoubleEarnings(int doubleGainTime);
 public delegate void AdDoubleOfflineEarnings();
 public class AdsManager : MonoBehaviour, IUnityAdsListener
 {
-    public enum AdType { BaseCurrency, DoubleIdleEarnings, DoubleOfflineEarnings }
+    public enum AdType { BaseCurrency, PremiumCurrency, DoubleIdleEarnings, DoubleOfflineEarnings }
 
     private Action EventAdBaseCurrency;
     private Action EventAdDoubleOfflineEarnings;
     private Action EventAdDoubleEarnings;
+    private Action EventAdPremiumCurrency;
 
     private string placement = "rewardedVideo";
     private AdType adType;
@@ -24,8 +25,11 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     {
         StartCoroutine(InitAd());
 
-        SubscribeToEventAdBaseCurrency(CurrencyManager.Instance.AddCurrencyFixedValue);
-        SubscribeToEventAdDoubleEarnings(CurrencyManager.Instance.AddDoubleGainTime);
+        CurrencyManager currencyManager = CurrencyManager.Instance;
+
+        SubscribeToEventAdBaseCurrency(currencyManager.AddCurrencyFixedValue);
+        SubscribeToEventAdPremiumCurrency(currencyManager.AddPremiumCurrencyFixedValue);
+        SubscribeToEventAdDoubleEarnings(currencyManager.AddDoubleGainTime);
     }
 
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
@@ -44,6 +48,9 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
 
                 case AdType.DoubleOfflineEarnings:
                     EventAdDoubleOfflineEarnings?.Invoke();
+                    break;
+                case AdType.PremiumCurrency:
+                    EventAdPremiumCurrency?.Invoke();
                     break;
                 default:
                     Debug.Log("Something went wrong with Ad rewards.");
@@ -70,6 +77,10 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     public void SubscribeToEventAdDoubleEarnings(Action method)
     {
         EventAdDoubleEarnings += method;
+    }
+    public void SubscribeToEventAdPremiumCurrency(Action method)
+    {
+        EventAdPremiumCurrency += method;
     }
 
 
