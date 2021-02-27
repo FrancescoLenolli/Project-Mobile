@@ -98,9 +98,8 @@ public class Ship : Collectible
                 isNextShipUnlocked = true;
                 canAutoBuy = false;
             }
-
-            if (GameManager.Instance.isVibrationOn)
-                Vibration.VibrateSoft();
+            
+            Vibration.VibrateSoft();
         }
     }
 

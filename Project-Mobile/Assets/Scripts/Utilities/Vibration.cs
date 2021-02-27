@@ -16,51 +16,63 @@ public static class Vibration
 
     public static void Vibrate()
     {
-        if (isAndroid())
-            vibrator.Call("vibrate");
-        else
-            Handheld.Vibrate();
+        if (Settings.IsVibrationOn)
+        {
+            if (IsAndroid())
+                vibrator.Call("vibrate");
+            else
+                Handheld.Vibrate();
+        }
     }
 
 
     public static void Vibrate(long milliseconds)
     {
-        if (isAndroid())
-            vibrator.Call("vibrate", milliseconds);
-        else
-            Handheld.Vibrate();
+        if (Settings.IsVibrationOn)
+        {
+            if (IsAndroid())
+                vibrator.Call("vibrate", milliseconds);
+            else
+                Handheld.Vibrate();
+        }
     }
 
     public static void VibrateSoft()
     {
-        long milliseconds = 20;
+        if (Settings.IsVibrationOn)
+        {
+            long milliseconds = 20;
 
-        if (isAndroid())
-            vibrator.Call("vibrate", milliseconds);
-        else
-            Handheld.Vibrate();
+            if (IsAndroid())
+                vibrator.Call("vibrate", milliseconds);
+            else
+                Handheld.Vibrate();
+        }
     }
 
     public static void Vibrate(long[] pattern, int repeat)
     {
-        if (isAndroid())
-            vibrator.Call("vibrate", pattern, repeat);
-        else
-            Handheld.Vibrate();
+        if (Settings.IsVibrationOn)
+        {
+            if (IsAndroid())
+                vibrator.Call("vibrate", pattern, repeat);
+            else
+                Handheld.Vibrate();
+        }
     }
 
     public static bool HasVibrator()
     {
-        return isAndroid();
+        return IsAndroid();
     }
 
     public static void Cancel()
     {
-        if (isAndroid())
+        if (IsAndroid())
             vibrator.Call("cancel");
     }
 
-    private static bool isAndroid()
+    private static bool IsAndroid()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
 	return true;

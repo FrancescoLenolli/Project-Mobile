@@ -1325,7 +1325,7 @@ RectTransform:
   - {fileID: 1396265728}
   - {fileID: 1893020139}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7154,7 +7154,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17916
+  m_Name: pb_Mesh17920
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7498,7 +7498,7 @@ RectTransform:
   - {fileID: 2086641993}
   - {fileID: 172659550}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7576,7 +7576,7 @@ PrefabInstance:
     - target: {fileID: 481800228180269380, guid: 3a954bc89adc1aa41bc4438c2d9ef9ab,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 481800228180269380, guid: 3a954bc89adc1aa41bc4438c2d9ef9ab,
         type: 3}
@@ -7735,8 +7735,8 @@ GameObject:
   - component: {fileID: 1893020139}
   - component: {fileID: 1893020141}
   - component: {fileID: 1893020140}
-  - component: {fileID: 1893020142}
   - component: {fileID: 1893020143}
+  - component: {fileID: 1893020142}
   m_Layer: 5
   m_Name: Panel_Extra
   m_TagString: Untagged
@@ -8135,7 +8135,7 @@ PrefabInstance:
     - target: {fileID: 6619241491161187432, guid: edb741dc77dc59346b9c9292c5f27db0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6619241491161187432, guid: edb741dc77dc59346b9c9292c5f27db0,
         type: 3}
@@ -8350,7 +8350,7 @@ Transform:
   - {fileID: 73893720}
   - {fileID: 1248909720}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2086641992
 PrefabInstance:

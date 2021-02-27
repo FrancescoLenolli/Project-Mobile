@@ -14,16 +14,10 @@ public class GameManager : Singleton<GameManager>
     private DateTime logInTime;
     private DateTime logOutTime;
 
-    [HideInInspector] public PlayerData playerData = null;
-    [HideInInspector] public string file = "PlayerData.json";
-
+    [Tooltip("If TRUE, you can buy ships at no cost.")]
     public bool isTesting = false;
+    [Tooltip("If TRUE, reset data every time you start the game.")]
     public bool canResetData = false;
-    [Space]
-    public string playerName = "";
-    public bool isVolumeSFXOn = true;
-    public bool isVolumeMusicOn = true;
-    public bool isVibrationOn = true;
     [Space(10)]
     public AdsManager adsManager = null;
 
@@ -48,18 +42,21 @@ public class GameManager : Singleton<GameManager>
         SubscribeToEventInitData(InitData);
         SubscribeToEventInitData(shipsManager.InitData);
         SubscribeToEventInitData(currencyManager.InitData);
+        SubscribeToEventInitData(Settings.InitData);
 
         SubscribeToEventSaveData(SaveData);
         SubscribeToEventSaveData(shipsManager.SaveData);
         SubscribeToEventSaveData(currencyManager.SaveData);
+        SubscribeToEventSaveData(Settings.SaveData);
 
         SubscribeToEventSendOfflineTime(currencyManager.CalculateOfflineGain);
 
         EventInitData?.Invoke();
 
-        UnsubscribeToEventInitData(InitData);
-        UnsubscribeToEventInitData(shipsManager.InitData);
+        UnsubscribeToEventInitData(Settings.InitData);
         UnsubscribeToEventInitData(currencyManager.InitData);
+        UnsubscribeToEventInitData(shipsManager.InitData);
+        UnsubscribeToEventInitData(InitData);
 
         CalculateOfflineTime();
     }
@@ -95,21 +92,6 @@ public class GameManager : Singleton<GameManager>
     public bool IsFirstSession()
     {
         return isFirstSession;
-    }
-
-    public void SetVolumeSFX(bool isOn)
-    {
-        isVolumeSFXOn = isOn;
-    }
-
-    public void SetVolumeMusic(bool isOn)
-    {
-        isVolumeMusicOn = isOn;
-    }
-
-    public void SetVibration(bool isOn)
-    {
-        isVibrationOn = isOn;
     }
 
 

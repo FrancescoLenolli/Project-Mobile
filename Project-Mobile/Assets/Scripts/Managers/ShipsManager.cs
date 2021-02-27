@@ -18,7 +18,7 @@ public class ShipsManager : MonoBehaviour
     private Vector3 shipsStartingPosition = new Vector3(0f, 0f, -500f);
     private int currentModelIndex = 0;
 
-    public Transform shipsParent;
+    [SerializeField] private Transform shipsParent = null;
 
     public void InitData()
     {

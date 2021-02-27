@@ -13,12 +13,12 @@ public class CanvasMain : MonoBehaviour
     private CurrencyManager currencyManager;
     private TextMeshProUGUI textPremiumCurrency;
 
-    public List<Transform> cycleButtons;
-    public TextMeshProUGUI textCurrency;
-    public TextMeshProUGUI textPassiveGain;
-    public TextMeshProUGUI textDoubleGainTime;
-    public Button buttonPremiumCurrency;
-    public TapObject prefabTextMousePosition;
+    [SerializeField] private List<Transform> cycleButtons = null;
+    [SerializeField] private TextMeshProUGUI textCurrency = null;
+    [SerializeField] private TextMeshProUGUI textPassiveGain = null;
+    [SerializeField] private TextMeshProUGUI textDoubleGainTime = null;
+    [SerializeField] private Button buttonPremiumCurrency = null;
+    [SerializeField] private TapObject prefabTextMousePosition = null;
 
     public void InitData()
     {
@@ -72,7 +72,7 @@ public class CanvasMain : MonoBehaviour
 
     public void UpdatePremiumCurrencyText(int value)
     {
-        textPremiumCurrency.text = Formatter.FormatValue(value);
+        textPremiumCurrency.text = value.ToString();
     }
 
     public void UpdateDoubleGainTime(double value)

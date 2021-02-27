@@ -6,7 +6,6 @@ public class PlayerData
     // GAME DATA
     // ********** GENERAL **********
     //public bool isFirstSession = true;
-    //public string playerName = "PlayerName";
     public double currency = 0;
     public int premiumCurrency = 0;
     public List<ShipInfo> ships = new List<ShipInfo>();
@@ -16,9 +15,9 @@ public class PlayerData
     public double secondsDoubleGain = 0;
 
     ////********** SETTINGS **********
-    //public bool isVolumeSFXOn = true;
-    //public bool isVolumeMusicOn = true;
-    //public bool isVibrationOn = true;
+    public bool isVolumeSFXOn = true;
+    public bool isVolumeMusicOn = true;
+    public bool isVibrationOn = true;
 
     ////********** SHIPS & UPGRADES **********
     //public List<ShipInfo> listShipInfos = null;

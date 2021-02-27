@@ -15,13 +15,11 @@ public class CanvasOfflineEarning : MonoBehaviour
     private Vector3 originalPosition;
     private double offlineEarnings;
 
-    public Transform panelOfflineEarning = null;
-    public Transform newPosition = null;
-    [Min(0)]
-    public float animationTime = 0;
-    public List<Button> listPanelButtons = new List<Button>();
-    public TextMeshProUGUI textCurrencyGained = null;
-    public TextMeshProUGUI textOfflineTime = null;
+    [SerializeField] private Transform panelOfflineEarning = null;
+    [SerializeField] private Transform newPosition = null;
+    [SerializeField] private float animationTime = 0;
+    [SerializeField] private TextMeshProUGUI textCurrencyGained = null;
+    [SerializeField] private TextMeshProUGUI textOfflineTime = null;
 
     private void Start()
     {

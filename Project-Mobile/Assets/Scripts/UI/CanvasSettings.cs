@@ -9,7 +9,6 @@ public class CanvasSettings : MonoBehaviour
     public Action<bool> EventToggleVolumeMusic;
     public Action<bool> EventToggleVibration;
 
-    private GameManager gameManager;
     private UIManager uiManager;
     private bool isVolumeSFXOn;
     private bool isVolumeMusicOn;
@@ -17,31 +16,30 @@ public class CanvasSettings : MonoBehaviour
     private Vector3 originalPosition;
     private Vector3 newPosition;
 
-    public List<Sprite> listSpritesToggle = new List<Sprite>();
-    public Image imageSFX = null;
-    public Image imageMusic = null;
-    public Image imageVibration = null;
-    public Transform panelOptions = null;
-    public Transform targetPosition = null;
-    public float animationTime = 0;
+    [SerializeField] private List<Sprite> listSpritesToggle = new List<Sprite>();
+    [SerializeField] private Image imageSFX = null;
+    [SerializeField] private Image imageMusic = null;
+    [SerializeField] private Image imageVibration = null;
+    [SerializeField] private Transform panelOptions = null;
+    [SerializeField] private Transform targetPosition = null;
+    [SerializeField] private float animationTime = 0;
 
     private void Start()
     {
-        gameManager = GameManager.Instance;
         uiManager = UIManager.Instance;
         originalPosition = panelOptions.localPosition;
         newPosition = targetPosition.localPosition;
 
         SubscribeToEventToggleVolumeSFX(StatusSFX);
-        SubscribeToEventToggleVolumeSFX(gameManager.SetVolumeSFX);
+        SubscribeToEventToggleVolumeSFX(Settings.SetVolumeSFX);
         SubscribeToEventToggleVolumeMusic(StatusMusic);
-        SubscribeToEventToggleVolumeMusic(gameManager.SetVolumeMusic);
+        SubscribeToEventToggleVolumeMusic(Settings.SetVolumeMusic);
         SubscribeToEventToggleVibration(StatusVibration);
-        SubscribeToEventToggleVibration(gameManager.SetVibration);
+        SubscribeToEventToggleVibration(Settings.SetVibration);
 
-        isVolumeSFXOn = gameManager.isVolumeSFXOn;
-        isVolumeMusicOn = gameManager.isVolumeMusicOn;
-        isVibrationOn = gameManager.isVibrationOn;
+        isVolumeSFXOn = Settings.IsVolumeSFXOn;
+        isVolumeMusicOn = Settings.IsVolumeMusicOn;
+        isVibrationOn = Settings.IsVibrationOn;
 
         imageSFX.sprite = ChangeSprite(isVolumeSFXOn);
         imageMusic.sprite = ChangeSprite(isVolumeMusicOn);

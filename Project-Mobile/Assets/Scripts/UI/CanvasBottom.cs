@@ -13,15 +13,14 @@ public class CanvasBottom : MonoBehaviour
     private Vector3 originalPanelPosition;
     private Vector3 targetPanelPosition;
 
-    public Ship prefabShip;
-    public Upgrade prefabUpgrade;
-    public Transform containersParent;
-    public Transform containerShips;
-    public Transform containerUpgrades;
-    [Space]
-    public PanelExtra panelExtra;
-    public Transform panelTargetPosition;
-    public float animationTime;
+    [SerializeField] private Ship prefabShip = null;
+    [SerializeField] private Upgrade prefabUpgrade = null;
+    [SerializeField] private Transform containersParent = null;
+    [SerializeField] private Transform containerShips = null;
+    [SerializeField] private Transform containerUpgrades = null;
+    [SerializeField] private PanelExtra panelExtra = null;
+    [SerializeField] private Transform panelTargetPosition = null;
+    [SerializeField] private float animationTime = 0;
 
     public void InitData(List<ShipInfo> shipsInfo, ShipsManager shipsManager)
     {

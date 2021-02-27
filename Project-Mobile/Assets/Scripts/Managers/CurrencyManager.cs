@@ -88,7 +88,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public void CalculateOfflineGain(TimeSpan timeOffline)
     {
         double secondsOffline = timeOffline.TotalSeconds;
-        double totalOfflineGain = 0;
+        double totalOfflineGain;
 
         if (secondsOffline >= secondsDoubleGain)
         {
@@ -222,9 +222,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
             double activeGain = GetActiveCurrencyGain();
             AddCurrency(activeGain);
             EventSendActiveCurrencyGainValue?.Invoke(activeGain, Input.mousePosition);
-
-            if (GameManager.Instance.isVibrationOn)
-                Vibration.VibrateSoft();
+            
+            Vibration.VibrateSoft();
         }
     }
 

@@ -12,10 +12,10 @@ public class PanelExtra : MonoBehaviour
     private UIManager uiManager;
     private CanvasBottom canvasBottom;
 
-    public TextMeshProUGUI textTitle;
-    public TextMeshProUGUI textDescription;
-    public Button buttonAd;
-    public Button buttonBuy;
+    [SerializeField] private TextMeshProUGUI textTitle = null;
+    [SerializeField] private TextMeshProUGUI textDescription = null;
+    [SerializeField] private Button buttonAd = null;
+    [SerializeField] private Button buttonBuy = null;
 
     public void InitData(CanvasBottom canvasBottom)
     {

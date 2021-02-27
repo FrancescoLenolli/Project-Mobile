@@ -1,33 +1,46 @@
-﻿static class Formatter
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+static class Formatter
 {
+    private static SuffixData suffixData;
+
     public static string FormatValue(double value)
     {
-        string formattedValue = "";
+        int mag = 0;
+        double divisor = 0;
+        double shortNumber = 0;
+        string shortNumberText = string.Empty;
+        string suffix = string.Empty;
 
-        if (value > 10000)
+        if (value > 999)
         {
-            formattedValue = $"{string.Format("{0:#.##e+0}", value)}m";
+            mag = (int)(Math.Floor(Math.Log10(value)) / 3);
+            divisor = Math.Pow(10, mag * 3);
+            shortNumber = value / divisor;
+            shortNumberText = shortNumber.ToString("N2");
         }
         else
         {
-            formattedValue = string.Format("{0:0.0}", value);
+            shortNumberText = value.ToString();
         }
 
-        return formattedValue;
+        int index = mag;
+        if (index < GetSuffixes().Count)
+            suffix = GetSuffixes()[index];
+
+        return shortNumberText + suffix;
     }
-    public static string FormatValue(int value)
+
+    private static List<string> GetSuffixes()
     {
-        string formattedValue = "";
-
-        if (value > 10000)
+        if(suffixData == null)
         {
-            formattedValue = $"{string.Format("{0:#.##e+0}", value)}m";
-        }
-        else
-        {
-            formattedValue = string.Format("{0:0.0}", value);
+            suffixData = Resources.LoadAll<SuffixData>("Suffixes").ToList()[0];
         }
 
-        return formattedValue;
+        return suffixData.suffixes;
     }
 }
