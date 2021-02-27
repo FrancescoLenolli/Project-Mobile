@@ -40,6 +40,17 @@ public class ShipsManager : MonoBehaviour
         else
         {
             GetShipsData();
+
+            ShipInfo lastInfo = savedShipsInfo.Last();
+            if(savedShipsInfo.Last().quantity >= savedShipsInfo.Last().data.qtForNextShip)
+            {
+                if (lastInfo.dataIndex + 1 < totalShips.Count)
+                {
+                    ShipInfo newShip = new ShipInfo(lastInfo.dataIndex + 1, totalShips[lastInfo.dataIndex + 1], 0, new List<UpgradeInfo>());
+
+                    savedShipsInfo.Add(newShip);
+                }
+            }
         }
         EventSendData?.Invoke(savedShipsInfo, this);
 
@@ -154,6 +165,7 @@ public class ShipsManager : MonoBehaviour
             }
 
             info = new ShipInfo(info.dataIndex, data, info.quantity, upgrades);
+            savedShipsInfo[i] = info;
         }
     }
 }

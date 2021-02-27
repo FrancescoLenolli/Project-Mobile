@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73797c0201dbcdb478c30548607b29d8, type: 3}
   m_Name: 0_Light Ship
   m_EditorClassIdentifier: 
+  index: 0
   name: Light Ship
+  currencyGain: 5
+  cost: 300
+  costIncreaseMultiplier: 1.07
   icon: {fileID: 21300098, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1993769037395402, guid: 1e0e09158ccbc064a9a4f4413946f881, type: 3}
-  currencyGain: 100
-  cost: 50
-  costIncreaseMultiplier: 1.07
   qtForNextShip: 3
   upgrades:
   - {fileID: 11400000, guid: c9df488a91e9e224f901ae2dd86ae393, type: 2}

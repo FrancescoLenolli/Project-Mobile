@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73797c0201dbcdb478c30548607b29d8, type: 3}
-  m_Name: 2_Long Ship
+  m_Name: 6_Heavy Bomber
   m_EditorClassIdentifier: 
-  index: 2
-  name: Long Ship
-  currencyGain: 25
+  index: 6
+  name: Heavy Bomber
+  currencyGain: 65
   cost: 300
   costIncreaseMultiplier: 1.07
   icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  model: {fileID: 1578151531806032, guid: 8247a213e30c0734a98bcb0af9f4d340, type: 3}
+  model: {fileID: 1261967083292032, guid: 445ae37f24e704de890bbfda1fa7a39c, type: 3}
   qtForNextShip: 3
   upgrades: []

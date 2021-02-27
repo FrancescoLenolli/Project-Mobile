@@ -81,7 +81,7 @@ public class Ship : Collectible
                 CurrencyManager.Instance.RemoveCurrency(cost);
 
             ++quantity;
-            if(quantity > 0)
+            if(quantity > 0 && !isNextShipUnlocked)
             {
                 EventSpawnShipModel?.Invoke(shipData);
                 UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
