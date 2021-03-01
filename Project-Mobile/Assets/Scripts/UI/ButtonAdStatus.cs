@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ButtonAdStatus : MonoBehaviour
@@ -8,10 +9,16 @@ public class ButtonAdStatus : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
+        StartCoroutine(SetButtonStatus());
     }
 
-    private void Update()
+    private IEnumerator SetButtonStatus()
     {
-        button.interactable = Connection.IsDeviceConnected();
+        while (true)
+        {
+            yield return new WaitForSeconds(.3f);
+            button.interactable = Connection.IsDeviceConnected();
+            yield return null;
+        }
     }
 }
