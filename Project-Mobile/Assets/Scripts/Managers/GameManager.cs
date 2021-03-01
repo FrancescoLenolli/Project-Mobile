@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.NetworkInformation;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -29,6 +31,8 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
+
+
         SaveManager.Load();
 
         if(canResetData)
@@ -92,6 +96,13 @@ public class GameManager : Singleton<GameManager>
     public bool IsFirstSession()
     {
         return isFirstSession;
+    }
+
+    public void PrestigeUp()
+    {
+        SaveManager.ResetData();
+        ++SaveManager.GetData().prestigeLevel;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
 
 

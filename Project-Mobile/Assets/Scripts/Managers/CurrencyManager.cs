@@ -190,7 +190,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         foreach (Ship ship in collectibles)
         {
-            currencyGain += ship.GetTotalCurrencyGain();
+            currencyGain += ship.TotalCurrencyGain;
         }
 
         return currencyGain;

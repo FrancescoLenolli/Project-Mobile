@@ -110,7 +110,7 @@ public class ShipsManager : MonoBehaviour
 
         for(int i = 0; i < ships.Count; ++i)
         {
-            ShipInfo shipInfo = new ShipInfo(ships[i].shipData.index, ships[i].shipData, ships[i].GetQuantity(), ships[i].GetUpgradesInfo());
+            ShipInfo shipInfo = new ShipInfo(ships[i].shipData.index, ships[i].shipData, ships[i].Quantity, ships[i].GetUpgradesInfo());
             shipsInfo.Add(shipInfo);
         }
 

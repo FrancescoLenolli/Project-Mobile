@@ -8,6 +8,7 @@ public delegate void ShowOptionsPanel();
 public class CanvasMain : MonoBehaviour
 {
     private Action EventShowOptionsPanel;
+    private Action EventPrestigeUp;
     private Action<UIManager.Cycle> EventCycleShipsModel;
 
     private CurrencyManager currencyManager;
@@ -24,6 +25,7 @@ public class CanvasMain : MonoBehaviour
     {
         CanvasSettings canvasOptions = FindObjectOfType<CanvasSettings>();
         ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
+        GameManager gameManager = GameManager.Instance;
 
         currencyManager = CurrencyManager.Instance;
         textPremiumCurrency = buttonPremiumCurrency.GetComponentInChildren<TextMeshProUGUI>();
@@ -32,6 +34,7 @@ public class CanvasMain : MonoBehaviour
 
         SubscribeToEventShowOptionsPanel(canvasOptions.MoveToPosition);
         SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
+        SubscribeToEventPrestigeUp(gameManager.PrestigeUp);
 
         currencyManager.SubscribeToEventSendCurrency(UpdateCurrencyText);
         currencyManager.SubscribeToEventSendPremiumCurrency(UpdatePremiumCurrencyText);
@@ -53,6 +56,11 @@ public class CanvasMain : MonoBehaviour
     public void CycleModelsRight()
     {
         EventCycleShipsModel?.Invoke(UIManager.Cycle.Right);
+    }
+
+    public void PrestigeUp()
+    {
+        EventPrestigeUp?.Invoke();
     }
 
     public void ShowCycleButtons()
@@ -96,5 +104,10 @@ public class CanvasMain : MonoBehaviour
     public void SubscribeToEventCycleShipsModel(Action<UIManager.Cycle> method)
     {
         EventCycleShipsModel += method;
+    }
+
+    public void SubscribeToEventPrestigeUp(Action method)
+    {
+        EventPrestigeUp += method;
     }
 }

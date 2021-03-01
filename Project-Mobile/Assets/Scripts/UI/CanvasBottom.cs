@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,7 +38,7 @@ public class CanvasBottom : MonoBehaviour
         {
             SpawnShip(shipsInfo[i], shipsManager);
 
-            if(i == shipsInfo.Count - 1 && shipsInfo[i].quantity > 0)
+            if (i == shipsInfo.Count - 1 && shipsInfo[i].quantity > 0)
             {
                 shipsManager.ViewShip();
             }
@@ -49,8 +48,10 @@ public class CanvasBottom : MonoBehaviour
     public void SpawnShip(ShipInfo shipInfo, ShipsManager shipsManager)
     {
         Ship ship = Instantiate(prefabShip, containerShips, false);
-        ship.InitData(shipInfo, shipsManager);
-        SpawnUpgrades(ship);
+        ship.InitData(shipInfo, shipsManager, this);
+        if (ship.Quantity > 0)
+            SpawnUpgrades(ship);
+
         currencyManager.AddCollectible(ship);
         ships.Add(ship);
 
@@ -94,9 +95,9 @@ public class CanvasBottom : MonoBehaviour
         uiManager.MoveRectObjectAndFade(panelExtra.transform, targetPosition, animationTime, fadeType);
     }
 
-    private void SpawnUpgrades(Ship ship)
+    public void SpawnUpgrades(Ship ship)
     {
-        foreach(UpgradeInfo info in ship.GetUpgradesInfo().Where(x => !x.isOwned))
+        foreach (UpgradeInfo info in ship.GetUpgradesInfo().Where(x => !x.isOwned))
         {
             Upgrade upgrade = Instantiate(prefabUpgrade, containerUpgrades, false);
             upgrade.InitData(info.upgradeData, ship, containerUpgrades);

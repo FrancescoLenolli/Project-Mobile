@@ -10,6 +10,7 @@ public class Ship : Collectible
 {
     private Action<ShipData> EventUnlockNewShip;
     private Action<ShipData> EventSpawnShipModel;
+    private Action<Ship> EventSpawnUpgrades;
 
     private ShipsManager shipsManager;
     private bool isNextShipUnlocked;
@@ -27,12 +28,12 @@ public class Ship : Collectible
     [Space]
     public ShipData shipData;
 
-    public void InitData(ShipInfo shipInfo, ShipsManager shipsManager)
+    public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom)
     {
         if (shipInfo.data)
         {
             shipData = shipInfo.data;
-            quantity = shipInfo.quantity;
+            Quantity = shipInfo.quantity;
             gameObject.name = shipData.name;
             SetUpgradesInfo(shipInfo.upgradesInfo);
             SetCost();
@@ -40,7 +41,7 @@ public class Ship : Collectible
 
             textShipName.text = shipData.name;
             textShipUnitCurrencyGain.text = $"+ {Formatter.FormatValue(GetUnitCurrencyGain())}/s";
-            textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(GetTotalCurrencyGain())}/s";
+            textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(TotalCurrencyGain)}/s";
             imageShipIcon.sprite = shipData.icon;
 
             SetTextQuantity();
@@ -60,7 +61,7 @@ public class Ship : Collectible
             canAutoBuy = false;
             StartCoroutine(AutoBuy());
 
-            if(quantity > 0)
+            if(Quantity > 0)
             {
                 SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
                 EventSpawnShipModel?.Invoke(shipData);
@@ -69,7 +70,9 @@ public class Ship : Collectible
             else
             {
                 SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
-            }    
+            }
+
+            SubscribeToEventSpawnUpgrades(canvasBottom.SpawnUpgrades);
         }
     }
 
@@ -80,11 +83,15 @@ public class Ship : Collectible
             if (!GameManager.Instance.isTesting)
                 CurrencyManager.Instance.RemoveCurrency(cost);
 
-            ++quantity;
-            if(quantity > 0 && !isNextShipUnlocked)
+            ++Quantity;
+            if(Quantity > 0 && !isNextShipUnlocked)
             {
                 EventSpawnShipModel?.Invoke(shipData);
                 UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+            }
+            if(Quantity == 1)
+            {
+                EventSpawnUpgrades?.Invoke(this);
             }
 
             SetCost();
@@ -154,10 +161,15 @@ public class Ship : Collectible
         EventSpawnShipModel -= method;
     }
 
+    private void SubscribeToEventSpawnUpgrades(Action<Ship> method)
+    {
+        EventSpawnUpgrades += method;
+    }
+
 
     private bool IsQuantityEnough()
     {
-        return quantity >= shipData.qtForNextShip;
+        return Quantity >= shipData.qtForNextShip;
     }
 
     protected override double GetUnitCurrencyGain()
@@ -179,15 +191,15 @@ public class Ship : Collectible
     protected override void SetTotalCurrencyGain()
     {
         double unitCurrencyGain = GetUnitCurrencyGain();
-        totalCurrencyGain = unitCurrencyGain * quantity;
+        TotalCurrencyGain = unitCurrencyGain * Quantity;
 
         textShipUnitCurrencyGain.text = $"+ {Formatter.FormatValue(GetUnitCurrencyGain())}/s";
-        textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(GetTotalCurrencyGain())}/s";
+        textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(TotalCurrencyGain)}/s";
     }
 
     protected override void SetCost()
     {
-        double multiplier = Math.Pow(shipData.costIncreaseMultiplier, quantity);
+        double multiplier = Math.Pow(shipData.costIncreaseMultiplier, Quantity);
         cost = shipData.cost * multiplier;
         SetTextCost();
     }
@@ -209,7 +221,7 @@ public class Ship : Collectible
 
     private void SetTextQuantity()
     {
-        textShipQuantity.text = $"x{quantity}";
+        textShipQuantity.text = $"x{Quantity}";
     }
 
     private void SetTextCost()

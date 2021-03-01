@@ -5,19 +5,12 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
-    protected double totalCurrencyGain;
     protected double cost;
-    protected int quantity;
+    private double totalCurrencyGain;
+    private int quantity;
 
-    public int GetQuantity()
-    {
-        return quantity;
-    }
-
-    public double GetTotalCurrencyGain()
-    {
-        return totalCurrencyGain;
-    }
+    public int Quantity { get => quantity; set => quantity = value; }
+    public double TotalCurrencyGain { get => totalCurrencyGain; set => totalCurrencyGain = value; }
 
     public virtual void Buy()
     {

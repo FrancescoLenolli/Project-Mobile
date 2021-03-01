@@ -10,9 +10,9 @@ static class Formatter
     public static string FormatValue(double value)
     {
         int mag = 0;
-        double divisor = 0;
-        double shortNumber = 0;
-        string shortNumberText = string.Empty;
+        double divisor;
+        double shortNumber;
+        string shortNumberText;
         string suffix = string.Empty;
 
         if (value > 999)
@@ -24,7 +24,7 @@ static class Formatter
         }
         else
         {
-            shortNumberText = value.ToString();
+            shortNumberText = value.ToString("N0");
         }
 
         int index = mag;
