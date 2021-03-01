@@ -8,6 +8,7 @@ public class ShipsManager : MonoBehaviour
 {
     private Action<List<ShipInfo>, ShipsManager> EventSendData;
     private Action<ShipInfo, ShipsManager> EventUnlockShip;
+    private Action EventMultipleShipsUnlocked;
 
     private UIManager uiManager;
     private CanvasBottom canvasBottom;
@@ -31,6 +32,7 @@ public class ShipsManager : MonoBehaviour
         SubscribeToEventSendData(canvasBottom.InitData);
         SubscribeToEventUnlockShip(canvasBottom.SpawnShip);
 
+        // Handles first play and data resets.
         if (savedShipsInfo.Count == 0)
         {
             ShipInfo firstShip = new ShipInfo(totalShips[0].index, totalShips[0], 0, new List<UpgradeInfo>());
@@ -42,11 +44,14 @@ public class ShipsManager : MonoBehaviour
             GetShipsData();
 
             ShipInfo lastInfo = savedShipsInfo.Last();
-            if(savedShipsInfo.Last().quantity >= savedShipsInfo.Last().data.qtForNextShip)
+            bool isLastShipQuantityEnough = lastInfo.quantity >= lastInfo.data.qtForNextShip;
+            if (isLastShipQuantityEnough)
             {
-                if (lastInfo.dataIndex + 1 < totalShips.Count)
+                bool isVeryLastShip = lastInfo.dataIndex + 1 >= totalShips.Count;
+                if (!isVeryLastShip)
                 {
-                    ShipInfo newShip = new ShipInfo(lastInfo.dataIndex + 1, totalShips[lastInfo.dataIndex + 1], 0, new List<UpgradeInfo>());
+                    int index = lastInfo.dataIndex + 1;
+                    ShipInfo newShip = new ShipInfo(index, totalShips[index], 0, new List<UpgradeInfo>());
 
                     savedShipsInfo.Add(newShip);
                 }
@@ -70,7 +75,10 @@ public class ShipsManager : MonoBehaviour
     public void SpawnShipModel(ShipData shipData)
     {
         if (shipsModel.Count == 1)
-            FindObjectOfType<CanvasMain>().ShowCycleButtons();
+        {
+            EventMultipleShipsUnlocked?.Invoke();
+            FindObjectOfType<CanvasMain>().ShowCycleButtons(); // TODO: Remove and use the Event above
+        }
 
         GameObject shipModel = Instantiate(shipData.model, shipsStartingPosition, Quaternion.identity);
         shipsModel.Add(shipModel);
@@ -91,31 +99,36 @@ public class ShipsManager : MonoBehaviour
 
     public void HideShip()
     {
-        shipsModel[currentModelIndex].transform.SetParent(null);
-        shipsModel[currentModelIndex].transform.position = shipsStartingPosition;
+        GameObject shipModel = shipsModel[currentModelIndex];
+
+        shipModel.transform.SetParent(null);
+        shipModel.transform.position = shipsStartingPosition;
     }
 
     public void ViewShip()
     {
-        shipsModel[currentModelIndex].transform.SetParent(shipsParent);
-        shipsModel[currentModelIndex].transform.localPosition = Vector3.zero;
-        shipsModel[currentModelIndex].transform.rotation = shipsParent.rotation;
-    }
+        GameObject shipModel = shipsModel[currentModelIndex];
 
+        shipModel.transform.SetParent(shipsParent);
+        shipModel.transform.localPosition = Vector3.zero;
+        shipModel.transform.rotation = shipsParent.rotation;
+    }
 
     public void SaveData()
     {
-        List<Ship> ships = canvasBottom.GetShips();
+        List<Ship> ships = canvasBottom.Ships;
         List<ShipInfo> shipsInfo = new List<ShipInfo>();
+        ShipInfo shipInfo;
 
         for(int i = 0; i < ships.Count; ++i)
         {
-            ShipInfo shipInfo = new ShipInfo(ships[i].shipData.index, ships[i].shipData, ships[i].Quantity, ships[i].GetUpgradesInfo());
+            shipInfo = new ShipInfo(ships[i].shipData.index, ships[i].shipData, ships[i].Quantity, ships[i].UpgradesInfo);
             shipsInfo.Add(shipInfo);
         }
 
         SaveManager.GetData().ships = shipsInfo;
     }
+
 
     public void SubscribeToEventSendData(Action<List<ShipInfo>, ShipsManager> method)
     {
@@ -132,39 +145,43 @@ public class ShipsManager : MonoBehaviour
         EventUnlockShip += method;
     }
 
+    public void SubscribeToEventMultipleShipsUnlocked(Action method)
+    {
+        EventMultipleShipsUnlocked += method;
+    }
+
+
     private void GetShipsData()
     {
-        for(int i = 0; i < savedShipsInfo.Count; ++i)
+        ShipInfo info;
+        ShipData data;
+        List<UpgradeInfo> upgrades;
+        UpgradeInfo upgradeInfo;
+        UpgradeData upgradeData;
+
+        for (int i = 0; i < savedShipsInfo.Count; ++i)
         {
-            ShipInfo info = savedShipsInfo[i];
-            ShipData data = null;
-            List<UpgradeInfo> upgrades = new List<UpgradeInfo>();
+            info = savedShipsInfo[i];
+            data = null;
+            upgrades = new List<UpgradeInfo>();
+            upgradeInfo = new UpgradeInfo();
+            upgradeData = null;
 
-            foreach(ShipData shipData in totalShips)
+            data = totalShips.Single(shipData => shipData.index == info.dataIndex);
+
+            for (int j = 0; j < info.upgradesInfo.Count; ++j)
             {
-                if(info.dataIndex == shipData.index)
-                {
-                    data = shipData;
-                    break;
-                }
-            }
+                upgradeInfo = info.upgradesInfo[j];
 
-            for(int j = 0; j < info.upgradesInfo.Count; ++j)
-            {
-                UpgradeInfo upgrade = info.upgradesInfo[j];
+                upgradeData = totalUpgrades.Single(upgrade => upgrade.index == upgradeInfo.index);
 
-                foreach(UpgradeData upgradeData in totalUpgrades)
-                {
-                    if(upgrade.index == upgradeData.index)
-                    {
-                        upgrade = new UpgradeInfo(upgrade.index, upgradeData, upgrade.isOwned);
-                        upgrades.Add(upgrade);
-                        break;
-                    }
-                }
+                upgradeInfo = new UpgradeInfo(upgradeInfo.index, upgradeData, upgradeInfo.isOwned);
+
+                upgrades.Add(upgradeInfo);
             }
 
             info = new ShipInfo(info.dataIndex, data, info.quantity, upgrades);
+
             savedShipsInfo[i] = info;
         }
     }

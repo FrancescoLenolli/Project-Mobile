@@ -21,6 +21,8 @@ public class CanvasBottom : MonoBehaviour
     [SerializeField] private Transform panelTargetPosition = null;
     [SerializeField] private float animationTime = 0;
 
+    public List<Ship> Ships { get => ships; }
+
     public void InitData(List<ShipInfo> shipsInfo, ShipsManager shipsManager)
     {
         currencyManager = CurrencyManager.Instance;
@@ -59,11 +61,6 @@ public class CanvasBottom : MonoBehaviour
         uiManager.ResizeContainer(ship.transform, containerShips, UIManager.Resize.Add);
     }
 
-    public List<Ship> GetShips()
-    {
-        return ships;
-    }
-
     public void OpenPanel(int index)
     {
         uiManager.ChangeVisibility(containers, index);
@@ -97,7 +94,7 @@ public class CanvasBottom : MonoBehaviour
 
     public void SpawnUpgrades(Ship ship)
     {
-        foreach (UpgradeInfo info in ship.GetUpgradesInfo().Where(x => !x.isOwned))
+        foreach (UpgradeInfo info in ship.UpgradesInfo.Where(x => !x.isOwned))
         {
             Upgrade upgrade = Instantiate(prefabUpgrade, containerUpgrades, false);
             upgrade.InitData(info.upgradeData, ship, containerUpgrades);

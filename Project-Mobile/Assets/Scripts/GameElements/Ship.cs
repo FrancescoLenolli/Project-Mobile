@@ -16,7 +16,7 @@ public class Ship : Collectible
     private bool isNextShipUnlocked;
     private bool canAutoBuy;
     private bool isButtonHeld;
-    public List<UpgradeInfo> upgradesInfo = new List<UpgradeInfo>();
+    private List<UpgradeInfo> upgradesInfo = new List<UpgradeInfo>();
 
     [SerializeField] private TextMeshProUGUI textShipName = null;
     [SerializeField] private TextMeshProUGUI textShipCost = null;
@@ -28,52 +28,51 @@ public class Ship : Collectible
     [Space]
     public ShipData shipData;
 
+    [HideInInspector] public List<UpgradeInfo> UpgradesInfo { get => upgradesInfo; }
+
     public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom)
     {
-        if (shipInfo.data)
+        shipData = shipInfo.data;
+        Quantity = shipInfo.quantity;
+        gameObject.name = shipData.name;
+        SetUpgradesInfo(shipInfo.upgradesInfo);
+        SetCost();
+        SetTotalCurrencyGain();
+
+        textShipName.text = shipData.name;
+        textShipUnitCurrencyGain.text = $"+ {Formatter.FormatValue(GetUnitCurrencyGain())}/s";
+        textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(TotalCurrencyGain)}/s";
+        imageShipIcon.sprite = shipData.icon;
+
+        SetTextQuantity();
+
+        // No need to subscribe to EventUnlockNewShip if new ship is already unlocked.
+        if (!IsQuantityEnough())
         {
-            shipData = shipInfo.data;
-            Quantity = shipInfo.quantity;
-            gameObject.name = shipData.name;
-            SetUpgradesInfo(shipInfo.upgradesInfo);
-            SetCost();
-            SetTotalCurrencyGain();
-
-            textShipName.text = shipData.name;
-            textShipUnitCurrencyGain.text = $"+ {Formatter.FormatValue(GetUnitCurrencyGain())}/s";
-            textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(TotalCurrencyGain)}/s";
-            imageShipIcon.sprite = shipData.icon;
-
-            SetTextQuantity();
-
-            // No need to subscribe to EventUnlockNewShip if new ship is already unlocked.
-            if (!IsQuantityEnough())
-            {
-                isNextShipUnlocked = false;
-                this.shipsManager = shipsManager;
-                SubscribeToEventSendData(shipsManager.UnlockNewShip);
-            }
-            else
-            {
-                isNextShipUnlocked = true;
-            }
-
-            canAutoBuy = false;
-            StartCoroutine(AutoBuy());
-
-            if(Quantity > 0)
-            {
-                SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
-                EventSpawnShipModel?.Invoke(shipData);
-                UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
-            }
-            else
-            {
-                SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
-            }
-
-            SubscribeToEventSpawnUpgrades(canvasBottom.SpawnUpgrades);
+            isNextShipUnlocked = false;
+            this.shipsManager = shipsManager;
+            SubscribeToEventSendData(shipsManager.UnlockNewShip);
         }
+        else
+        {
+            isNextShipUnlocked = true;
+        }
+
+        if (Quantity > 0)
+        {
+            SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+            EventSpawnShipModel?.Invoke(shipData);
+            UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+        }
+        else
+        {
+            SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+        }
+
+        SubscribeToEventSpawnUpgrades(canvasBottom.SpawnUpgrades);
+
+        canAutoBuy = false;
+        StartCoroutine(AutoBuy());
     }
 
     public override void Buy()
@@ -84,12 +83,12 @@ public class Ship : Collectible
                 CurrencyManager.Instance.RemoveCurrency(cost);
 
             ++Quantity;
-            if(Quantity > 0 && !isNextShipUnlocked)
+            if (Quantity > 0 && !isNextShipUnlocked)
             {
                 EventSpawnShipModel?.Invoke(shipData);
                 UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
             }
-            if(Quantity == 1)
+            if (Quantity == 1)
             {
                 EventSpawnUpgrades?.Invoke(this);
             }
@@ -105,14 +104,9 @@ public class Ship : Collectible
                 isNextShipUnlocked = true;
                 canAutoBuy = false;
             }
-            
+
             Vibration.VibrateSoft();
         }
-    }
-
-    public List<UpgradeInfo> GetUpgradesInfo()
-    {
-        return upgradesInfo;
     }
 
     public void UpgradeBought(UpgradeData upgradeData)
@@ -183,6 +177,9 @@ public class Ship : Collectible
             totalUpgradesPct += info.upgradeData.upgradePercentage;
         }
 
+        //float testing = upgradesInfo.Where(x => x.isOwned).Sum(x => x.upgradeData.upgradePercentage);
+        //Debug.Log($"Total Upgrades percentage: {testing}\nReal Total percentage: {totalUpgradesPct}");
+
         double newCurrencyGain = totalUpgradesPct == 0f ? currencyGain : currencyGain + MathUtils.Pct(totalUpgradesPct, currencyGain);
 
         return newCurrencyGain;
@@ -231,7 +228,7 @@ public class Ship : Collectible
 
     private IEnumerator AutoBuy()
     {
-        while(true)
+        while (true)
         {
             if (canAutoBuy)
             {
@@ -248,8 +245,8 @@ public class Ship : Collectible
     {
         yield return new WaitForSeconds(1.3f);
 
-        if(isButtonHeld)
-        canAutoBuy = true;
+        if (isButtonHeld)
+            canAutoBuy = true;
 
         yield return null;
     }

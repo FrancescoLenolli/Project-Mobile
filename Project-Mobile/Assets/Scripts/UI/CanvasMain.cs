@@ -58,14 +58,14 @@ public class CanvasMain : MonoBehaviour
         EventCycleShipsModel?.Invoke(UIManager.Cycle.Right);
     }
 
-    public void PrestigeUp()
-    {
-        EventPrestigeUp?.Invoke();
-    }
-
     public void ShowCycleButtons()
     {
         UIManager.Instance.ChangeVisibility(cycleButtons, true);
+    }
+
+    public void PrestigeUp()
+    {
+        EventPrestigeUp?.Invoke();
     }
 
     public void UpdatePassiveGainText(double value)
