@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public static class Settings
+﻿public static class Settings
 {
     private static bool isVolumeSFXOn;
     private static bool isVolumeMusicOn;
@@ -14,9 +10,9 @@ public static class Settings
 
     public static void InitData()
     {
-        isVolumeSFXOn = SaveManager.GetData().isVolumeSFXOn;
-        isVolumeMusicOn = SaveManager.GetData().isVolumeMusicOn;
-        isVibrationOn = SaveManager.GetData().isVibrationOn;
+        isVolumeSFXOn = SaveManager.PlayerData.isVolumeSFXOn;
+        isVolumeMusicOn = SaveManager.PlayerData.isVolumeMusicOn;
+        isVibrationOn = SaveManager.PlayerData.isVibrationOn;
     }
 
     public static void SetVolumeSFX(bool isOn)
@@ -36,8 +32,8 @@ public static class Settings
 
     public static void SaveData()
     {
-        SaveManager.GetData().isVolumeSFXOn = isVolumeSFXOn;
-        SaveManager.GetData().isVolumeMusicOn = isVolumeMusicOn;
-        SaveManager.GetData().isVibrationOn = isVibrationOn;
+        SaveManager.PlayerData.isVolumeSFXOn = isVolumeSFXOn;
+        SaveManager.PlayerData.isVolumeMusicOn = isVolumeMusicOn;
+        SaveManager.PlayerData.isVibrationOn = isVibrationOn;
     }
 }

@@ -6,14 +6,19 @@ using UnityEngine;
 static class Formatter
 {
     private static SuffixData suffixData;
+    private static int mag;
+    private static double divisor;
+    private static double shortNumber;
+    private static string shortNumberText;
+    private static string suffix;
 
     public static string FormatValue(double value)
     {
-        int mag = 0;
-        double divisor;
-        double shortNumber;
-        string shortNumberText;
-        string suffix = string.Empty;
+        mag = 0;
+        divisor = 0;
+        shortNumber = 0;
+        shortNumberText = string.Empty;
+        suffix = string.Empty;
 
         if (value > 999)
         {

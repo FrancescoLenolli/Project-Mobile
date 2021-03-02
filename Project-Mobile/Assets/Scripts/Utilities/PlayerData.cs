@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class PlayerData
 {
-    // GAME DATA
     // ********** GENERAL **********
     //public bool isFirstSession = true;
     public double currency = 0;
@@ -18,13 +16,6 @@ public class PlayerData
     public bool isVolumeMusicOn = true;
     public bool isVibrationOn = true;
 
-    ////********** SHIPS & UPGRADES **********
-    //public List<ShipInfo> listShipInfos = null;
-    //public List<UpgradeInfo> listUpgradesUnlocked = null;
-    //public List<UpgradeInfo> listUpgradesBought = null;
-
-    ////********** SHIPS 3D MODEL **********
-    //public  int unlockedShipsCount = 0;
 
     ////********** DAILY REWARDS **********
     //public List<int> listRewardsIndexes = null;

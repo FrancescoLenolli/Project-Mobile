@@ -9,9 +9,18 @@ public static class SaveManager
     private static string fileName = "PlayerData.json";
     private static PlayerData playerData;
 
+    public static PlayerData PlayerData { get => playerData; set => playerData = value; }
+
     // Convert data to JSON, then save it.
     public static void Save()
     {
+        string json = JsonUtility.ToJson(playerData);
+        WriteToFile(fileName, json);
+    }
+
+    public static void Save(PlayerData newData)
+    {
+        playerData = newData;
         string json = JsonUtility.ToJson(playerData);
         WriteToFile(fileName, json);
     }
@@ -41,11 +50,6 @@ public static class SaveManager
             playerData = new PlayerData();
             Debug.LogWarning("Save file corrupted, new file created.");
         }
-    }
-
-    public static PlayerData GetData()
-    {
-        return playerData;
     }
 
     public static void ResetData()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -23,7 +22,7 @@ public class ShipsManager : MonoBehaviour
 
     public void InitData()
     {
-        savedShipsInfo = SaveManager.GetData().ships;
+        savedShipsInfo = SaveManager.PlayerData.ships;
         totalShips = Resources.LoadAll<ShipData>("Ships").ToList();
         totalUpgrades = Resources.LoadAll<UpgradeData>("Upgrades").ToList();
         canvasBottom = FindObjectOfType<CanvasBottom>();
@@ -76,8 +75,7 @@ public class ShipsManager : MonoBehaviour
     {
         if (shipsModel.Count == 1)
         {
-            EventMultipleShipsUnlocked?.Invoke();
-            FindObjectOfType<CanvasMain>().ShowCycleButtons(); // TODO: Remove and use the Event above
+            canvasBottom.ShowCycleButtons(); // TODO: Remove and use the Event above
         }
 
         GameObject shipModel = Instantiate(shipData.model, shipsStartingPosition, Quaternion.identity);
@@ -120,13 +118,13 @@ public class ShipsManager : MonoBehaviour
         List<ShipInfo> shipsInfo = new List<ShipInfo>();
         ShipInfo shipInfo;
 
-        for(int i = 0; i < ships.Count; ++i)
+        for (int i = 0; i < ships.Count; ++i)
         {
             shipInfo = new ShipInfo(ships[i].shipData.index, ships[i].shipData, ships[i].Quantity, ships[i].UpgradesInfo);
             shipsInfo.Add(shipInfo);
         }
 
-        SaveManager.GetData().ships = shipsInfo;
+        SaveManager.PlayerData.ships = shipsInfo;
     }
 
 

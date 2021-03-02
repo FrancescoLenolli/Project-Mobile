@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -35,9 +36,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
         canvasMain.InitData();
 
-        secondsDoubleGain = SaveManager.GetData().secondsDoubleGain;
-        AddCurrency(SaveManager.GetData().currency);
-        AddPremiumCurrency(SaveManager.GetData().premiumCurrency);
+        secondsDoubleGain = SaveManager.PlayerData.secondsDoubleGain;
+        AddCurrency(SaveManager.PlayerData.currency);
+        AddPremiumCurrency(SaveManager.PlayerData.premiumCurrency);
         AddPassiveCurrency();
 
         SubscribeToEventGainedPassiveCurrency(canvasOfflineEarning.ShowPanel);
@@ -45,14 +46,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     public void SaveData()
     {
-        SaveManager.GetData().currency = currency;
-        SaveManager.GetData().premiumCurrency = premiumCurrency;
-        SaveManager.GetData().secondsDoubleGain = secondsDoubleGain;
-    }
-
-    public List<Collectible> GetCollectibles()
-    {
-        return collectibles;
+        SaveManager.PlayerData.currency = currency;
+        SaveManager.PlayerData.premiumCurrency = premiumCurrency;
+        SaveManager.PlayerData.secondsDoubleGain = secondsDoubleGain;
     }
 
     public void AddCollectible(Collectible collectible)
@@ -74,7 +70,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     public void RemoveCurrency(double value)
     {
-
         currency -= value;
         EventSendCurrencyValue?.Invoke(currency);
     }
@@ -148,6 +143,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         AddPremiumCurrency(data.adPremiumCurrencyGain);
     }
 
+
     public void SubscribeToEventSendCurrency(Action<double> method)
     {
         EventSendCurrencyValue += method;
@@ -186,14 +182,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private double GetTotalPassiveCurrencyGain()
     {
-        double currencyGain = 0f;
-
-        foreach (Ship ship in collectibles)
-        {
-            currencyGain += ship.TotalCurrencyGain;
-        }
-
-        return currencyGain;
+        return collectibles.Sum(x => x.TotalCurrencyGain);
     }
 
     private double GetActiveCurrencyGain()
@@ -222,7 +211,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
             double activeGain = GetActiveCurrencyGain();
             AddCurrency(activeGain);
             EventSendActiveCurrencyGainValue?.Invoke(activeGain, Input.mousePosition);
-            
+
             Vibration.VibrateSoft();
         }
     }

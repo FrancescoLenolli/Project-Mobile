@@ -77,7 +77,7 @@ public class Ship : Collectible
 
     public override void Buy()
     {
-        if (CanBuy() || GameManager.Instance.isTesting)
+        if (CanBuy())
         {
             if (!GameManager.Instance.isTesting)
                 CurrencyManager.Instance.RemoveCurrency(cost);
@@ -243,7 +243,7 @@ public class Ship : Collectible
 
     private IEnumerator AutoBuyStartingDelay()
     {
-        yield return new WaitForSeconds(1.3f);
+        yield return new WaitForSeconds(1.0f);
 
         if (isButtonHeld)
             canAutoBuy = true;

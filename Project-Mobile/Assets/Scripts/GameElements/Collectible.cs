@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
@@ -19,7 +16,7 @@ public class Collectible : MonoBehaviour
 
     protected virtual void SetCost()
     {
-
+        // self explanatory.
     }
 
     protected virtual double GetUnitCurrencyGain()
@@ -35,6 +32,7 @@ public class Collectible : MonoBehaviour
 
     protected bool CanBuy()
     {
-        return CurrencyManager.Instance.currency >= cost;
+        bool result = CurrencyManager.Instance.currency >= cost || GameManager.Instance.isTesting;
+        return result;
     }
 }

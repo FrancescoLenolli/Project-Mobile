@@ -9,12 +9,10 @@ public class CanvasMain : MonoBehaviour
 {
     private Action EventShowOptionsPanel;
     private Action EventPrestigeUp;
-    private Action<UIManager.Cycle> EventCycleShipsModel;
 
     private CurrencyManager currencyManager;
     private TextMeshProUGUI textPremiumCurrency;
 
-    [SerializeField] private List<Transform> cycleButtons = null;
     [SerializeField] private TextMeshProUGUI textCurrency = null;
     [SerializeField] private TextMeshProUGUI textPassiveGain = null;
     [SerializeField] private TextMeshProUGUI textDoubleGainTime = null;
@@ -33,7 +31,6 @@ public class CanvasMain : MonoBehaviour
         buttonPremiumCurrency.image.sprite = currencyManager.data.premiumCurrencySprite;
 
         SubscribeToEventShowOptionsPanel(canvasOptions.MoveToPosition);
-        SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
         SubscribeToEventPrestigeUp(gameManager.PrestigeUp);
 
         currencyManager.SubscribeToEventSendCurrency(UpdateCurrencyText);
@@ -46,21 +43,6 @@ public class CanvasMain : MonoBehaviour
     public void ShowOptionsPanel()
     {
         EventShowOptionsPanel?.Invoke();
-    }
-
-    public void CycleModelsLeft()
-    {
-        EventCycleShipsModel?.Invoke(UIManager.Cycle.Left);
-    }
-
-    public void CycleModelsRight()
-    {
-        EventCycleShipsModel?.Invoke(UIManager.Cycle.Right);
-    }
-
-    public void ShowCycleButtons()
-    {
-        UIManager.Instance.ChangeVisibility(cycleButtons, true);
     }
 
     public void PrestigeUp()
@@ -99,11 +81,6 @@ public class CanvasMain : MonoBehaviour
     public void SubscribeToEventShowOptionsPanel(Action method)
     {
         EventShowOptionsPanel += method;
-    }
-
-    public void SubscribeToEventCycleShipsModel(Action<UIManager.Cycle> method)
-    {
-        EventCycleShipsModel += method;
     }
 
     public void SubscribeToEventPrestigeUp(Action method)

@@ -27,14 +27,11 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         LogIn();
+        SaveManager.Load();
     }
 
     private void Start()
     {
-
-
-        SaveManager.Load();
-
         if(canResetData)
         {
             SaveManager.ResetData();
@@ -65,13 +62,14 @@ public class GameManager : Singleton<GameManager>
         CalculateOfflineTime();
     }
 
+    // pause == TRUE: the app is in the background.
+    // pause == FALSE: the app is in focus.
     private void OnApplicationPause(bool pause)
     {
         if (!isTesting)
         {
             if (pause)
             {
-                //lastSessionTime = DateTime.Now;
                 LogOut();
                 Save();
             }
@@ -84,8 +82,6 @@ public class GameManager : Singleton<GameManager>
 
     private void OnApplicationQuit()
     {
-        //lastSessionTime = DateTime.Now;
-        //isFirstSession = false;
         if (!isTesting)
         {
             LogOut();
@@ -100,8 +96,11 @@ public class GameManager : Singleton<GameManager>
 
     public void PrestigeUp()
     {
-        SaveManager.ResetData();
-        ++SaveManager.GetData().prestigeLevel;
+        PlayerData newData = new PlayerData();
+        newData.prestigeLevel = ++SaveManager.PlayerData.prestigeLevel;
+        newData.premiumCurrency = SaveManager.PlayerData.premiumCurrency;
+
+        SaveManager.Save(newData);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
 
@@ -126,7 +125,7 @@ public class GameManager : Singleton<GameManager>
 
     private void InitData()
     {
-        string lastLogOut = SaveManager.GetData().lastLogOutTime;
+        string lastLogOut = SaveManager.PlayerData.lastLogOutTime;
 
         if (lastLogOut != "")
             logOutTime = Convert.ToDateTime(lastLogOut);
@@ -136,7 +135,7 @@ public class GameManager : Singleton<GameManager>
 
     private void SaveData()
     {
-        SaveManager.GetData().lastLogOutTime = logOutTime.ToString();
+        SaveManager.PlayerData.lastLogOutTime = logOutTime.ToString();
     }
 
     private void Save()

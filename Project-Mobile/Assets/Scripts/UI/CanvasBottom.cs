@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CanvasBottom : MonoBehaviour
 {
+    private Action<UIManager.Cycle> EventCycleShipsModel;
+
     private CurrencyManager currencyManager;
     private UIManager uiManager;
     private List<Transform> containers = new List<Transform>();
@@ -17,6 +20,7 @@ public class CanvasBottom : MonoBehaviour
     [SerializeField] private Transform containersParent = null;
     [SerializeField] private Transform containerShips = null;
     [SerializeField] private Transform containerUpgrades = null;
+    [SerializeField] private List<Transform> cycleButtons = null;
     [SerializeField] private PanelExtra panelExtra = null;
     [SerializeField] private Transform panelTargetPosition = null;
     [SerializeField] private float animationTime = 0;
@@ -35,6 +39,7 @@ public class CanvasBottom : MonoBehaviour
         list.ForEach(x => containers.Add(x.transform));
 
         OpenPanel(0);
+        SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
 
         for (int i = 0; i < shipsInfo.Count; ++i)
         {
@@ -45,6 +50,21 @@ public class CanvasBottom : MonoBehaviour
                 shipsManager.ViewShip();
             }
         }
+    }
+
+    public void CycleModelsLeft()
+    {
+        EventCycleShipsModel?.Invoke(UIManager.Cycle.Left);
+    }
+
+    public void CycleModelsRight()
+    {
+        EventCycleShipsModel?.Invoke(UIManager.Cycle.Right);
+    }
+
+    public void ShowCycleButtons()
+    {
+        UIManager.Instance.ChangeVisibility(cycleButtons, true);
     }
 
     public void SpawnShip(ShipInfo shipInfo, ShipsManager shipsManager)
@@ -102,5 +122,10 @@ public class CanvasBottom : MonoBehaviour
             upgrade.transform.SetAsFirstSibling();
             uiManager.ResizeContainer(upgrade.transform, containerUpgrades, UIManager.Resize.Add);
         }
+    }
+
+    public void SubscribeToEventCycleShipsModel(Action<UIManager.Cycle> method)
+    {
+        EventCycleShipsModel += method;
     }
 }

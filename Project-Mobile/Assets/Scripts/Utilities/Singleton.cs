@@ -9,7 +9,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            //Debug.Assert(instance != null);
             if (instance != null)
             {
                 return instance;
