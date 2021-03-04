@@ -19,6 +19,6 @@ public class PlayerData
     ////********** DAILY REWARDS **********
     public List<int> listRewardsIndexes = new List<int>();
     public int currentRewardIndex = 0;
-    //public long collectionCooldownTime = 0;
+    public int cooldownSeconds = 0;
 
 }

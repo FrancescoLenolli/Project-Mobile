@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class CanvasBottom : MonoBehaviour
 {
     private Action<UIManager.Cycle> EventCycleShipsModel;
+    private Action EventShowDailyRewards;
 
     private CurrencyManager currencyManager;
     private UIManager uiManager;
@@ -39,7 +40,11 @@ public class CanvasBottom : MonoBehaviour
         list.ForEach(x => containers.Add(x.transform));
 
         OpenPanel(0);
+
+        CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
+
         SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
+        SubscribeToEventShowDailyRewards(canvasDailyRewards.MoveToPosition);
 
         for (int i = 0; i < shipsInfo.Count; ++i)
         {
@@ -104,6 +109,11 @@ public class CanvasBottom : MonoBehaviour
         panelExtra.SetUpPanel(AdsManager.AdType.PremiumCurrency);
     }
 
+    public void ShowDailyRewards()
+    {
+        EventShowDailyRewards?.Invoke();
+    }
+
     public void MovePanelToPosition(bool isPanelVisible)
     {
         Vector3 targetPosition = isPanelVisible ? originalPanelPosition : targetPanelPosition;
@@ -127,5 +137,10 @@ public class CanvasBottom : MonoBehaviour
     public void SubscribeToEventCycleShipsModel(Action<UIManager.Cycle> method)
     {
         EventCycleShipsModel += method;
+    }
+
+    public void SubscribeToEventShowDailyRewards(Action method)
+    {
+        EventShowDailyRewards += method;
     }
 }

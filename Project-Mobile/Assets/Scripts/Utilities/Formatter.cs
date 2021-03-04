@@ -48,4 +48,19 @@ static class Formatter
 
         return suffixData.suffixes;
     }
+
+    public static string FormatTime(int seconds)
+    {
+        return $"{ TimeSpan.FromSeconds(seconds):hh\\:mm\\:ss}";
+    }
+
+    public static string FormatTime(double seconds)
+    {
+        return $"{ TimeSpan.FromSeconds(seconds):hh\\:mm\\:ss}";
+    }
+
+    public static string FormatTime(TimeSpan timeSpan)
+    {
+        return $"{ timeSpan:hh\\:mm\\:ss}";
+    }
 }
