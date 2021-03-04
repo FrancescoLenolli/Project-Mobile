@@ -39,21 +39,25 @@ public class GameManager : Singleton<GameManager>
 
         CurrencyManager currencyManager = CurrencyManager.Instance;
         ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
+        DailyRewardsManager rewardsManager = FindObjectOfType<DailyRewardsManager>();
 
         SubscribeToEventInitData(InitData);
         SubscribeToEventInitData(shipsManager.InitData);
         SubscribeToEventInitData(currencyManager.InitData);
         SubscribeToEventInitData(Settings.InitData);
+        SubscribeToEventInitData(rewardsManager.InitData);
 
         SubscribeToEventSaveData(SaveData);
         SubscribeToEventSaveData(shipsManager.SaveData);
         SubscribeToEventSaveData(currencyManager.SaveData);
         SubscribeToEventSaveData(Settings.SaveData);
+        SubscribeToEventSaveData(rewardsManager.SaveData);
 
         SubscribeToEventSendOfflineTime(currencyManager.CalculateOfflineGain);
 
         EventInitData?.Invoke();
 
+        UnsubscribeToEventInitData(rewardsManager.InitData);
         UnsubscribeToEventInitData(Settings.InitData);
         UnsubscribeToEventInitData(currencyManager.InitData);
         UnsubscribeToEventInitData(shipsManager.InitData);

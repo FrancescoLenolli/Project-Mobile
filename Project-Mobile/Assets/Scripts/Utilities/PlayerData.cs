@@ -16,10 +16,9 @@ public class PlayerData
     public bool isVolumeMusicOn = true;
     public bool isVibrationOn = true;
 
-
     ////********** DAILY REWARDS **********
-    //public List<int> listRewardsIndexes = null;
-    //public int currentRewardIndex = 0;
+    public List<int> listRewardsIndexes = new List<int>();
+    public int currentRewardIndex = 0;
     //public long collectionCooldownTime = 0;
 
 }

@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DailyReward : MonoBehaviour
+public abstract class DailyReward
 {
-    public Sprite spriteIcon = null;
-    public Sprite spriteCollectedReward = null;
-
     public virtual void GetReward()
     {
         Debug.Log("Base Effect");
+    }
+
+    public virtual Sprite GetSprite()
+    {
+        return null;
     }
 }

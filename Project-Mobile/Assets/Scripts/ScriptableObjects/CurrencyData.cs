@@ -7,6 +7,7 @@ public class CurrencyData : ScriptableObject
 {
     public Sprite currencySprite;
     public Sprite premiumCurrencySprite;
+    public Sprite doubleGainTimeSprite;
     public double baseActiveGainValue;
     public int baseActiveGainPercentage;
     public int extrasPremiumCost;
