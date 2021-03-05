@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PanelExtra : MonoBehaviour
@@ -11,6 +12,10 @@ public class PanelExtra : MonoBehaviour
     private CurrencyManager currencyManager;
     private UIManager uiManager;
     private CanvasBottom canvasBottom;
+    string title;
+    string description;
+    UnityAction adAction;
+    UnityAction buyAction;
 
     [SerializeField] private TextMeshProUGUI textTitle = null;
     [SerializeField] private TextMeshProUGUI textDescription = null;
@@ -84,37 +89,47 @@ public class PanelExtra : MonoBehaviour
 
     private void SetUpExtraGetCurrency()
     {
-        uiManager.ChangeVisibility(buttonBuy.transform, true);
-
-        textTitle.text = "Get Currency";
-        textDescription.text = $"Get {currencyManager.data.adPctGain}% of the actual Currency." +
+        title = "Get Currency";
+        description = $"Get {currencyManager.data.adPctGain}% of the actual Currency." +
             $"\n{MathUtils.Pct(currencyManager.data.adPctGain, currencyManager.currency)}";
-        buttonAd.onClick.RemoveAllListeners();
-        buttonBuy.onClick.RemoveAllListeners();
-        buttonAd.onClick.AddListener(WatchAdExtraCurrency);
-        buttonBuy.onClick.AddListener(BuyExtraCurrency);
+        adAction = WatchAdExtraCurrency;
+        buyAction = BuyExtraCurrency;
+
+        PanelSetup(true, title, description, buyAction, adAction);
     }
 
     private void SetUpExtraDoubleIdleEarnings()
     {
-        uiManager.ChangeVisibility(buttonBuy.transform, true);
+        title = "Double your IdleGain";
+        description = $"Get {currencyManager.data.adHoursDoubleGain} hours of doubled idle gain";
+        adAction = WatchAdDoubleEarnings;
+        buyAction = BuyDoubleEarnings;
 
-        textTitle.text = "Double your IdleGain";
-        textDescription.text = $"Get {currencyManager.data.adHoursDoubleGain} hours of doubled idle gain";
-        buttonAd.onClick.RemoveAllListeners();
-        buttonBuy.onClick.RemoveAllListeners();
-        buttonAd.onClick.AddListener(WatchAdDoubleEarnings);
-        buttonBuy.onClick.AddListener(BuyDoubleEarnings);
+        PanelSetup(true, title, description, buyAction, adAction);
     }
 
     private void SetUpExtraGetCurrencyPremium()
     {
-        uiManager.ChangeVisibility(buttonBuy.transform, false);
+        title = "Get Premium Currency";
+        description = $"Gain {currencyManager.data.adPremiumCurrencyGain} premium currency";
+        adAction = WatchAdGetPremiumCurrency;
 
-        textTitle.text = "Get Premium Currency";
-        textDescription.text = $"Gain {currencyManager.data.adPremiumCurrencyGain} premium currency";
+        PanelSetup(false, title, description, null, adAction);
+    }
+
+    private void PanelSetup(bool isButtonVisible, string title, string description, UnityAction buyAction, UnityAction adAction)
+    {
+        uiManager.ChangeVisibility(buttonBuy.transform, isButtonVisible);
+
+        textTitle.text = title;
+        textDescription.text = description;
+
         buttonAd.onClick.RemoveAllListeners();
         buttonBuy.onClick.RemoveAllListeners();
-        buttonAd.onClick.AddListener(WatchAdGetPremiumCurrency);
+
+        if (adAction != null)
+            buttonAd.onClick.AddListener(adAction);
+        if (buyAction != null)
+            buttonBuy.onClick.AddListener(buyAction);
     }
 }

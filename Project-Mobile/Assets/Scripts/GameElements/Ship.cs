@@ -205,10 +205,7 @@ public class Ship : Collectible
     {
         if (upgradesInfo.Count == 0)
         {
-            foreach (UpgradeData data in shipData.upgrades)
-            {
-                this.upgradesInfo.Add(new UpgradeInfo(data.index, data, false));
-            }
+            shipData.upgrades.ForEach(upgrade => this.upgradesInfo.Add(new UpgradeInfo(upgrade.index, upgrade, false)));
         }
         else
         {

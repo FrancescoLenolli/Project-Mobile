@@ -21,8 +21,8 @@ public class Collectible : MonoBehaviour
 
     protected virtual double GetUnitCurrencyGain()
     {
-        return double.MaxValue;
         // calculate how much currency is gained by one unit of this collectible.
+        return double.MaxValue;
     }
 
     protected virtual void SetTotalCurrencyGain()
