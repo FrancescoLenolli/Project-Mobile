@@ -6,13 +6,14 @@ using UnityEngine.UI;
 
 public class CanvasDailyRewards : MonoBehaviour
 {
-    private Func<bool> FuncCollectReward;
+    private Action EventCollectReward;
 
     private UIManager uiManager;
     private DailyRewardsManager rewardsManager;
     private Vector3 originalPosition;
     private Vector3 newPosition;
     private TextMeshProUGUI textButtonGetReward;
+    private List<Image> rewardImages = new List<Image>();
 
     public Transform panelRewards;
     public Transform targetPosition;
@@ -21,6 +22,8 @@ public class CanvasDailyRewards : MonoBehaviour
     public TextMeshProUGUI textCooldownTime = null;
     public Button buttonGetReward = null;
     public float animationTime = 0;
+    public Color colorCollectedReward;
+    public TextMeshProUGUI textDebug;
 
     private void Start()
     {
@@ -29,31 +32,32 @@ public class CanvasDailyRewards : MonoBehaviour
         newPosition = targetPosition.localPosition;
     }
 
-    public void InitRewards(List<DailyReward> rewards, DailyRewardsManager dailyRewardsManager)
+    public void InitRewards(List<DailyReward> rewards, int currentIndex, DailyRewardsManager dailyRewardsManager)
     {
         rewardsManager = dailyRewardsManager;
         textButtonGetReward = buttonGetReward.GetComponentInChildren<TextMeshProUGUI>();
 
-        FuncCollectReward += rewardsManager.CollectReward;
+
+
+        EventCollectReward += rewardsManager.CollectReward;
 
         SpawnRewards(rewards);
+
+        rewardImages.GetRange(0, currentIndex - 1).ForEach(image => image.color = colorCollectedReward);
     }
 
-    public void SpawnRewards(List<DailyReward> rewards)
+
+    public void ResetRewards(List<DailyReward> rewards)
     {
-        foreach (DailyReward reward in rewards)
-        {
-            Image newImage = Instantiate(imagePrefab, rewardsContainer);
-            newImage.sprite = reward.GetSprite();
-        }
+        rewardImages.ForEach(image => Destroy(image.gameObject));
+        rewardImages.Clear();
+        SpawnRewards(rewards);
     }
 
     public void CollectReward()
     {
-        if(CallFuncCollectReward())
-        {
-            MoveToPosition();
-        }
+        EventCollectReward?.Invoke();
+        MoveToPosition();
     }
 
     public void MoveToPosition()
@@ -68,28 +72,32 @@ public class CanvasDailyRewards : MonoBehaviour
 
     public void CheckCooldown(int cooldownSeconds)
     {
-        if(cooldownSeconds <= 0)
+        //if (!textCooldownTime)
+        //    textCooldownTime = GameObject.Find("Text_Cooldown").GetComponent<TextMeshProUGUI>();
+        //if (!textButtonGetReward)
+        //    textButtonGetReward = GameObject.Find("Button_Collect").GetComponentInChildren<TextMeshProUGUI>();
+
+        if (cooldownSeconds <= 0)
         {
             textCooldownTime.text = "";
             textButtonGetReward.text = "Collect";
-            buttonGetReward.onClick.RemoveAllListeners();
-            buttonGetReward.onClick.AddListener(CollectReward);
         }
         else
         {
             textCooldownTime.text = Formatter.FormatTime(cooldownSeconds);
             textButtonGetReward.text = "Close";
-            buttonGetReward.onClick.RemoveAllListeners();
-            buttonGetReward.onClick.AddListener(MoveToPosition);
         }
+
+        textDebug.text = $"Text Button is {textButtonGetReward}\n Text Cooldown is {textCooldownTime}";
     }
 
-    private bool CallFuncCollectReward()
+    private void SpawnRewards(List<DailyReward> rewards)
     {
-        if(FuncCollectReward == null)
+        foreach (DailyReward reward in rewards)
         {
-            return false;
+            Image newImage = Instantiate(imagePrefab, rewardsContainer);
+            newImage.sprite = reward.GetSprite();
+            rewardImages.Add(newImage);
         }
-        return FuncCollectReward.Invoke();
     }
 }

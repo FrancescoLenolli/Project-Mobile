@@ -13,8 +13,7 @@ public class DailyRewardsManager : MonoBehaviour
     private List<DailyReward> rewards = new List<DailyReward>();
     private List<int> rewardsIndexes = new List<int>();
     private int currentIndex = 0;
-    private int cooldownSeconds = 0;
-
+    public int cooldownSeconds = 0;
     public int rewardsCount;
 
     public int CooldownSeconds { get => cooldownSeconds; set => cooldownSeconds = value; }
@@ -35,10 +34,10 @@ public class DailyRewardsManager : MonoBehaviour
         }
 
         CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
-        canvasDailyRewards.InitRewards(rewards, this);
+        canvasDailyRewards.InitRewards(rewards,currentIndex, this);
 
         SubscribeToEventSendCooldownTime(canvasDailyRewards.CheckCooldown);
-        SubscribeToEventSendRewards(canvasDailyRewards.SpawnRewards);
+        SubscribeToEventSendRewards(canvasDailyRewards.ResetRewards);
 
         StartCoroutine(RewardsCooldown());
     }
@@ -50,18 +49,20 @@ public class DailyRewardsManager : MonoBehaviour
         SaveManager.PlayerData.cooldownSeconds = cooldownSeconds;
     }
 
-    public bool CollectReward()
+    public void CollectReward()
     {
-        if (currentIndex < rewards.Count)
+        bool canCollect = currentIndex < rewards.Count && cooldownSeconds == 0;
+        if (canCollect)
         {
             rewards[currentIndex].GetReward();
-            ResetCooldown();
             ++currentIndex;
-            return true;
-        }
-        else
-        {
-            return false;
+            ResetCooldown();
+
+            if (currentIndex >= rewards.Count)
+            {
+                SetRewards();
+                EventSendRewards?.Invoke(rewards);
+            }
         }
     }
 
@@ -143,13 +144,10 @@ public class DailyRewardsManager : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(1.0f);
-            --cooldownSeconds;
-            if(cooldownSeconds == 0)
-            {
-                SetRewards();
-                EventSendRewards?.Invoke(rewards);
-            }
+
+            cooldownSeconds = cooldownSeconds <= 0 ? 0 : --cooldownSeconds;
             EventSendCooldownTime?.Invoke(cooldownSeconds);
+
             yield return null;
         }
     }

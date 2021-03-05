@@ -100,9 +100,11 @@ public class GameManager : Singleton<GameManager>
 
     public void PrestigeUp()
     {
-        PlayerData newData = new PlayerData();
-        newData.prestigeLevel = ++SaveManager.PlayerData.prestigeLevel;
-        newData.premiumCurrency = SaveManager.PlayerData.premiumCurrency;
+        PlayerData newData = new PlayerData
+        {
+            prestigeLevel = ++SaveManager.PlayerData.prestigeLevel,
+            premiumCurrency = SaveManager.PlayerData.premiumCurrency
+        };
 
         SaveManager.Save(newData);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
@@ -131,10 +133,7 @@ public class GameManager : Singleton<GameManager>
     {
         string lastLogOut = SaveManager.PlayerData.lastLogOutTime;
 
-        if (lastLogOut != "")
-            logOutTime = Convert.ToDateTime(lastLogOut);
-        else
-            logOutTime = logInTime;
+        logOutTime = lastLogOut != "" ? Convert.ToDateTime(lastLogOut) : logInTime;
     }
 
     private void SaveData()

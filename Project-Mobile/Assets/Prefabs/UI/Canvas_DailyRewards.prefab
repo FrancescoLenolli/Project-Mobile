@@ -366,11 +366,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b5f536c69f14e146ab145d7f7c7ab49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelRewards: {fileID: 0}
-  targetPosition: {fileID: 0}
-  rewardsContainer: {fileID: 0}
-  imagePrefab: {fileID: 0}
-  animationTime: 0
+  panelRewards: {fileID: 7484596659615676811}
+  targetPosition: {fileID: 7484596660521571667}
+  rewardsContainer: {fileID: 7484596658970536836}
+  imagePrefab: {fileID: 3532934356302868931, guid: a5e1818a39c72dd4ca4c4b32ccbf4e9b,
+    type: 3}
+  textCooldownTime: {fileID: 7484596658760599365}
+  buttonGetReward: {fileID: 5176782146115734573}
+  animationTime: 0.3
+  colorCollectedReward: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 0.54509807}
 --- !u!1 &7484596659615676808
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,7 +413,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -973}
+  m_AnchoredPosition: {x: 0, y: -685}
   m_SizeDelta: {x: 700, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7484596659615676805
@@ -492,7 +496,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 450}
+  m_AnchoredPosition: {x: 0, y: 368}
   m_SizeDelta: {x: 700, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &7484596660204791307
@@ -505,7 +509,7 @@ PrefabInstance:
     - target: {fileID: 2308445479152970278, guid: 9dcf8003cee7ed14c82f6ebbc966b783,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2308445479152970278, guid: 9dcf8003cee7ed14c82f6ebbc966b783,
         type: 3}
@@ -675,3 +679,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7484596660204791307}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5176782146115734573 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2308445479152970278, guid: 9dcf8003cee7ed14c82f6ebbc966b783,
+    type: 3}
+  m_PrefabInstance: {fileID: 7484596660204791307}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
