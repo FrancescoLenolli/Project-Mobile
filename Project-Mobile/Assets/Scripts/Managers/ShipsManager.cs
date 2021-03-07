@@ -7,7 +7,6 @@ public class ShipsManager : MonoBehaviour
 {
     private Action<List<ShipInfo>, ShipsManager> EventSendData;
     private Action<ShipInfo, ShipsManager> EventUnlockShip;
-    private Action EventMultipleShipsUnlocked;
 
     private UIManager uiManager;
     private CanvasBottom canvasBottom;
@@ -143,14 +142,12 @@ public class ShipsManager : MonoBehaviour
         EventUnlockShip += method;
     }
 
-    public void SubscribeToEventMultipleShipsUnlocked(Action method)
-    {
-        EventMultipleShipsUnlocked += method;
-    }
-
 
     private void GetShipsData()
     {
+        totalShips = totalShips.OrderBy(ship => ship.index).ToList();
+        totalUpgrades = totalUpgrades.OrderBy(upgrade => upgrade.index).ToList();
+
         ShipInfo info;
         ShipData data;
         List<UpgradeInfo> upgrades;
@@ -165,13 +162,13 @@ public class ShipsManager : MonoBehaviour
             upgradeInfo = new UpgradeInfo();
             upgradeData = null;
 
-            data = totalShips.Single(shipData => shipData.index == info.dataIndex);
+            data = totalShips[info.dataIndex];
 
             for (int j = 0; j < info.upgradesInfo.Count; ++j)
             {
                 upgradeInfo = info.upgradesInfo[j];
 
-                upgradeData = totalUpgrades.Single(upgrade => upgrade.index == upgradeInfo.index);
+                upgradeData = totalUpgrades[upgradeInfo.index];
 
                 upgradeInfo = new UpgradeInfo(upgradeInfo.index, upgradeData, upgradeInfo.isOwned);
 

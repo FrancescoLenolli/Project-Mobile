@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -32,7 +28,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        if(canResetData)
+        if (canResetData)
         {
             SaveManager.ResetData();
         }
@@ -156,7 +152,7 @@ public class GameManager : Singleton<GameManager>
     private void LogOut()
     {
         logOutTime = DateTime.Now;
-    }    
+    }
 
     private void CalculateOfflineTime()
     {
