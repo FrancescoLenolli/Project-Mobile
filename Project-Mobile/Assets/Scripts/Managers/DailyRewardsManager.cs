@@ -34,7 +34,7 @@ public class DailyRewardsManager : MonoBehaviour
         }
 
         CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
-        canvasDailyRewards.InitRewards(rewards,currentIndex, this);
+        canvasDailyRewards.InitRewards(rewards, currentIndex, this);
 
         SubscribeToEventSendCooldownTime(canvasDailyRewards.CheckCooldown);
         SubscribeToEventSendRewards(canvasDailyRewards.ResetRewards);
@@ -64,6 +64,14 @@ public class DailyRewardsManager : MonoBehaviour
                 EventSendRewards?.Invoke(rewards);
             }
         }
+    }
+
+    public void CalculateOfflineTime(TimeSpan timeOffline)
+    {
+        cooldownSeconds -= (int)timeOffline.TotalSeconds;
+
+        if (cooldownSeconds < 0)
+            cooldownSeconds = 0;
     }
 
     private DailyReward GetReward(int index)
@@ -141,7 +149,7 @@ public class DailyRewardsManager : MonoBehaviour
 
     private IEnumerator RewardsCooldown()
     {
-        while(true)
+        while (true)
         {
             yield return new WaitForSeconds(1.0f);
 

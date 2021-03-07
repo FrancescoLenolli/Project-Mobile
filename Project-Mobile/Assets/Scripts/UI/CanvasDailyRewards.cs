@@ -23,7 +23,6 @@ public class CanvasDailyRewards : MonoBehaviour
     public Button buttonGetReward = null;
     public float animationTime = 0;
     public Color colorCollectedReward;
-    public TextMeshProUGUI textDebug;
 
     private void Start()
     {
@@ -36,8 +35,6 @@ public class CanvasDailyRewards : MonoBehaviour
     {
         rewardsManager = dailyRewardsManager;
         textButtonGetReward = buttonGetReward.GetComponentInChildren<TextMeshProUGUI>();
-
-
 
         EventCollectReward += rewardsManager.CollectReward;
 
@@ -72,23 +69,17 @@ public class CanvasDailyRewards : MonoBehaviour
 
     public void CheckCooldown(int cooldownSeconds)
     {
-        //if (!textCooldownTime)
-        //    textCooldownTime = GameObject.Find("Text_Cooldown").GetComponent<TextMeshProUGUI>();
-        //if (!textButtonGetReward)
-        //    textButtonGetReward = GameObject.Find("Button_Collect").GetComponentInChildren<TextMeshProUGUI>();
-
         if (cooldownSeconds <= 0)
         {
             textCooldownTime.text = "";
             textButtonGetReward.text = "Collect";
+            MoveToView();
         }
         else
         {
             textCooldownTime.text = Formatter.FormatTime(cooldownSeconds);
             textButtonGetReward.text = "Close";
         }
-
-        textDebug.text = $"Text Button is {textButtonGetReward}\n Text Cooldown is {textCooldownTime}";
     }
 
     private void SpawnRewards(List<DailyReward> rewards)
@@ -99,5 +90,13 @@ public class CanvasDailyRewards : MonoBehaviour
             newImage.sprite = reward.GetSprite();
             rewardImages.Add(newImage);
         }
+    }
+
+    private void MoveToView()
+    {
+        bool isPanelVisible = panelRewards.localPosition == newPosition;
+
+        if(!isPanelVisible)
+        uiManager.MoveRectObjectAndFade(panelRewards, newPosition, animationTime, UIManager.Fade.In);
     }
 }

@@ -54,6 +54,7 @@ public class GameManager : Singleton<GameManager>
         SubscribeToEventSaveData(rewardsManager.SaveData);
 
         SubscribeToEventSendOfflineTime(currencyManager.CalculateOfflineGain);
+        SubscribeToEventSendOfflineTime(rewardsManager.CalculateOfflineTime);
 
         EventInitData?.Invoke();
 
