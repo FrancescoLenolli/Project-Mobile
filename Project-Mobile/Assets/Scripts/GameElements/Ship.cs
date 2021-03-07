@@ -32,7 +32,7 @@ public class Ship : Collectible
 
     public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom)
     {
-        shipData = shipInfo.data;
+        shipData = shipInfo.shipData;
         Quantity = shipInfo.quantity;
         gameObject.name = shipData.name;
         SetUpgradesInfo(shipInfo.upgradesInfo);

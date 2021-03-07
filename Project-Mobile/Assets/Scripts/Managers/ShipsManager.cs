@@ -42,13 +42,13 @@ public class ShipsManager : MonoBehaviour
             GetShipsData();
 
             ShipInfo lastInfo = savedShipsInfo.Last();
-            bool isLastShipQuantityEnough = lastInfo.quantity >= lastInfo.data.qtForNextShip;
+            bool isLastShipQuantityEnough = lastInfo.quantity >= lastInfo.shipData.qtForNextShip;
             if (isLastShipQuantityEnough)
             {
-                bool isVeryLastShip = lastInfo.dataIndex + 1 >= totalShips.Count;
+                bool isVeryLastShip = lastInfo.index + 1 >= totalShips.Count;
                 if (!isVeryLastShip)
                 {
-                    int index = lastInfo.dataIndex + 1;
+                    int index = lastInfo.index + 1;
                     ShipInfo newShip = new ShipInfo(index, totalShips[index], 0, new List<UpgradeInfo>());
 
                     savedShipsInfo.Add(newShip);
@@ -148,36 +148,38 @@ public class ShipsManager : MonoBehaviour
         totalShips = totalShips.OrderBy(ship => ship.index).ToList();
         totalUpgrades = totalUpgrades.OrderBy(upgrade => upgrade.index).ToList();
 
-        ShipInfo info;
-        ShipData data;
+        ShipInfo shipInfo;
+        ShipData shipData;
         List<UpgradeInfo> upgrades;
         UpgradeInfo upgradeInfo;
         UpgradeData upgradeData;
 
         for (int i = 0; i < savedShipsInfo.Count; ++i)
         {
-            info = savedShipsInfo[i];
-            data = null;
+            shipInfo = savedShipsInfo[i];
+            shipData = null;
             upgrades = new List<UpgradeInfo>();
             upgradeInfo = new UpgradeInfo();
             upgradeData = null;
 
-            data = totalShips[info.dataIndex];
+            shipData = totalShips[shipInfo.index];
 
-            for (int j = 0; j < info.upgradesInfo.Count; ++j)
+            for (int j = 0; j < shipInfo.upgradesInfo.Count; ++j)
             {
-                upgradeInfo = info.upgradesInfo[j];
+                upgradeInfo = shipInfo.upgradesInfo[j];
 
                 upgradeData = totalUpgrades[upgradeInfo.index];
 
-                upgradeInfo = new UpgradeInfo(upgradeInfo.index, upgradeData, upgradeInfo.isOwned);
+                //upgradeInfo = new UpgradeInfo(upgradeInfo.index, upgradeData, upgradeInfo.isOwned);
+                upgradeInfo.SetData(upgradeData);
 
                 upgrades.Add(upgradeInfo);
             }
 
-            info = new ShipInfo(info.dataIndex, data, info.quantity, upgrades);
+            //shipInfo = new ShipInfo(shipInfo.dataIndex, shipData, shipInfo.quantity, upgrades);
+            shipInfo.SetData(shipData, upgrades);
 
-            savedShipsInfo[i] = info;
+            savedShipsInfo[i] = shipInfo;
         }
     }
 }
