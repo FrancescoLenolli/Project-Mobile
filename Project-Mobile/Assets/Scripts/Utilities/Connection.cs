@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.NetworkInformation;
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class Connection
 {

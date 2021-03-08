@@ -11,6 +11,7 @@ public class CurrencyData : ScriptableObject
     public double baseActiveGainValue;
     public int baseActiveGainPercentage;
     public int extrasPremiumCost;
+    public int prestigeOfflineBonusPct;
     public int adPctGain;
     public int adHoursDoubleGain;
     public int adPremiumCurrencyGain;

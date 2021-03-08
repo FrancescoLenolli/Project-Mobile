@@ -40,7 +40,8 @@ public class CanvasDailyRewards : MonoBehaviour
 
         SpawnRewards(rewards);
 
-        rewardImages.GetRange(0, currentIndex - 1).ForEach(image => image.color = colorCollectedReward);
+        int index = currentIndex - 1 < 0 ? 0 : currentIndex - 1;
+        rewardImages.GetRange(0, index).ForEach(image => image.color = colorCollectedReward);
     }
 
 

@@ -88,16 +88,20 @@ public class CurrencyManager : Singleton<CurrencyManager>
         if (secondsOffline >= secondsDoubleGain)
         {
             double baseSecondsOffline = secondsOffline - secondsDoubleGain;
-            double currencyGainedOffline = (GetTotalPassiveCurrencyGain() * baseSecondsOffline) / 3;
-            double currencyDoubledOffline = ((GetTotalPassiveCurrencyGain() * secondsDoubleGain) / 3) * 2;
+            double offlineGain = 0;
+            double doubledOfflineGain = 0;
 
-            totalOfflineGain = currencyGainedOffline + currencyDoubledOffline;
+            offlineGain = MathUtils.Pct(GetOfflineBonusPct(), GetTotalPassiveCurrencyGain()) * baseSecondsOffline;
+            if (secondsDoubleGain > 0)
+                doubledOfflineGain = MathUtils.Pct(GetOfflineBonusPct(), GetTotalPassiveCurrencyGain()) * secondsDoubleGain * 2;
+
+            totalOfflineGain = offlineGain + doubledOfflineGain;
             secondsDoubleGain = 0;
         }
         else
         {
             secondsDoubleGain -= secondsOffline;
-            totalOfflineGain = ((GetTotalPassiveCurrencyGain() * secondsDoubleGain) / 3) * 2;
+            totalOfflineGain = MathUtils.Pct(GetOfflineBonusPct(), GetTotalPassiveCurrencyGain()) * secondsOffline * 2;
         }
 
         if (totalOfflineGain > 0)
@@ -143,6 +147,11 @@ public class CurrencyManager : Singleton<CurrencyManager>
         AddPremiumCurrency(data.adPremiumCurrencyGain);
     }
 
+    public bool CanBuyWithPremium()
+    {
+        return data.extrasPremiumCost <= premiumCurrency;
+    }
+
 
     public void SubscribeToEventSendCurrency(Action<double> method)
     {
@@ -178,6 +187,13 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private bool IsPlayerTapping()
     {
         return Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began || Input.GetMouseButtonDown(0);
+    }
+
+    private int GetOfflineBonusPct()
+    {
+        int totalPct = data.prestigeOfflineBonusPct * SaveManager.PlayerData.prestigeLevel;
+
+        return totalPct == 0 ? data.prestigeOfflineBonusPct / 2 : totalPct;
     }
 
     private double GetTotalPassiveCurrencyGain()

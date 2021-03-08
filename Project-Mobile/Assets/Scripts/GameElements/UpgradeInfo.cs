@@ -11,9 +11,4 @@ public struct UpgradeInfo
         this.upgradeData = upgradeData;
         this.isOwned = isOwned;
     }
-
-    public void SetData(UpgradeData upgradeData)
-    {
-        this.upgradeData = upgradeData;
-    }
 }

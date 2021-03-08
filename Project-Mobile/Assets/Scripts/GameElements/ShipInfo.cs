@@ -15,10 +15,4 @@ public struct ShipInfo
         this.quantity = quantity;
         this.upgradesInfo = upgradesInfo;
     }
-
-    public void SetData(ShipData shipData, List<UpgradeInfo> upgradesInfo)
-    {
-        this.shipData = shipData;
-        this.upgradesInfo = upgradesInfo;
-    }
 }

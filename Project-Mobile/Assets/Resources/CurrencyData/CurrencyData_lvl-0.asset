@@ -20,6 +20,7 @@ MonoBehaviour:
   baseActiveGainValue: 10
   baseActiveGainPercentage: 35
   extrasPremiumCost: 3
+  prestigeOfflineBonusPct: 10
   adPctGain: 25
   adHoursDoubleGain: 4
   adPremiumCurrencyGain: 1

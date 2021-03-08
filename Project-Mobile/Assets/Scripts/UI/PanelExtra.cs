@@ -91,7 +91,7 @@ public class PanelExtra : MonoBehaviour
     {
         title = "Get Currency";
         description = $"Get {currencyManager.data.adPctGain}% of the actual Currency." +
-            $"\n{MathUtils.Pct(currencyManager.data.adPctGain, currencyManager.currency)}";
+            $"\n{Formatter.FormatValue(MathUtils.Pct(currencyManager.data.adPctGain, currencyManager.currency))}";
         adAction = WatchAdExtraCurrency;
         buyAction = BuyExtraCurrency;
 

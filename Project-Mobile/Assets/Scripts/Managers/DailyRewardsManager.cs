@@ -13,6 +13,7 @@ public class DailyRewardsManager : MonoBehaviour
     private List<DailyReward> rewards = new List<DailyReward>();
     private List<int> rewardsIndexes = new List<int>();
     private int currentIndex = 0;
+
     public int cooldownSeconds = 0;
     public int rewardsCount;
 

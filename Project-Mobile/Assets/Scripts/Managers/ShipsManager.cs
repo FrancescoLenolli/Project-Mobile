@@ -170,14 +170,12 @@ public class ShipsManager : MonoBehaviour
 
                 upgradeData = totalUpgrades[upgradeInfo.index];
 
-                //upgradeInfo = new UpgradeInfo(upgradeInfo.index, upgradeData, upgradeInfo.isOwned);
-                upgradeInfo.SetData(upgradeData);
+                upgradeInfo = new UpgradeInfo(upgradeInfo.index, upgradeData, upgradeInfo.isOwned);
 
                 upgrades.Add(upgradeInfo);
             }
 
-            //shipInfo = new ShipInfo(shipInfo.dataIndex, shipData, shipInfo.quantity, upgrades);
-            shipInfo.SetData(shipData, upgrades);
+            shipInfo = new ShipInfo(shipInfo.index, shipData, shipInfo.quantity, upgrades);
 
             savedShipsInfo[i] = shipInfo;
         }
