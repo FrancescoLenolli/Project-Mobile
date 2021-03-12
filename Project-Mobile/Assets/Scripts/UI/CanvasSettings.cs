@@ -13,22 +13,16 @@ public class CanvasSettings : MonoBehaviour
     private bool isVolumeSFXOn;
     private bool isVolumeMusicOn;
     private bool isVibrationOn;
-    private Vector3 originalPosition;
-    private Vector3 newPosition;
 
     [SerializeField] private List<Sprite> listSpritesToggle = new List<Sprite>();
     [SerializeField] private Image imageSFX = null;
     [SerializeField] private Image imageMusic = null;
     [SerializeField] private Image imageVibration = null;
-    [SerializeField] private Transform panelOptions = null;
-    [SerializeField] private Transform targetPosition = null;
-    [SerializeField] private float animationTime = 0;
+    [SerializeField] private PanelAnimator panelAnimator = null;
 
     private void Start()
     {
         uiManager = UIManager.Instance;
-        originalPosition = panelOptions.localPosition;
-        newPosition = targetPosition.localPosition;
 
         SubscribeToEventToggleVolumeSFX(StatusSFX);
         SubscribeToEventToggleVolumeSFX(Settings.SetVolumeSFX);
@@ -48,12 +42,7 @@ public class CanvasSettings : MonoBehaviour
 
     public void MoveToPosition()
     {
-        bool isPanelVisible = panelOptions.localPosition == newPosition;
-
-        Vector3 targetPosition = isPanelVisible ? originalPosition : newPosition;
-        UIManager.Fade fadeType = isPanelVisible ? UIManager.Fade.Out : UIManager.Fade.In;
-
-        uiManager.MoveRectObjectAndFade(panelOptions, targetPosition, animationTime, fadeType);
+        panelAnimator.MoveToPosition();
     }
 
     public void ToggleSFX()

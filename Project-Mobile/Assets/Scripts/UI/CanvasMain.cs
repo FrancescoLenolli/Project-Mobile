@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public delegate void ShowOptionsPanel();
 public class CanvasMain : MonoBehaviour
 {
     private Action EventShowOptionsPanel;

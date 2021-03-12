@@ -13,8 +13,6 @@ public class CanvasBottom : MonoBehaviour
     private UIManager uiManager;
     private List<Transform> containers = new List<Transform>();
     private List<Ship> ships = new List<Ship>();
-    private Vector3 originalPanelPosition;
-    private Vector3 targetPanelPosition;
 
     [SerializeField] private Ship prefabShip = null;
     [SerializeField] private Upgrade prefabUpgrade = null;
@@ -23,8 +21,7 @@ public class CanvasBottom : MonoBehaviour
     [SerializeField] private Transform containerUpgrades = null;
     [SerializeField] private List<Transform> cycleButtons = null;
     [SerializeField] private PanelExtra panelExtra = null;
-    [SerializeField] private Transform panelTargetPosition = null;
-    [SerializeField] private float animationTime = 0;
+    [SerializeField] private PanelAnimator panelAnimator = null;
 
     public List<Ship> Ships { get => ships; }
 
@@ -32,8 +29,6 @@ public class CanvasBottom : MonoBehaviour
     {
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
-        originalPanelPosition = panelExtra.transform.localPosition;
-        targetPanelPosition = panelTargetPosition.localPosition;
         panelExtra.InitData(this);
 
         List<ScrollRect> list = containersParent.GetComponentsInChildren<ScrollRect>().ToList();
@@ -116,10 +111,10 @@ public class CanvasBottom : MonoBehaviour
 
     public void MovePanelToPosition(bool isPanelVisible)
     {
-        Vector3 targetPosition = isPanelVisible ? originalPanelPosition : targetPanelPosition;
-        UIManager.Fade fadeType = isPanelVisible ? UIManager.Fade.Out : UIManager.Fade.In;
-
-        uiManager.MoveRectObjectAndFade(panelExtra.transform, targetPosition, animationTime, fadeType);
+        if (isPanelVisible)
+            panelAnimator.HidePanel();
+        else
+            panelAnimator.ShowPanel();
     }
 
     public void SpawnUpgrades(Ship ship)

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PanelAnimation : MonoBehaviour
+public class PanelAnimator : MonoBehaviour
 {
     private UIManager uiManager;
     private Vector3 originalPosition;

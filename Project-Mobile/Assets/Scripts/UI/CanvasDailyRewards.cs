@@ -10,25 +10,19 @@ public class CanvasDailyRewards : MonoBehaviour
 
     private UIManager uiManager;
     private DailyRewardsManager rewardsManager;
-    private Vector3 originalPosition;
-    private Vector3 newPosition;
     private TextMeshProUGUI textButtonGetReward;
     private List<Image> rewardImages = new List<Image>();
 
-    public Transform panelRewards;
-    public Transform targetPosition;
     public Transform rewardsContainer = null;
     public Image imagePrefab = null;
     public TextMeshProUGUI textCooldownTime = null;
     public Button buttonGetReward = null;
-    public float animationTime = 0;
+    public PanelAnimator panelAnimator = null;
     public Color colorCollectedReward;
 
     private void Start()
     {
         uiManager = UIManager.Instance;
-        originalPosition = panelRewards.localPosition;
-        newPosition = targetPosition.localPosition;
     }
 
     public void InitRewards(List<DailyReward> rewards, int currentIndex, DailyRewardsManager dailyRewardsManager)
@@ -41,7 +35,7 @@ public class CanvasDailyRewards : MonoBehaviour
         SpawnRewards(rewards);
 
         int index = currentIndex - 1 < 0 ? 0 : currentIndex - 1;
-        rewardImages.GetRange(0, index).ForEach(image => image.color = colorCollectedReward);
+        rewardImages.GetRange(0, index).ForEach(image => RewardCollected(image));
     }
 
 
@@ -60,12 +54,7 @@ public class CanvasDailyRewards : MonoBehaviour
 
     public void MoveToPosition()
     {
-        bool isPanelVisible = panelRewards.localPosition == newPosition;
-
-        Vector3 targetPosition = isPanelVisible ? originalPosition : newPosition;
-        UIManager.Fade fadeType = isPanelVisible ? UIManager.Fade.Out : UIManager.Fade.In;
-
-        uiManager.MoveRectObjectAndFade(panelRewards, targetPosition, animationTime, fadeType);
+        panelAnimator.MoveToPosition();
     }
 
     public void CheckCooldown(int cooldownSeconds)
@@ -74,13 +63,23 @@ public class CanvasDailyRewards : MonoBehaviour
         {
             textCooldownTime.text = "";
             textButtonGetReward.text = "Collect";
-            MoveToView();
+            ShowPanel();
         }
         else
         {
             textCooldownTime.text = Formatter.FormatTime(cooldownSeconds);
             textButtonGetReward.text = "Close";
         }
+    }
+
+    public void RewardCollected(int index)
+    {
+        RewardCollected(rewardImages[index]);
+    }
+
+    private void RewardCollected(Image image)
+    {
+        image.color = colorCollectedReward;
     }
 
     private void SpawnRewards(List<DailyReward> rewards)
@@ -93,11 +92,8 @@ public class CanvasDailyRewards : MonoBehaviour
         }
     }
 
-    private void MoveToView()
+    private void ShowPanel()
     {
-        bool isPanelVisible = panelRewards.localPosition == newPosition;
-
-        if(!isPanelVisible)
-        uiManager.MoveRectObjectAndFade(panelRewards, newPosition, animationTime, UIManager.Fade.In);
+        panelAnimator.ShowPanel();
     }
 }

@@ -8,22 +8,22 @@ using UnityEngine;
 public class DailyRewardsManager : MonoBehaviour
 {
     private Action<int> EventSendCooldownTime;
+    private Action<int> EventRewardCollected;
     private Action<List<DailyReward>> EventSendRewards;
 
+    private const int rewardCooldownSeconds = 86400; // seconds in a day;
     private List<DailyReward> rewards = new List<DailyReward>();
     private List<int> rewardsIndexes = new List<int>();
     private int currentIndex = 0;
 
-    public int cooldownSeconds = 0;
+    public int currentCooldownSeconds = 0;
     public int rewardsCount;
-
-    public int CooldownSeconds { get => cooldownSeconds; set => cooldownSeconds = value; }
 
     public void InitData()
     {
         rewardsIndexes = SaveManager.PlayerData.listRewardsIndexes;
         currentIndex = SaveManager.PlayerData.currentRewardIndex;
-        cooldownSeconds = SaveManager.PlayerData.cooldownSeconds;
+        currentCooldownSeconds = SaveManager.PlayerData.cooldownSeconds;
 
         if (rewardsIndexes.Count == 0 || rewardsIndexes.Count == currentIndex)
         {
@@ -39,6 +39,7 @@ public class DailyRewardsManager : MonoBehaviour
 
         SubscribeToEventSendCooldownTime(canvasDailyRewards.CheckCooldown);
         SubscribeToEventSendRewards(canvasDailyRewards.ResetRewards);
+        SubscribeToEventRewardCollected(canvasDailyRewards.RewardCollected);
 
         StartCoroutine(RewardsCooldown());
     }
@@ -47,15 +48,16 @@ public class DailyRewardsManager : MonoBehaviour
     {
         SaveManager.PlayerData.listRewardsIndexes = rewardsIndexes;
         SaveManager.PlayerData.currentRewardIndex = currentIndex;
-        SaveManager.PlayerData.cooldownSeconds = cooldownSeconds;
+        SaveManager.PlayerData.cooldownSeconds = currentCooldownSeconds;
     }
 
     public void CollectReward()
     {
-        bool canCollect = currentIndex < rewards.Count && cooldownSeconds == 0;
+        bool canCollect = currentIndex < rewards.Count && currentCooldownSeconds == 0;
         if (canCollect)
         {
             rewards[currentIndex].GetReward();
+            EventRewardCollected?.Invoke(currentIndex);
             ++currentIndex;
             ResetCooldown();
 
@@ -69,10 +71,10 @@ public class DailyRewardsManager : MonoBehaviour
 
     public void CalculateOfflineTime(TimeSpan timeOffline)
     {
-        cooldownSeconds -= (int)timeOffline.TotalSeconds;
+        currentCooldownSeconds -= (int)timeOffline.TotalSeconds;
 
-        if (cooldownSeconds < 0)
-            cooldownSeconds = 0;
+        if (currentCooldownSeconds < 0)
+            currentCooldownSeconds = 0;
     }
 
     private DailyReward GetReward(int index)
@@ -133,7 +135,7 @@ public class DailyRewardsManager : MonoBehaviour
 
     private void ResetCooldown()
     {
-        cooldownSeconds = (int)TimeSpan.FromDays(1).TotalSeconds;
+        currentCooldownSeconds = rewardCooldownSeconds;
     }
 
 
@@ -147,6 +149,11 @@ public class DailyRewardsManager : MonoBehaviour
         EventSendRewards += method;
     }
 
+    private void SubscribeToEventRewardCollected(Action<int> method)
+    {
+        EventRewardCollected += method;
+    }
+
 
     private IEnumerator RewardsCooldown()
     {
@@ -154,8 +161,8 @@ public class DailyRewardsManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1.0f);
 
-            cooldownSeconds = cooldownSeconds <= 0 ? 0 : --cooldownSeconds;
-            EventSendCooldownTime?.Invoke(cooldownSeconds);
+            currentCooldownSeconds = currentCooldownSeconds <= 0 ? 0 : --currentCooldownSeconds;
+            EventSendCooldownTime?.Invoke(currentCooldownSeconds);
 
             yield return null;
         }

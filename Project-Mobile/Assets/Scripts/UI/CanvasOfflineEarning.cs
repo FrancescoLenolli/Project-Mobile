@@ -12,14 +12,11 @@ public class CanvasOfflineEarning : MonoBehaviour
     private UIManager uiManager;
     private GameManager gameManager;
     private CurrencyManager currencyManager;
-    private Vector3 originalPosition;
     private double offlineEarnings;
 
-    [SerializeField] private Transform panelOfflineEarning = null;
-    [SerializeField] private Transform newPosition = null;
-    [SerializeField] private float animationTime = 0;
     [SerializeField] private TextMeshProUGUI textCurrencyGained = null;
     [SerializeField] private TextMeshProUGUI textOfflineTime = null;
+    [SerializeField] private PanelAnimator panelAnimator = null;
 
     private void Start()
     {
@@ -28,7 +25,6 @@ public class CanvasOfflineEarning : MonoBehaviour
         currencyManager = CurrencyManager.Instance;
 
         gameManager.adsManager.SubscribeToEventAdDoubleOfflineEarnings(CollectDoubleEarnings);
-        originalPosition = panelOfflineEarning.localPosition;
     }
     
     public void CollectEarnings()
@@ -55,7 +51,7 @@ public class CanvasOfflineEarning : MonoBehaviour
 
     private void HidePanel()
     {
-        uiManager.MoveRectObjectAndFade(panelOfflineEarning, originalPosition, animationTime, UIManager.Fade.Out);
+        panelAnimator.HidePanel();
     }
 
     private IEnumerator WaitToShowPanel(float time, TimeSpan timeOffline, double currencyGained)
@@ -64,7 +60,7 @@ public class CanvasOfflineEarning : MonoBehaviour
 
         offlineEarnings = currencyGained;
 
-        uiManager.MoveRectObjectAndFade(panelOfflineEarning, newPosition, animationTime, UIManager.Fade.In);
+        panelAnimator.ShowPanel();
 
         textCurrencyGained.text = Formatter.FormatValue(currencyGained);
         textOfflineTime.text = string.Format("{0:hh\\:mm\\:ss}", timeOffline);
