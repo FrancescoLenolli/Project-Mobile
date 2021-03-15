@@ -198,7 +198,13 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private double GetTotalPassiveCurrencyGain()
     {
-        return collectibles.Sum(x => x.TotalCurrencyGain);
+        double collectiblesGain = collectibles.Sum(x => x.TotalCurrencyGain);
+        double prestigeBonusGain = 0;
+
+        if (SaveManager.PlayerData.prestigeLevel != 0) // TODO: Prestige variable in GameManager
+            prestigeBonusGain = MathUtils.Pct(data.basePassiveGainPercentage * SaveManager.PlayerData.prestigeLevel, collectiblesGain);
+
+        return collectiblesGain + prestigeBonusGain;
     }
 
     private double GetActiveCurrencyGain()
@@ -210,7 +216,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return activeGain;
     }
 
-    private int GetTotalActiveGainPercentage()
+    private double GetTotalActiveGainPercentage()
     {
         return data.baseActiveGainPercentage; // TODO: Upgrades that increase the active gain percentage
     }
