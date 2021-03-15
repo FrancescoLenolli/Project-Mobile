@@ -34,6 +34,7 @@ public class Ship : Collectible
     {
         shipData = shipInfo.shipData;
         Quantity = shipInfo.quantity;
+        Weight = shipData.weight;
         gameObject.name = shipData.name;
         SetUpgradesInfo(shipInfo.upgradesInfo);
         SetCost();

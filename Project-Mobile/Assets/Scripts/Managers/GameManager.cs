@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -97,14 +99,21 @@ public class GameManager : Singleton<GameManager>
 
     public void PrestigeUp()
     {
-        PlayerData newData = new PlayerData
-        {
-            prestigeLevel = ++SaveManager.PlayerData.prestigeLevel,
-            premiumCurrency = SaveManager.PlayerData.premiumCurrency
-        };
+        // TODO: PrestigeManager seems likely.
+        double baseWeightRequired = 50;
+        double totalWeightRequired = baseWeightRequired * SaveManager.PlayerData.prestigeLevel + 1;
 
-        SaveManager.Save(newData);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+        if (GetCollectiblesWeight() >= totalWeightRequired)
+        {
+            PlayerData newData = new PlayerData
+            {
+                prestigeLevel = ++SaveManager.PlayerData.prestigeLevel,
+                premiumCurrency = SaveManager.PlayerData.premiumCurrency
+            };
+
+            SaveManager.Save(newData);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+        }
     }
 
 
@@ -158,5 +167,12 @@ public class GameManager : Singleton<GameManager>
     {
         TimeSpan timeOffline = logInTime.Subtract(logOutTime);
         EventSendOfflineTime?.Invoke(timeOffline);
+    }
+
+    private double GetCollectiblesWeight()
+    {
+        List<Collectible> collectibles = CurrencyManager.Instance.Collectibles;
+
+        return collectibles.Sum(collectible => (double)(collectible.Weight * collectible.Quantity));
     }
 }

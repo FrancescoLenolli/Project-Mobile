@@ -9,4 +9,5 @@ public class CollectibleData : ScriptableObject
     public double currencyGain;
     public double cost;
     public float costIncreaseMultiplier;
+    public int weight; // collectible 1 has weight 1 and so on (used to check if prestige can go up)
 }

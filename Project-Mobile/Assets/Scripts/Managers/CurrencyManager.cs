@@ -21,6 +21,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public int premiumCurrency;
     public CurrencyData data;
 
+    public List<Collectible> Collectibles { get => collectibles; }
+
     public void Update()
     {
         if (IsPlayerTapping())

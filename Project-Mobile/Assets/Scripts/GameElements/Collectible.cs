@@ -5,9 +5,11 @@ public class Collectible : MonoBehaviour
     protected double cost;
     private double totalCurrencyGain;
     private int quantity;
+    private int weight;
 
     public int Quantity { get => quantity; set => quantity = value; }
     public double TotalCurrencyGain { get => totalCurrencyGain; set => totalCurrencyGain = value; }
+    public int Weight { get => weight; set => weight = value; }
 
     public virtual void Buy()
     {
