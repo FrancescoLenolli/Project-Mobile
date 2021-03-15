@@ -14,7 +14,7 @@ public class DailyRewardsManager : MonoBehaviour
     private const int rewardCooldownSeconds = 86400; // seconds in a day;
     private List<DailyReward> rewards = new List<DailyReward>();
     private List<int> rewardsIndexes = new List<int>();
-    private int currentIndex = 0;
+    public int currentIndex = 0;
 
     public int currentCooldownSeconds = 0;
     public int rewardsCount;

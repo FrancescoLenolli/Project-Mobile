@@ -33,9 +33,7 @@ public class CanvasDailyRewards : MonoBehaviour
         EventCollectReward += rewardsManager.CollectReward;
 
         SpawnRewards(rewards);
-
-        int index = currentIndex - 1 < 0 ? 0 : currentIndex - 1;
-        rewardImages.GetRange(0, index).ForEach(image => RewardCollected(image));
+        rewardImages.GetRange(0, currentIndex).ForEach(image => RewardCollected(image));
     }
 
 
