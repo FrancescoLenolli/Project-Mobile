@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 
 public class PanelItemDescription : MonoBehaviour
 {
     private UIManager uiManager = null;
-    private Vector3 originalPosition = Vector3.zero;
 
     public Transform newTargetPosition = null;
     public float animationTime = 0.2f;
@@ -19,7 +16,6 @@ public class PanelItemDescription : MonoBehaviour
     private void Awake()
     {
         uiManager = UIManager.Instance;
-        originalPosition = transform.localPosition;
     }
 
     public void ShowPanel(Sprite itemImage, string itemName, string itemDescription)

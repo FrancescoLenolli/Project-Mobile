@@ -10,6 +10,7 @@ public class Ship : Collectible
 {
     private Action<ShipData> EventUnlockNewShip;
     private Action<ShipData> EventSpawnShipModel;
+    private Action<ShipData> EventShowInfo;
     private Action<Ship> EventSpawnUpgrades;
 
     private ShipsManager shipsManager;
@@ -71,6 +72,7 @@ public class Ship : Collectible
         }
 
         SubscribeToEventSpawnUpgrades(canvasBottom.SpawnUpgrades);
+        SubscribeToEventShowInfo(canvasBottom.PanelInfo.ShowInfo);
 
         canAutoBuy = false;
         StartCoroutine(AutoBuy());
@@ -135,32 +137,10 @@ public class Ship : Collectible
         isButtonHeld = false;
     }
 
-
-    private void SubscribeToEventSendData(Action<ShipData> method)
+    public void ShowInfo()
     {
-        EventUnlockNewShip += method;
+        EventShowInfo?.Invoke(shipData);
     }
-
-    private void UnsubscribeToEventSendData(Action<ShipData> method)
-    {
-        EventUnlockNewShip -= method;
-    }
-
-    private void SubscribeToEventSpawnShip(Action<ShipData> method)
-    {
-        EventSpawnShipModel += method;
-    }
-
-    private void UnsubscribeToEventSpawnShip(Action<ShipData> method)
-    {
-        EventSpawnShipModel -= method;
-    }
-
-    private void SubscribeToEventSpawnUpgrades(Action<Ship> method)
-    {
-        EventSpawnUpgrades += method;
-    }
-
 
     private bool IsQuantityEnough()
     {
@@ -247,5 +227,35 @@ public class Ship : Collectible
             canAutoBuy = true;
 
         yield return null;
+    }
+
+    private void SubscribeToEventSendData(Action<ShipData> method)
+    {
+        EventUnlockNewShip += method;
+    }
+
+    private void UnsubscribeToEventSendData(Action<ShipData> method)
+    {
+        EventUnlockNewShip -= method;
+    }
+
+    private void SubscribeToEventSpawnShip(Action<ShipData> method)
+    {
+        EventSpawnShipModel += method;
+    }
+
+    private void UnsubscribeToEventSpawnShip(Action<ShipData> method)
+    {
+        EventSpawnShipModel -= method;
+    }
+
+    private void SubscribeToEventSpawnUpgrades(Action<Ship> method)
+    {
+        EventSpawnUpgrades += method;
+    }
+
+    private void SubscribeToEventShowInfo(Action<ShipData> method)
+    {
+        EventShowInfo += method;
     }
 }

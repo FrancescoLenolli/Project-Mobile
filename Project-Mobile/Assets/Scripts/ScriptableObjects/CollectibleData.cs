@@ -6,6 +6,8 @@ public class CollectibleData : ScriptableObject
 {
     public int index;
     public new string name;
+    [TextArea]
+    public string description;
     public double currencyGain;
     public double cost;
     public float costIncreaseMultiplier;

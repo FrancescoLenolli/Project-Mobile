@@ -105,10 +105,12 @@ public class GameManager : Singleton<GameManager>
 
         if (GetCollectiblesWeight() >= totalWeightRequired)
         {
+            int premiumReward = CurrencyManager.Instance.data.extrasPremiumCost * 3;
+
             PlayerData newData = new PlayerData
             {
                 prestigeLevel = ++SaveManager.PlayerData.prestigeLevel,
-                premiumCurrency = SaveManager.PlayerData.premiumCurrency
+                premiumCurrency = SaveManager.PlayerData.premiumCurrency + premiumReward
             };
 
             SaveManager.Save(newData);

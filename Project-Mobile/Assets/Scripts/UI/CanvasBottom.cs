@@ -21,9 +21,11 @@ public class CanvasBottom : MonoBehaviour
     [SerializeField] private Transform containerUpgrades = null;
     [SerializeField] private List<Transform> cycleButtons = null;
     [SerializeField] private PanelExtra panelExtra = null;
-    [SerializeField] private PanelAnimator panelAnimator = null;
+    [SerializeField] private PanelAnimator panelExtraAnimator = null;
+    [SerializeField] private PanelShipInfo panelShipInfo = null;
 
     public List<Ship> Ships { get => ships; }
+    public PanelShipInfo PanelInfo { get => panelShipInfo; }
 
     public void InitData(List<ShipInfo> shipsInfo, ShipsManager shipsManager)
     {
@@ -112,9 +114,9 @@ public class CanvasBottom : MonoBehaviour
     public void MovePanelToPosition(bool isPanelVisible)
     {
         if (isPanelVisible)
-            panelAnimator.HidePanel();
+            panelExtraAnimator.HidePanel();
         else
-            panelAnimator.ShowPanel();
+            panelExtraAnimator.ShowPanel();
     }
 
     public void SpawnUpgrades(Ship ship)

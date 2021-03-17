@@ -9,7 +9,6 @@ public class CanvasOfflineEarning : MonoBehaviour
 {
     public enum CollectionType { Normal, DoubleAd }
 
-    private UIManager uiManager;
     private GameManager gameManager;
     private CurrencyManager currencyManager;
     private double offlineEarnings;
@@ -20,7 +19,6 @@ public class CanvasOfflineEarning : MonoBehaviour
 
     private void Start()
     {
-        uiManager = UIManager.Instance;
         gameManager = GameManager.Instance;
         currencyManager = CurrencyManager.Instance;
 

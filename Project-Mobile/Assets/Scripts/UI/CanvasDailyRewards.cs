@@ -8,7 +8,6 @@ public class CanvasDailyRewards : MonoBehaviour
 {
     private Action EventCollectReward;
 
-    private UIManager uiManager;
     private DailyRewardsManager rewardsManager;
     private TextMeshProUGUI textButtonGetReward;
     private List<Image> rewardImages = new List<Image>();
@@ -19,11 +18,6 @@ public class CanvasDailyRewards : MonoBehaviour
     public Button buttonGetReward = null;
     public PanelAnimator panelAnimator = null;
     public Color colorCollectedReward;
-
-    private void Start()
-    {
-        uiManager = UIManager.Instance;
-    }
 
     public void InitRewards(List<DailyReward> rewards, int currentIndex, DailyRewardsManager dailyRewardsManager)
     {

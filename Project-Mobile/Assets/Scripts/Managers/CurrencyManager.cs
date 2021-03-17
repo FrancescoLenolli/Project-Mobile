@@ -90,7 +90,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         if (secondsOffline >= secondsDoubleGain)
         {
             double baseSecondsOffline = secondsOffline - secondsDoubleGain;
-            double offlineGain = 0;
+            double offlineGain;
             double doubledOfflineGain = 0;
 
             offlineGain = MathUtils.Pct(GetOfflineBonusPct(), GetTotalPassiveCurrencyGain()) * baseSecondsOffline;

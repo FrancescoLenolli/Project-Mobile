@@ -18,7 +18,8 @@ MonoBehaviour:
   doubleGainTimeSprite: {fileID: 21300004, guid: 148a7416d4c344a42bb28cb23ee31708,
     type: 3}
   baseActiveGainValue: 10
-  baseActiveGainPercentage: 35
+  baseActiveGainPercentage: 0
+  basePassiveGainPercentage: 0
   extrasPremiumCost: 3
   prestigeOfflineBonusPct: 10
   adPctGain: 25

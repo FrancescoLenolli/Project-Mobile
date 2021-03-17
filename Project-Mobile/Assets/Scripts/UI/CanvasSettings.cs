@@ -9,7 +9,6 @@ public class CanvasSettings : MonoBehaviour
     public Action<bool> EventToggleVolumeMusic;
     public Action<bool> EventToggleVibration;
 
-    private UIManager uiManager;
     private bool isVolumeSFXOn;
     private bool isVolumeMusicOn;
     private bool isVibrationOn;
@@ -22,8 +21,6 @@ public class CanvasSettings : MonoBehaviour
 
     private void Start()
     {
-        uiManager = UIManager.Instance;
-
         SubscribeToEventToggleVolumeSFX(StatusSFX);
         SubscribeToEventToggleVolumeSFX(Settings.SetVolumeSFX);
         SubscribeToEventToggleVolumeMusic(StatusMusic);
@@ -63,23 +60,6 @@ public class CanvasSettings : MonoBehaviour
         EventToggleVibration?.Invoke(isVibrationOn);
     }
 
-
-    private void SubscribeToEventToggleVolumeSFX(Action<bool> method)
-    {
-        EventToggleVolumeSFX += method;
-    }
-
-    private void SubscribeToEventToggleVolumeMusic(Action<bool> method)
-    {
-        EventToggleVolumeMusic += method;
-    }
-
-    private void SubscribeToEventToggleVibration(Action<bool> method)
-    {
-        EventToggleVibration += method;
-    }
-
-
     private void StatusSFX(bool isOn)
     {
         imageSFX.sprite = ChangeSprite(isOn);
@@ -107,5 +87,20 @@ public class CanvasSettings : MonoBehaviour
         Sprite newSprite;
         newSprite = isOn ? listSpritesToggle[1] : listSpritesToggle[0];
         return newSprite;
+    }
+
+    private void SubscribeToEventToggleVolumeSFX(Action<bool> method)
+    {
+        EventToggleVolumeSFX += method;
+    }
+
+    private void SubscribeToEventToggleVolumeMusic(Action<bool> method)
+    {
+        EventToggleVolumeMusic += method;
+    }
+
+    private void SubscribeToEventToggleVibration(Action<bool> method)
+    {
+        EventToggleVibration += method;
     }
 }
