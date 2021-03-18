@@ -16,10 +16,7 @@ MonoBehaviour:
   name: Light Ship
   description: Smallest battle capable ship, not very effective but cheap and easy
     to mass produce.
-  currencyGain: 5
-  cost: 300
   costIncreaseMultiplier: 1.07
-  weight: 0
   icon: {fileID: 21300098, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1993769037395402, guid: 1e0e09158ccbc064a9a4f4413946f881, type: 3}
   qtForNextShip: 3

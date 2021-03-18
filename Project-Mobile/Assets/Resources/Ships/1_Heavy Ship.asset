@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 1
   name: Heavy Ship
+  description: Big sister of the Light Ship, it's more armored and can withstand
+    a lot of damage. Not very fast, but it can mount upgraded thrusters.
   currencyGain: 15
   cost: 300
   costIncreaseMultiplier: 1.07
+  weight: 0
   icon: {fileID: 21300004, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1261967083292032, guid: 8473f9776d8295943a5758049686e69c, type: 3}
   qtForNextShip: 3

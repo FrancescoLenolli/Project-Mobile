@@ -12,12 +12,12 @@ public class CanvasDailyRewards : MonoBehaviour
     private TextMeshProUGUI textButtonGetReward;
     private List<Image> rewardImages = new List<Image>();
 
-    public Transform rewardsContainer = null;
-    public Image imagePrefab = null;
-    public TextMeshProUGUI textCooldownTime = null;
-    public Button buttonGetReward = null;
-    public PanelAnimator panelAnimator = null;
-    public Color colorCollectedReward;
+    [SerializeField] private Transform rewardsContainer = null;
+    [SerializeField] private Image imagePrefab = null;
+    [SerializeField] private TextMeshProUGUI textCooldownTime = null;
+    [SerializeField] private Button buttonGetReward = null;
+    [SerializeField] private PanelAnimator panelAnimator = null;
+    [SerializeField] private Color colorCollectedReward = Color.white;
 
     public void InitRewards(List<DailyReward> rewards, int currentIndex, DailyRewardsManager dailyRewardsManager)
     {

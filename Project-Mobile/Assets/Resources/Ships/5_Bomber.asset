@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 5
   name: Bomber
+  description: 'Used for planetary bombing, it can be upgraded to be more precise
+    or more destructive. '
   currencyGain: 55
   cost: 300
   costIncreaseMultiplier: 1.07
+  weight: 0
   icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1993769037395402, guid: 73b09e5094ff94fddac6945d623c08af, type: 3}
   qtForNextShip: 3

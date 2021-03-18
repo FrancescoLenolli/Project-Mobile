@@ -2,6 +2,8 @@
 
 public class Collectible : MonoBehaviour
 {
+    protected double baseCost;
+    protected double baseCurrencyGain;
     protected double cost;
     private double totalCurrencyGain;
     private int quantity;
@@ -16,15 +18,30 @@ public class Collectible : MonoBehaviour
         // what happens when buying a unit of this collectible.
     }
 
+    protected virtual void SetWeight()
+    {
+        //
+    }
+
+    protected virtual void SetBaseCost()
+    {
+        //
+    }
+
     protected virtual void SetCost()
     {
-        // self explanatory.
+        //
     }
 
     protected virtual double GetUnitCurrencyGain()
     {
         // calculate how much currency is gained by one unit of this collectible.
         return double.MaxValue;
+    }
+
+    protected virtual void SetBaseCurrencyGain()
+    {
+        //
     }
 
     protected virtual void SetTotalCurrencyGain()
@@ -36,5 +53,10 @@ public class Collectible : MonoBehaviour
     {
         bool result = CurrencyManager.Instance.currency >= cost || GameManager.Instance.isTesting;
         return result;
+    }
+
+    protected void SetWeight(int value)
+    {
+        weight = value;
     }
 }

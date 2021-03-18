@@ -35,9 +35,11 @@ public class Ship : Collectible
     {
         shipData = shipInfo.shipData;
         Quantity = shipInfo.quantity;
-        Weight = shipData.weight;
         gameObject.name = shipData.name;
         SetUpgradesInfo(shipInfo.upgradesInfo);
+        SetWeight(shipData.index + 1);
+        SetBaseCost();
+        SetBaseCurrencyGain();
         SetCost();
         SetTotalCurrencyGain();
 
@@ -142,6 +144,7 @@ public class Ship : Collectible
         EventShowInfo?.Invoke(shipData);
     }
 
+
     private bool IsQuantityEnough()
     {
         return Quantity >= shipData.qtForNextShip;
@@ -149,7 +152,7 @@ public class Ship : Collectible
 
     protected override double GetUnitCurrencyGain()
     {
-        double currencyGain = shipData.currencyGain;
+        double currencyGain = baseCurrencyGain;
         List<UpgradeData> upgrades = shipData.upgrades;
         float totalUpgradesPct = 0f;
 
@@ -158,12 +161,16 @@ public class Ship : Collectible
             totalUpgradesPct += info.upgradeData.upgradePercentage;
         }
 
-        //float testing = upgradesInfo.Where(x => x.isOwned).Sum(x => x.upgradeData.upgradePercentage);
-        //Debug.Log($"Total Upgrades percentage: {testing}\nReal Total percentage: {totalUpgradesPct}");
-
         double newCurrencyGain = totalUpgradesPct == 0f ? currencyGain : currencyGain + MathUtils.Pct(totalUpgradesPct, currencyGain);
 
         return newCurrencyGain;
+    }
+
+    protected override void SetBaseCurrencyGain()
+    {
+        int pow = (shipData.index);
+        double multiplier = Math.Pow(shipData.index + 1, pow);
+        baseCurrencyGain = CurrencyManager.Instance.data.baseShipCurrencyGain * multiplier;
     }
 
     protected override void SetTotalCurrencyGain()
@@ -175,10 +182,16 @@ public class Ship : Collectible
         textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(TotalCurrencyGain)}/s";
     }
 
+    protected override void SetBaseCost()
+    {
+        double multiplier = Math.Pow(shipData.index + 1, shipData.index + 1);
+        baseCost = CurrencyManager.Instance.data.baseShipCost * multiplier;
+    }
+
     protected override void SetCost()
     {
         double multiplier = Math.Pow(shipData.costIncreaseMultiplier, Quantity);
-        cost = shipData.cost * multiplier;
+        cost = baseCost * multiplier;
         SetTextCost();
     }
 
@@ -228,6 +241,7 @@ public class Ship : Collectible
 
         yield return null;
     }
+
 
     private void SubscribeToEventSendData(Action<ShipData> method)
     {

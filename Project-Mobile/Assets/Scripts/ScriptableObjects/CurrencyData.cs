@@ -11,6 +11,8 @@ public class CurrencyData : ScriptableObject
     public double baseActiveGainValue;
     public double baseActiveGainPercentage;
     public double basePassiveGainPercentage;
+    public double baseShipCost;
+    public double baseShipCurrencyGain;
     public int extrasPremiumCost;
     public int prestigeOfflineBonusPct;
     public int adPctGain;

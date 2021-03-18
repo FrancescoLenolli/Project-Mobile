@@ -118,25 +118,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-
-    public void SubscribeToEventInitData(Action method)
-    {
-        EventInitData += method;
-    }
-    public void UnsubscribeToEventInitData(Action method)
-    {
-        EventInitData -= method;
-    }
-    public void SubscribeToEventSaveData(Action method)
-    {
-        EventSaveData += method;
-    }
-    public void SubscribeToEventSendOfflineTime(Action<TimeSpan> method)
-    {
-        EventSendOfflineTime += method;
-    }
-
-
     private void InitData()
     {
         string lastLogOut = SaveManager.PlayerData.lastLogOutTime;
@@ -176,5 +157,23 @@ public class GameManager : Singleton<GameManager>
         List<Collectible> collectibles = CurrencyManager.Instance.Collectibles;
 
         return collectibles.Sum(collectible => (double)(collectible.Weight * collectible.Quantity));
+    }
+
+
+    public void SubscribeToEventInitData(Action method)
+    {
+        EventInitData += method;
+    }
+    public void UnsubscribeToEventInitData(Action method)
+    {
+        EventInitData -= method;
+    }
+    public void SubscribeToEventSaveData(Action method)
+    {
+        EventSaveData += method;
+    }
+    public void SubscribeToEventSendOfflineTime(Action<TimeSpan> method)
+    {
+        EventSendOfflineTime += method;
     }
 }

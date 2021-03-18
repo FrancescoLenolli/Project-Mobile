@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 6
   name: Heavy Bomber
+  description: Able to carry the biggest bombs currently available, it's effective
+    to completely destroy planets too entrenched by enemy forces.
   currencyGain: 65
   cost: 300
   costIncreaseMultiplier: 1.07
+  weight: 0
   icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1261967083292032, guid: 445ae37f24e704de890bbfda1fa7a39c, type: 3}
   qtForNextShip: 3

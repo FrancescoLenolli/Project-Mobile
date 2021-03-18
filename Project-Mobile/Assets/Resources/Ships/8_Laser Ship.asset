@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 8
   name: Laser Ship
+  description: Lasers help disrupt target sensors, and can burn holes in lighter
+    ships, depleting their oxygen reserves.
   currencyGain: 85
   cost: 300
   costIncreaseMultiplier: 1.07
+  weight: 0
   icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1542112843390278, guid: ef6ab94c04502497498daa16165ee0bd, type: 3}
   qtForNextShip: 3

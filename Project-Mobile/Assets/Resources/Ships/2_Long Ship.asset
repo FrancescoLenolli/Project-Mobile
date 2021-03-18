@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 2
   name: Long Ship
+  description: Halfway between Light and Heavy ships, it's more focused on maneuvrability.
+    Perfect for patrolling mining outposts deep inside asteroid belts.
   currencyGain: 25
   cost: 300
   costIncreaseMultiplier: 1.07
+  weight: 0
   icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1578151531806032, guid: 8247a213e30c0734a98bcb0af9f4d340, type: 3}
   qtForNextShip: 3

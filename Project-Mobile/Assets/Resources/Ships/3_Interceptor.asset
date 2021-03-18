@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 3
   name: Interceptor
+  description: Equipped with powerful scanners and a quick action warp drive, this
+    ship can be used to turn the tide of small/medium sized engagements and to chase
+    off retreating forces.
   currencyGain: 35
   cost: 300
   costIncreaseMultiplier: 1.07
+  weight: 0
   icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1542112843390278, guid: b47bece6812c64d44b8a3f159e732957, type: 3}
   qtForNextShip: 3

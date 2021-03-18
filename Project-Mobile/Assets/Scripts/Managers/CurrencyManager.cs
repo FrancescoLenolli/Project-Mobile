@@ -154,33 +154,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return data.extrasPremiumCost <= premiumCurrency;
     }
 
-
-    public void SubscribeToEventSendCurrency(Action<double> method)
-    {
-        EventSendCurrencyValue += method;
-    }
-    public void SubscribeToEventSendPremiumCurrency(Action<int> method)
-    {
-        EventSendPremiumCurrencyValue += method;
-    }
-    public void SubscribeToEventSendPassiveCurrencyGain(Action<double> method)
-    {
-        EventSendPassiveCurrencyGainValue += method;
-    }
-    public void SubscribeToEventSendActiveCurrencyGain(Action<double, Vector3> method)
-    {
-        EventSendActiveCurrencyGainValue += method;
-    }
-    public void SubscribeToEventGainedPassiveCurrency(Action<TimeSpan, double> method)
-    {
-        EventGainedOfflineCurrency += method;
-    }
-    public void SubscribeToEventSendDoubleGainTime(Action<double> method)
-    {
-        EventSendDoubleGainTime += method;
-    }
-
-
     private void AddPassiveCurrency()
     {
         StartCoroutine(PassiveCurrencyGain());
@@ -260,5 +233,31 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
             yield return null;
         }
+    }
+
+
+    public void SubscribeToEventSendCurrency(Action<double> method)
+    {
+        EventSendCurrencyValue += method;
+    }
+    public void SubscribeToEventSendPremiumCurrency(Action<int> method)
+    {
+        EventSendPremiumCurrencyValue += method;
+    }
+    public void SubscribeToEventSendPassiveCurrencyGain(Action<double> method)
+    {
+        EventSendPassiveCurrencyGainValue += method;
+    }
+    public void SubscribeToEventSendActiveCurrencyGain(Action<double, Vector3> method)
+    {
+        EventSendActiveCurrencyGainValue += method;
+    }
+    public void SubscribeToEventGainedPassiveCurrency(Action<TimeSpan, double> method)
+    {
+        EventGainedOfflineCurrency += method;
+    }
+    public void SubscribeToEventSendDoubleGainTime(Action<double> method)
+    {
+        EventSendDoubleGainTime += method;
     }
 }

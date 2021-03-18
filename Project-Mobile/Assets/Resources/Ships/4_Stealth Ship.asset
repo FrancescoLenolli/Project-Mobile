@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 4
   name: Stealth Ship
+  description: Impossible to detect with his engines offline, it can go deep inside
+    enemy space and relay vital information back to the main fleet. Avoid open combat
+    at all costs.
   currencyGain: 45
   cost: 300
   costIncreaseMultiplier: 1.07
+  weight: 0
   icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   model: {fileID: 1044101965864496, guid: a825e414d2854204e98190cc7a58404e, type: 3}
   qtForNextShip: 3
