@@ -29,7 +29,7 @@ public class CanvasMain : MonoBehaviour
         buttonPremiumCurrency.image.sprite = currencyManager.data.premiumCurrencySprite;
 
         SubscribeToEventShowOptionsPanel(canvasOptions.MoveToPosition);
-        SubscribeToEventPrestigeUp(gameManager.PrestigeUp);
+        SubscribeToEventPrestigeUp(PrestigeManager.Instance.PrestigeUp);
 
         currencyManager.SubscribeToEventSendCurrency(UpdateCurrencyText);
         currencyManager.SubscribeToEventSendPremiumCurrency(UpdatePremiumCurrencyText);

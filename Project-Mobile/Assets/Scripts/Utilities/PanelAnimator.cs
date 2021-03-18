@@ -39,7 +39,7 @@ public class PanelAnimator : MonoBehaviour
             uiManager.MoveRectObjectAndFade(panel, originalPosition, animationTime, UIManager.Fade.Out);
     }
 
-    private bool IsPanelInView()
+    public bool IsPanelInView()
     {
         return panel.localPosition == targetPosition;
     }

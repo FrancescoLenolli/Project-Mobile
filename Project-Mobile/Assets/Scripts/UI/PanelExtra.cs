@@ -80,13 +80,6 @@ public class PanelExtra : MonoBehaviour
         EventWatchCurrencyAd?.Invoke(AdsManager.AdType.PremiumCurrency);
     }
 
-
-    private void SubscribeToEventWatchAd(Action<AdsManager.AdType> method)
-    {
-        EventWatchCurrencyAd += method;
-    }
-
-
     private void SetUpExtraGetCurrency()
     {
         title = "Get Currency";
@@ -131,5 +124,11 @@ public class PanelExtra : MonoBehaviour
             buttonAd.onClick.AddListener(adAction);
         if (buyAction != null)
             buttonBuy.onClick.AddListener(buyAction);
+    }
+
+
+    private void SubscribeToEventWatchAd(Action<AdsManager.AdType> method)
+    {
+        EventWatchCurrencyAd += method;
     }
 }

@@ -35,17 +35,20 @@ public class GameManager : Singleton<GameManager>
             SaveManager.ResetData();
         }
 
+        PrestigeManager prestigeManager = PrestigeManager.Instance;
         CurrencyManager currencyManager = CurrencyManager.Instance;
         ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
         DailyRewardsManager rewardsManager = FindObjectOfType<DailyRewardsManager>();
 
         SubscribeToEventInitData(InitData);
+        SubscribeToEventInitData(prestigeManager.InitData);
         SubscribeToEventInitData(shipsManager.InitData);
         SubscribeToEventInitData(currencyManager.InitData);
         SubscribeToEventInitData(Settings.InitData);
         SubscribeToEventInitData(rewardsManager.InitData);
 
         SubscribeToEventSaveData(SaveData);
+        SubscribeToEventSaveData(prestigeManager.SaveData);
         SubscribeToEventSaveData(shipsManager.SaveData);
         SubscribeToEventSaveData(currencyManager.SaveData);
         SubscribeToEventSaveData(Settings.SaveData);
@@ -60,6 +63,7 @@ public class GameManager : Singleton<GameManager>
         UnsubscribeToEventInitData(Settings.InitData);
         UnsubscribeToEventInitData(currencyManager.InitData);
         UnsubscribeToEventInitData(shipsManager.InitData);
+        UnsubscribeToEventInitData(prestigeManager.InitData);
         UnsubscribeToEventInitData(InitData);
 
         CalculateOfflineTime();
@@ -97,25 +101,10 @@ public class GameManager : Singleton<GameManager>
         return isFirstSession;
     }
 
-    public void PrestigeUp()
+    public void Save()
     {
-        // TODO: PrestigeManager seems likely.
-        double baseWeightRequired = 50;
-        double totalWeightRequired = baseWeightRequired * SaveManager.PlayerData.prestigeLevel + 1;
-
-        if (GetCollectiblesWeight() >= totalWeightRequired)
-        {
-            int premiumReward = CurrencyManager.Instance.data.extrasPremiumCost * 3;
-
-            PlayerData newData = new PlayerData
-            {
-                prestigeLevel = ++SaveManager.PlayerData.prestigeLevel,
-                premiumCurrency = SaveManager.PlayerData.premiumCurrency + premiumReward
-            };
-
-            SaveManager.Save(newData);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
-        }
+        EventSaveData?.Invoke();
+        SaveManager.Save();
     }
 
     private void InitData()
@@ -128,12 +117,6 @@ public class GameManager : Singleton<GameManager>
     private void SaveData()
     {
         SaveManager.PlayerData.lastLogOutTime = logOutTime.ToString();
-    }
-
-    private void Save()
-    {
-        EventSaveData?.Invoke();
-        SaveManager.Save();
     }
 
     private void LogIn()
@@ -150,13 +133,6 @@ public class GameManager : Singleton<GameManager>
     {
         TimeSpan timeOffline = logInTime.Subtract(logOutTime);
         EventSendOfflineTime?.Invoke(timeOffline);
-    }
-
-    private double GetCollectiblesWeight()
-    {
-        List<Collectible> collectibles = CurrencyManager.Instance.Collectibles;
-
-        return collectibles.Sum(collectible => (double)(collectible.Weight * collectible.Quantity));
     }
 
 
