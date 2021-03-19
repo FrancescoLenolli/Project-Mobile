@@ -6,7 +6,6 @@ using UnityEngine;
 [System.Serializable]
 public class ShipData : CollectibleData
 {
-    public Sprite icon;
     public GameObject model;
     [Space]
     public int qtForNextShip; //TODO: Fix horrendous name.

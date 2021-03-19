@@ -7,6 +7,7 @@ public class ShipsManager : MonoBehaviour
 {
     private Action<List<ShipInfo>, ShipsManager> EventSendData;
     private Action<ShipInfo, ShipsManager> EventUnlockShip;
+    private Action<int> EventShipViewChanged;
 
     private UIManager uiManager;
     private CanvasBottom canvasBottom;
@@ -21,14 +22,16 @@ public class ShipsManager : MonoBehaviour
 
     public void InitData()
     {
+        CameraBehaviour cameraBehaviour = Camera.main.GetComponent<CameraBehaviour>();
+        uiManager = UIManager.Instance;
         savedShipsInfo = SaveManager.PlayerData.ships;
         totalShips = Resources.LoadAll<ShipData>("Ships").ToList();
         totalUpgrades = Resources.LoadAll<UpgradeData>("Upgrades").ToList();
         canvasBottom = FindObjectOfType<CanvasBottom>();
-        uiManager = UIManager.Instance;
 
         SubscribeToEventSendData(canvasBottom.InitData);
         SubscribeToEventUnlockShip(canvasBottom.SpawnShip);
+        SubscribeToEventShipViewChanged(cameraBehaviour.ChangePosition);
 
         // Handles first play and data resets.
         if (savedShipsInfo.Count == 0)
@@ -109,6 +112,8 @@ public class ShipsManager : MonoBehaviour
         shipModel.transform.SetParent(shipsParent);
         shipModel.transform.localPosition = Vector3.zero;
         shipModel.transform.rotation = shipsParent.rotation;
+
+        EventShipViewChanged?.Invoke(currentModelIndex);
     }
 
     public void SaveData()
@@ -125,23 +130,6 @@ public class ShipsManager : MonoBehaviour
 
         SaveManager.PlayerData.ships = shipsInfo;
     }
-
-
-    public void SubscribeToEventSendData(Action<List<ShipInfo>, ShipsManager> method)
-    {
-        EventSendData += method;
-    }
-
-    public void UnsubscribeToEventSendData(Action<List<ShipInfo>, ShipsManager> method)
-    {
-        EventSendData -= method;
-    }
-
-    public void SubscribeToEventUnlockShip(Action<ShipInfo, ShipsManager> method)
-    {
-        EventUnlockShip += method;
-    }
-
 
     private void GetShipsData()
     {
@@ -179,5 +167,26 @@ public class ShipsManager : MonoBehaviour
 
             savedShipsInfo[i] = shipInfo;
         }
+    }
+
+
+    public void SubscribeToEventSendData(Action<List<ShipInfo>, ShipsManager> method)
+    {
+        EventSendData += method;
+    }
+
+    public void UnsubscribeToEventSendData(Action<List<ShipInfo>, ShipsManager> method)
+    {
+        EventSendData -= method;
+    }
+
+    public void SubscribeToEventUnlockShip(Action<ShipInfo, ShipsManager> method)
+    {
+        EventUnlockShip += method;
+    }
+
+    public void SubscribeToEventShipViewChanged(Action<int> method)
+    {
+        EventShipViewChanged += method;
     }
 }

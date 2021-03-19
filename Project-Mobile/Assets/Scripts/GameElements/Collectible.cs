@@ -10,17 +10,13 @@ public class Collectible : MonoBehaviour
     private int weight;
 
     public int Quantity { get => quantity; set => quantity = value; }
-    public double TotalCurrencyGain { get => totalCurrencyGain; set => totalCurrencyGain = value; }
     public int Weight { get => weight; set => weight = value; }
+    public double TotalCurrencyGain { get => totalCurrencyGain; set => totalCurrencyGain = value; }
+    public double BaseCost { get => baseCost; }
 
     public virtual void Buy()
     {
         // what happens when buying a unit of this collectible.
-    }
-
-    protected virtual void SetWeight()
-    {
-        //
     }
 
     protected virtual void SetBaseCost()
@@ -49,14 +45,14 @@ public class Collectible : MonoBehaviour
         // calculate the total currency gained by the owned quantity of this collectible.
     }
 
+    protected void SetWeight(int value)
+    {
+        weight = value;
+    }
+
     protected bool CanBuy()
     {
         bool result = CurrencyManager.Instance.currency >= cost || GameManager.Instance.isTesting;
         return result;
-    }
-
-    protected void SetWeight(int value)
-    {
-        weight = value;
     }
 }

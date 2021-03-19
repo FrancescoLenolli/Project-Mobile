@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class PanelShipInfo : MonoBehaviour
 {
     private UIManager uiManager;
-    private ShipData currentData;
+    private CollectibleData currentData;
     private CanvasGroup canvasGroup;
 
     [SerializeField] private Image icon = null;
@@ -18,11 +18,11 @@ public class PanelShipInfo : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public void ShowInfo(ShipData data)
+    public void ShowInfo(CollectibleData data)
     {
-        bool isShipDifferent = currentData != data;
+        bool isItemDifferent = currentData != data;
 
-        if (isShipDifferent)
+        if (isItemDifferent)
         {
             ChangeVisibility(true);
             currentData = data;
@@ -30,11 +30,11 @@ public class PanelShipInfo : MonoBehaviour
             name.text = data.name;
             description.text = data.description;
         }
-        else if (!isShipDifferent && IsPanelVisible())
+        else if (!isItemDifferent && IsPanelVisible())
         {
             ChangeVisibility(false);
         }
-        else if (!(isShipDifferent || IsPanelVisible()))
+        else if (!(isItemDifferent || IsPanelVisible()))
         {
             ChangeVisibility(true);
         }

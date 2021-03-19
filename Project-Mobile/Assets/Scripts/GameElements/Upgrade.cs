@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class Upgrade : MonoBehaviour
     private UpgradeData upgradeData;
     private Ship ship;
     private Transform container;
+    private double cost;
 
     public TextMeshProUGUI textName = null;
     public TextMeshProUGUI textDescription = null;
@@ -23,10 +25,11 @@ public class Upgrade : MonoBehaviour
         this.upgradeData = upgradeData;
         this.container = container;
         this.ship = ship;
+        SetCost(ship);
 
         textName.text = upgradeData.name;
         textDescription.text = $"Increase {ship.name} currency gain by {upgradeData.upgradePercentage}%";
-        textCost.text = Formatter.FormatValue(upgradeData.cost);
+        textCost.text = Formatter.FormatValue(cost);
         imageIcon.sprite = upgradeData.icon;
     }
 
@@ -35,7 +38,7 @@ public class Upgrade : MonoBehaviour
         if (CanBuy() || GameManager.Instance.isTesting)
         {
             if (!GameManager.Instance.isTesting)
-                currencyManager.RemoveCurrency(upgradeData.cost);
+                currencyManager.RemoveCurrency(cost);
 
             ship.UpgradeBought(upgradeData);
             uiManager.ResizeContainer(transform, container, UIManager.Resize.Subtract);
@@ -48,6 +51,12 @@ public class Upgrade : MonoBehaviour
 
     private bool CanBuy()
     {
-        return upgradeData.cost <= CurrencyManager.Instance.currency;
+        return cost <= CurrencyManager.Instance.currency;
+    }
+
+    private void SetCost(Ship ship)
+    {
+        double multiplier = Math.Pow(ship.shipData.index + 1, ship.shipData.index + 1) * 3;
+        cost = ship.BaseCost * multiplier;
     }
 }

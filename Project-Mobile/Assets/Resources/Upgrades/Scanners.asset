@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d29799469370c24f9e057ba9bd2fb1e, type: 3}
   m_Name: Scanners
   m_EditorClassIdentifier: 
+  index: 0
+  icon: {fileID: 21300020, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   name: Scanners
-  description: 'This are scanners
+  description: 'These are scanners
 
 '
-  icon: {fileID: 21300020, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  cost: 150
+  costIncreaseMultiplier: 0
   upgradePercentage: 45

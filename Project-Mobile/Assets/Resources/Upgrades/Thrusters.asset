@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Thrusters
   m_EditorClassIdentifier: 
   index: 2
-  name: Thrusters
-  description: "This are thrusters\n\t"
   icon: {fileID: 21300044, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  cost: 50
+  name: Thrusters
+  description: "These are thrusters\n\t"
+  costIncreaseMultiplier: 0
   upgradePercentage: 20

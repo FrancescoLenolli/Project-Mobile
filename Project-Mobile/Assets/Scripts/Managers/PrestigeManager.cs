@@ -22,7 +22,7 @@ public class PrestigeManager : Singleton<PrestigeManager>
         SubscribeToEventReloadingGame(GameManager.Instance.Save);
 
         prestigeLevel = SaveManager.PlayerData.prestigeLevel;
-        CalculateRequiredWeight();   
+        CalculateRequiredWeight();
     }
 
     public void SaveData()
