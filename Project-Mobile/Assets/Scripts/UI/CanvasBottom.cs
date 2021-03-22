@@ -22,6 +22,7 @@ public class CanvasBottom : MonoBehaviour
     [SerializeField] private List<Transform> cycleButtons = null;
     [SerializeField] private PanelExtra panelExtra = null;
     [SerializeField] private PanelAnimator panelExtraAnimator = null;
+    [SerializeField] private PanelAnimator panelBottomAnimator = null;
     [SerializeField] private PanelShipInfo panelShipInfo = null;
 
     public List<Ship> Ships { get => ships; }
@@ -38,11 +39,6 @@ public class CanvasBottom : MonoBehaviour
 
         OpenPanel(0);
 
-        CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
-
-        SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
-        SubscribeToEventShowDailyRewards(canvasDailyRewards.MoveToPosition);
-
         for (int i = 0; i < shipsInfo.Count; ++i)
         {
             SpawnShip(shipsInfo[i], shipsManager);
@@ -52,6 +48,13 @@ public class CanvasBottom : MonoBehaviour
                 shipsManager.ViewShip();
             }
         }
+
+        CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
+        SwipeDetector swipeDetector = FindObjectOfType<SwipeDetector>();
+
+        SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
+        SubscribeToEventShowDailyRewards(canvasDailyRewards.MoveToPosition);
+        swipeDetector.SubscribeToEventSwipe(ChangeBottomPanelVisibility);
     }
 
     public void CycleModelsLeft()
@@ -86,6 +89,7 @@ public class CanvasBottom : MonoBehaviour
     public void OpenPanel(int index)
     {
         uiManager.ChangeVisibility(containers, index);
+        panelBottomAnimator.MoveToView();
     }
 
     public void AddExtraCurrency()
@@ -129,6 +133,30 @@ public class CanvasBottom : MonoBehaviour
             upgrade.transform.SetAsFirstSibling();
             uiManager.ResizeContainer(upgrade.transform, containerUpgrades, UIManager.Resize.Add);
         }
+    }
+
+    private void ChangeBottomPanelVisibility(SwipeDetector.Swipe swipe, Vector2 startPosition)
+    {
+        switch (swipe)
+        {
+            case SwipeDetector.Swipe.Down:
+                panelBottomAnimator.HideFromView();
+                break;
+            case SwipeDetector.Swipe.Up:
+                panelBottomAnimator.MoveToView();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private bool FindPoint(Vector2 bottomLeft, Vector2 topRight, Vector2 point)
+    {
+        if (point.x > bottomLeft.x && point.x < topRight.x &&
+            point.y > bottomLeft.y && point.y < topRight.y)
+            return true;
+
+        return false;
     }
 
     public void SubscribeToEventCycleShipsModel(Action<UIManager.Cycle> method)

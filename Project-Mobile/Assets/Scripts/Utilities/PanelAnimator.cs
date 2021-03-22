@@ -27,6 +27,16 @@ public class PanelAnimator : MonoBehaviour
         uiManager.MoveRectObjectAndFade(panel, newPosition, animationTime, fadeType);
     }
 
+    public void MoveToView()
+    {
+        uiManager.MoveRectObject(animationTime, panel, originalPosition);
+    }
+
+    public void HideFromView()
+    {
+        uiManager.MoveRectObject(animationTime, panel, targetPosition);
+    }
+
     public void ShowPanel()
     {
         if (!IsPanelInView())

@@ -65,6 +65,15 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
+    /// Move Canvas Element to newPosition in n seconds.
+    /// </summary>
+    public void MoveRectObject(float time, Transform animatedObject, Vector3 newPosition)
+    {
+        if (canAnimate)
+            StartCoroutine(MoveRect(time, animatedObject, newPosition));
+    }
+
+    /// <summary>
     /// Move Canvas Element to newPosition in n seconds, with a Fade effect.
     /// </summary>
     public void MoveRectObjectAndFade(Transform animatedObject, Transform newPosition, float time, Fade fadeType)
@@ -232,6 +241,27 @@ public class UIManager : Singleton<UIManager>
             yield return null;
         }
         animatedObject.localPosition = endPosition;
+
+        canAnimate = true;
+
+        yield return null;
+    }
+
+    private IEnumerator MoveRect(float time, Transform animatedObject, Vector3 newPosition)
+    {
+        canAnimate = false;
+
+        float duration = 0;
+        Vector3 originalPosition = animatedObject.localPosition;
+
+        while (duration < time)
+        {
+            float t2 = Time.deltaTime + duration / time > 1 ? 1 : Time.deltaTime + duration / time;
+            animatedObject.localPosition = Vector3.Lerp(originalPosition, newPosition, t2);
+            duration += Time.deltaTime;
+            yield return null;
+        }
+        animatedObject.localPosition = newPosition;
 
         canAnimate = true;
 
