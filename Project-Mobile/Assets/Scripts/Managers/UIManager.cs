@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -12,12 +13,23 @@ public class UIManager : Singleton<UIManager>
 
     private bool canAnimate = true;
 
+    [Tooltip("Check if you want to change the current font with the one chosen below on Start.")]
+    [SerializeField] private bool changeGlobalFontOnPlay = false;
+    [SerializeField] private TMP_FontAsset font = null;
+
 
     private new void Awake()
     {
         base.Awake();
     }
 
+    private void Start()
+    {
+        if(changeGlobalFontOnPlay)
+        {
+            ChangeGlobalFont();
+        }
+    }
 
     /// <summary>
     /// Set a UI Element visible/hidden using a CanvasGroup Component. If missing, it will be added first.
@@ -223,6 +235,15 @@ public class UIManager : Singleton<UIManager>
         canvasGroup.alpha = newAlphaValue;
         canvasGroup.interactable = isVisible;
         canvasGroup.blocksRaycasts = isVisible;
+    }
+
+    private void ChangeGlobalFont()
+    {
+        TextMeshProUGUI[] texts = FindObjectsOfType<TextMeshProUGUI>();
+        foreach (TextMeshProUGUI text in texts)
+        {
+            text.font = font;
+        }
     }
 
     private IEnumerator MoveRect(float time, Transform animatedObject, Transform newPosition)
