@@ -166,7 +166,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
     private int GetOfflineBonusPct()
     {
-        int totalPct = data.prestigeOfflineBonusPct * SaveManager.PlayerData.prestigeLevel;
+        int totalPct = data.prestigeOfflineBonusPct * PrestigeManager.prestigeLevel;
 
         return totalPct == 0 ? data.prestigeOfflineBonusPct / 2 : totalPct;
     }
@@ -176,8 +176,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
         double collectiblesGain = collectibles.Sum(x => x.TotalCurrencyGain);
         double prestigeBonusGain = 0;
 
-        if (SaveManager.PlayerData.prestigeLevel != 0) // TODO: Prestige variable in GameManager
-            prestigeBonusGain = MathUtils.Pct(data.basePassiveGainPercentage * SaveManager.PlayerData.prestigeLevel, collectiblesGain);
+        if (PrestigeManager.prestigeLevel != 0) // TODO: Prestige variable in GameManager
+            prestigeBonusGain = MathUtils.Pct(data.basePassiveGainPercentage * PrestigeManager.prestigeLevel, collectiblesGain);
 
         return collectiblesGain + prestigeBonusGain;
     }

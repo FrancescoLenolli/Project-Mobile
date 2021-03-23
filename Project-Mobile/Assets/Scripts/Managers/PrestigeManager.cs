@@ -8,7 +8,7 @@ public class PrestigeManager : Singleton<PrestigeManager>
 {
     private Action EventReloadingGame;
 
-    public int prestigeLevel;
+    public static int prestigeLevel;
     public int baseWeight;
     [HideInInspector] public int requiredWeight;
 
@@ -36,10 +36,11 @@ public class PrestigeManager : Singleton<PrestigeManager>
         if (GetCollectiblesWeight() >= requiredWeight)
         {
             int premiumReward = CurrencyManager.Instance.data.extrasPremiumCost * 3;
+            ++prestigeLevel;
 
             PlayerData newData = new PlayerData
             {
-                prestigeLevel = ++SaveManager.PlayerData.prestigeLevel,
+                prestigeLevel = prestigeLevel,
                 premiumCurrency = SaveManager.PlayerData.premiumCurrency + premiumReward
             };
 
