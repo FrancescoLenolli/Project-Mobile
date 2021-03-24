@@ -13,15 +13,12 @@ MonoBehaviour:
   m_Name: 9_Capital Ship
   m_EditorClassIdentifier: 
   index: 9
+  icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   name: Capital Ship
   description: Space equivalent of a battleship, its biggest weapons can destroy
     almost anything, and the sheer amount of point defense weapons keep enemies from
     coming too close.
-  currencyGain: 95
-  cost: 300
-  costIncreaseMultiplier: 1.07
-  weight: 0
-  icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  costIncreaseMultiplier: 1.13
   model: {fileID: 1044101965864496, guid: c7bd5c71ab13c41359305dc1af814468, type: 3}
   qtForNextShip: 3
   upgrades: []

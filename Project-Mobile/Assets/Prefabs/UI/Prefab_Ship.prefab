@@ -98,6 +98,7 @@ MonoBehaviour:
   textShipUnitCurrencyGain: {fileID: 1749124678668267638}
   textShipQuantity: {fileID: 3635724956480066667}
   imageShipIcon: {fileID: 1035214644177345837}
+  buttonBuy: {fileID: 1035214643019896348}
   shipData: {fileID: 0}
 --- !u!1 &1035214643019896338
 GameObject:
@@ -207,7 +208,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 21300092, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300084, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -541,6 +542,11 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4278190080
       objectReference: {fileID: 0}
+    - target: {fileID: 5520419474621108016, guid: a7c7d26bf660b844388013e4e8fa598b,
+        type: 3}
+      propertyPath: m_textAlignment
+      value: 513
+      objectReference: {fileID: 0}
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -599,7 +605,7 @@ PrefabInstance:
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -248.4
+      value: -129.5
       objectReference: {fileID: 0}
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
@@ -609,7 +615,7 @@ PrefabInstance:
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 383.2
+      value: 621
       objectReference: {fileID: 0}
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
@@ -903,7 +909,7 @@ PrefabInstance:
     - target: {fileID: 5520419474621108016, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
       propertyPath: m_fontSize
-      value: 22.05
+      value: 35.9
       objectReference: {fileID: 0}
     - target: {fileID: 5520419474621108016, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
@@ -924,6 +930,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4278190080
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520419474621108016, guid: a7c7d26bf660b844388013e4e8fa598b,
+        type: 3}
+      propertyPath: m_textAlignment
+      value: 513
       objectReference: {fileID: 0}
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
@@ -983,7 +994,7 @@ PrefabInstance:
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -248.4
+      value: -129.5
       objectReference: {fileID: 0}
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
@@ -993,7 +1004,7 @@ PrefabInstance:
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 383.2
+      value: 621
       objectReference: {fileID: 0}
     - target: {fileID: 6935993298641921325, guid: a7c7d26bf660b844388013e4e8fa598b,
         type: 3}

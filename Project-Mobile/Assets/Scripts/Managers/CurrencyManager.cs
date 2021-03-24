@@ -174,12 +174,9 @@ public class CurrencyManager : Singleton<CurrencyManager>
     private double GetTotalPassiveCurrencyGain()
     {
         double collectiblesGain = collectibles.Sum(x => x.TotalCurrencyGain);
-        double prestigeBonusGain = 0;
+        double prestigeBonusGainMultiplier = 1 + ((float)PrestigeManager.prestigeLevel / 10f);
 
-        if (PrestigeManager.prestigeLevel != 0) // TODO: Prestige variable in GameManager
-            prestigeBonusGain = MathUtils.Pct(data.basePassiveGainPercentage * PrestigeManager.prestigeLevel, collectiblesGain);
-
-        return collectiblesGain + prestigeBonusGain;
+        return collectiblesGain * prestigeBonusGainMultiplier;
     }
 
     private double GetActiveCurrencyGain()
@@ -240,22 +237,31 @@ public class CurrencyManager : Singleton<CurrencyManager>
     {
         EventSendCurrencyValue += method;
     }
+    public void UnsubscribeToEventSendCurrency(Action<double> method)
+    {
+        EventSendCurrencyValue -= method;
+    }
+
     public void SubscribeToEventSendPremiumCurrency(Action<int> method)
     {
         EventSendPremiumCurrencyValue += method;
     }
+
     public void SubscribeToEventSendPassiveCurrencyGain(Action<double> method)
     {
         EventSendPassiveCurrencyGainValue += method;
     }
+
     public void SubscribeToEventSendActiveCurrencyGain(Action<double, Vector3> method)
     {
         EventSendActiveCurrencyGainValue += method;
     }
+
     public void SubscribeToEventGainedPassiveCurrency(Action<TimeSpan, double> method)
     {
         EventGainedOfflineCurrency += method;
     }
+
     public void SubscribeToEventSendDoubleGainTime(Action<double> method)
     {
         EventSendDoubleGainTime += method;

@@ -29,7 +29,7 @@ static class Formatter
         }
         else
         {
-            shortNumberText = value.ToString("N0");
+            shortNumberText = value.ToString("N1");
         }
 
         int index = mag;

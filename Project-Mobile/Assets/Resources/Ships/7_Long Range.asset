@@ -13,15 +13,12 @@ MonoBehaviour:
   m_Name: 7_Long Range
   m_EditorClassIdentifier: 
   index: 7
+  icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
   name: Long Range
   description: It can hit a human sized target from the other side of the solar system.
     It was used to destroy the engines of an entire enemy fleet, massively helping
     the rest of the allied forces.
-  currencyGain: 75
-  cost: 300
-  costIncreaseMultiplier: 1.07
-  weight: 0
-  icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  costIncreaseMultiplier: 1.11
   model: {fileID: 1578151531806032, guid: 7049a336c6ee74a32984d27e6d9faeca, type: 3}
   qtForNextShip: 3
   upgrades: []

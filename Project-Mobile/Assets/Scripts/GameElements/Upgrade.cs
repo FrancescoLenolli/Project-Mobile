@@ -16,6 +16,7 @@ public class Upgrade : MonoBehaviour
     public TextMeshProUGUI textDescription = null;
     public TextMeshProUGUI textCost = null;
     public Image imageIcon = null;
+    public Button buttonBuy = null;
 
     public void InitData(UpgradeData upgradeData, Ship ship, Transform container)
     {
@@ -31,6 +32,8 @@ public class Upgrade : MonoBehaviour
         textDescription.text = $"Increase {ship.name} currency gain by {upgradeData.upgradePercentage}%";
         textCost.text = Formatter.FormatValue(cost);
         imageIcon.sprite = upgradeData.icon;
+
+        currencyManager.SubscribeToEventSendCurrency(SetButtonBuyStatus);
     }
 
     public void Buy()
@@ -45,18 +48,25 @@ public class Upgrade : MonoBehaviour
 
             Vibration.VibrateSoft();
 
+            currencyManager.UnsubscribeToEventSendCurrency(SetButtonBuyStatus);
             Destroy(gameObject);
         }
     }
 
     private bool CanBuy()
     {
-        return cost <= CurrencyManager.Instance.currency;
+        return cost <= currencyManager.currency;
     }
 
     private void SetCost(Ship ship)
     {
         double multiplier = Math.Pow(ship.shipData.index + 1, ship.shipData.index + 1) * 3;
         cost = ship.BaseCost * multiplier;
+    }
+
+    private void SetButtonBuyStatus(double totalCurrency)
+    {
+        if(buttonBuy)
+        buttonBuy.interactable = cost <= totalCurrency;
     }
 }

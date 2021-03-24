@@ -21,8 +21,6 @@ public class CanvasOfflineEarning : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         currencyManager = CurrencyManager.Instance;
-
-        gameManager.adsManager.SubscribeToEventAdDoubleOfflineEarnings(CollectDoubleEarnings);
     }
     
     public void CollectEarnings()
@@ -41,7 +39,7 @@ public class CanvasOfflineEarning : MonoBehaviour
         StartCoroutine(WaitToShowPanel(3, timeOffline, currencyGained));
     }
 
-    private void CollectDoubleEarnings()
+    public void CollectDoubleEarnings()
     {
         currencyManager.AddCurrency(offlineEarnings * 2);
         HidePanel();

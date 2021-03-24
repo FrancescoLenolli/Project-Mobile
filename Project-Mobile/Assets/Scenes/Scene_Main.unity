@@ -6835,7 +6835,7 @@ PrefabInstance:
     - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
       propertyPath: canResetData
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
@@ -10449,8 +10449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e0507158d3b26a4ab108b82b3539915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prestigeLevel: 0
-  baseWeight: 50
+  baseWeight: 200
   requiredWeight: 0
 --- !u!4 &2036541680
 Transform:

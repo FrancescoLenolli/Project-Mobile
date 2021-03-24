@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class PrestigeManager : Singleton<PrestigeManager>
 {
-    private Action EventReloadingGame;
-
     public static int prestigeLevel;
     public int baseWeight;
     [HideInInspector] public int requiredWeight;
@@ -19,8 +17,6 @@ public class PrestigeManager : Singleton<PrestigeManager>
 
     public void InitData()
     {
-        SubscribeToEventReloadingGame(GameManager.Instance.Save);
-
         prestigeLevel = SaveManager.PlayerData.prestigeLevel;
         CalculateRequiredWeight();
     }
@@ -44,7 +40,7 @@ public class PrestigeManager : Singleton<PrestigeManager>
                 premiumCurrency = SaveManager.PlayerData.premiumCurrency + premiumReward
             };
 
-            EventReloadingGame?.Invoke();
+            SaveManager.Save(newData);
             SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
         }
     }
@@ -59,11 +55,5 @@ public class PrestigeManager : Singleton<PrestigeManager>
     private void CalculateRequiredWeight()
     {
         requiredWeight = baseWeight * (prestigeLevel + 1);
-    }
-
-
-    private void SubscribeToEventReloadingGame(Action method)
-    {
-        EventReloadingGame += method;
     }
 }

@@ -25,10 +25,9 @@ public class Ship : Collectible
     [SerializeField] private TextMeshProUGUI textShipUnitCurrencyGain = null;
     [SerializeField] private TextMeshProUGUI textShipQuantity = null;
     [SerializeField] private Image imageShipIcon = null;
+    [SerializeField] private Button buttonBuy = null;
 
-    [Space]
-    public ShipData shipData;
-
+    [HideInInspector] public ShipData shipData;
     [HideInInspector] public List<UpgradeInfo> UpgradesInfo { get => upgradesInfo; }
 
     public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom)
@@ -75,6 +74,7 @@ public class Ship : Collectible
 
         SubscribeToEventSpawnUpgrades(canvasBottom.SpawnUpgrades);
         SubscribeToEventShowInfo(canvasBottom.PanelInfo.ShowInfo);
+        CurrencyManager.Instance.SubscribeToEventSendCurrency(SetButtonBuyStatus);
 
         canAutoBuy = false;
         StartCoroutine(AutoBuy());
@@ -170,7 +170,7 @@ public class Ship : Collectible
     {
         double pow = (shipData.index * 1.6f);
         double multiplier = Math.Pow(shipData.index + 1, pow);
-        baseCurrencyGain = CurrencyManager.Instance.data.baseShipCurrencyGain * multiplier;
+        baseCurrencyGain = (CurrencyManager.Instance.data.baseShipCurrencyGain * multiplier) / 2;
     }
 
     protected override void SetTotalCurrencyGain()
@@ -191,7 +191,7 @@ public class Ship : Collectible
     protected override void SetCost()
     {
         double multiplier = Math.Pow(shipData.costIncreaseMultiplier, Quantity);
-        cost = baseCost * multiplier;
+        cost = (baseCost * multiplier) / 1.1;
         SetTextCost();
     }
 
@@ -215,6 +215,11 @@ public class Ship : Collectible
     private void SetTextCost()
     {
         textShipCost.text = Formatter.FormatValue(cost);
+    }
+
+    private void SetButtonBuyStatus(double totalCurrency)
+    {
+        buttonBuy.interactable = cost <= totalCurrency;
     }
 
     private IEnumerator AutoBuy()
