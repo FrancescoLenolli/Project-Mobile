@@ -168,9 +168,9 @@ public class Ship : Collectible
 
     protected override void SetBaseCurrencyGain()
     {
-        double pow = (shipData.index * 1.6f);
+        double pow = (shipData.index * 1.1f);
         double multiplier = Math.Pow(shipData.index + 1, pow);
-        baseCurrencyGain = (CurrencyManager.Instance.data.baseShipCurrencyGain * multiplier) / 2;
+        baseCurrencyGain = (CurrencyManager.Instance.data.baseShipCurrencyGain * multiplier) / 2.8;
     }
 
     protected override void SetTotalCurrencyGain()
