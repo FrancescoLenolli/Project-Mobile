@@ -20,7 +20,7 @@ MonoBehaviour:
   baseActiveGainValue: 10
   baseActiveGainPercentage: 0
   basePassiveGainPercentage: 0
-  baseShipCost: 50
+  baseShipCost: 35
   baseShipCurrencyGain: 5
   extrasPremiumCost: 3
   prestigeOfflineBonusPct: 10
