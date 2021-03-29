@@ -39,26 +39,29 @@ public class GameManager : Singleton<GameManager>
         ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
         DailyRewardsManager rewardsManager = FindObjectOfType<DailyRewardsManager>();
 
-        SubscribeToEventInitData(InitData);
-        SubscribeToEventInitData(prestigeManager.InitData);
-        SubscribeToEventInitData(shipsManager.InitData);
-        SubscribeToEventInitData(currencyManager.InitData);
-        SubscribeToEventInitData(Settings.InitData);
-        SubscribeToEventInitData(rewardsManager.InitData);
+        List<Action> actionsInitData = new List<Action>
+        {
+            InitData, prestigeManager.InitData, shipsManager.InitData,
+            currencyManager.InitData, Settings.InitData, rewardsManager.InitData
+        };
 
-        SubscribeToEventSaveData(SaveData);
-        SubscribeToEventSaveData(prestigeManager.SaveData);
-        SubscribeToEventSaveData(shipsManager.SaveData);
-        SubscribeToEventSaveData(currencyManager.SaveData);
-        SubscribeToEventSaveData(Settings.SaveData);
-        SubscribeToEventSaveData(rewardsManager.SaveData);
+        List<Action> actionsSaveData = new List<Action>
+        {
+            SaveData, prestigeManager.SaveData, shipsManager.SaveData,
+            currencyManager.SaveData, Settings.SaveData, rewardsManager.SaveData
+        };
 
-        SubscribeToEventSendOfflineTime(currencyManager.CalculateOfflineGain);
-        SubscribeToEventSendOfflineTime(rewardsManager.CalculateOfflineTime);
+        List<Action<TimeSpan>> actionsOfflineTime = new List<Action<TimeSpan>>
+        {
+            currencyManager.CalculateOfflineGain, rewardsManager.CalculateOfflineTime
+        };
+
+        EventInitData = Observer.AddObserversToSubject(EventInitData, actionsInitData);
+        EventSaveData = Observer.AddObserversToSubject(EventSaveData, actionsSaveData);
+        EventSendOfflineTime = Observer.AddObserversToSubject(EventSendOfflineTime, actionsOfflineTime);
 
         EventInitData?.Invoke();
-
-        EmptyInitEvent();
+        EventInitData = Observer.RemoveAllObservers(EventInitData);
 
         CalculateOfflineTime();
     }
@@ -127,36 +130,5 @@ public class GameManager : Singleton<GameManager>
     {
         TimeSpan timeOffline = logInTime.Subtract(logOutTime);
         EventSendOfflineTime?.Invoke(timeOffline);
-    }
-
-    private void EmptyInitEvent()
-    {
-        Action action;
-        List<Delegate> invocationList = EventInitData.GetInvocationList().ToList();
-        invocationList.Reverse();
-
-        foreach (var observer in invocationList)
-        {
-            action = (Action)observer;
-            EventInitData -= action;
-        }
-    }
-
-
-    public void SubscribeToEventInitData(Action method)
-    {
-        EventInitData += method;
-    }
-    public void UnsubscribeToEventInitData(Action method)
-    {
-        EventInitData -= method;
-    }
-    public void SubscribeToEventSaveData(Action method)
-    {
-        EventSaveData += method;
-    }
-    public void SubscribeToEventSendOfflineTime(Action<TimeSpan> method)
-    {
-        EventSendOfflineTime += method;
     }
 }

@@ -6551,7 +6551,7 @@ PrefabInstance:
     - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
       propertyPath: canResetData
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
