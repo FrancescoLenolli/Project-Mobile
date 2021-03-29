@@ -19,6 +19,7 @@ public class Ship : Collectible
     private bool isButtonHeld;
     private List<UpgradeInfo> upgradesInfo = new List<UpgradeInfo>();
 
+    [SerializeField] private ShipButtonSound shipSound = null;
     [SerializeField] private TextMeshProUGUI textShipName = null;
     [SerializeField] private TextMeshProUGUI textShipCost = null;
     [SerializeField] private TextMeshProUGUI textShipTotalCurrencyGain = null;
@@ -70,6 +71,7 @@ public class Ship : Collectible
         else
         {
             SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+            SubscribeToEventSpawnShip(shipSound.PlayShipUnlockedSound);
         }
 
         SubscribeToEventSpawnUpgrades(canvasBottom.SpawnUpgrades);
@@ -87,11 +89,14 @@ public class Ship : Collectible
             if (!GameManager.Instance.isTesting)
                 CurrencyManager.Instance.RemoveCurrency(cost);
 
+            shipSound.PlaySoundDefault();
+
             ++Quantity;
             if (Quantity > 0 && !isNextShipUnlocked)
             {
                 EventSpawnShipModel?.Invoke(shipData);
                 UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+                UnsubscribeToEventSpawnShip(shipSound.PlayShipUnlockedSound);
             }
             if (Quantity == 1)
             {

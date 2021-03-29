@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd81c12fe3ef5241b6cb90dfb0e6155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipSound: {fileID: 1352421223802177161}
   textShipName: {fileID: 4810313309551833345}
   textShipCost: {fileID: 4810313310515098376}
   textShipTotalCurrencyGain: {fileID: 99108375805431733}
@@ -113,6 +114,7 @@ GameObject:
   - component: {fileID: 1035214643019896351}
   - component: {fileID: 1035214643019896348}
   - component: {fileID: 1311636324864277908}
+  - component: {fileID: 1352421223802177161}
   m_Layer: 5
   m_Name: Button_Buy
   m_TagString: Untagged
@@ -274,6 +276,20 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1352421223802177161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035214643019896338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd9b5e52b570e247b896ea5c8f77a6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultSound: event:/SFX/Button_Pressed
+  shipUnlockedSound: event:/SFX/ShipUnlocked
 --- !u!1 &1035214644177345827
 GameObject:
   m_ObjectHideFlags: 0

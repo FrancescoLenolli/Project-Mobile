@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="AudioFile" id="{9199b4d8-b88e-4521-b9e8-63daf3105848}">
+		<property name="assetPath">
+			<value>Free Sci-Fi Track 4 (Loop).wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>99.555555555555557</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{af4b3653-e4e8-409d-b279-61bce610be09}</destination>
+		</relationship>
+	</object>
+</objects>

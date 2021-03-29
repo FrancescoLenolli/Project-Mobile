@@ -1,10 +1,12 @@
 ﻿using System;
 using UnityEngine;
+using System.Linq;
+using System.Collections.Generic;
 
 public class GameManager : Singleton<GameManager>
 {
     public Action EventSaveData;
-    public Action EventInitData;
+    public event Action EventInitData;
     public Action<TimeSpan> EventSendOfflineTime;
 
     private bool isFirstSession = true;
@@ -56,12 +58,7 @@ public class GameManager : Singleton<GameManager>
 
         EventInitData?.Invoke();
 
-        UnsubscribeToEventInitData(rewardsManager.InitData);
-        UnsubscribeToEventInitData(Settings.InitData);
-        UnsubscribeToEventInitData(currencyManager.InitData);
-        UnsubscribeToEventInitData(shipsManager.InitData);
-        UnsubscribeToEventInitData(prestigeManager.InitData);
-        UnsubscribeToEventInitData(InitData);
+        EmptyInitEvent();
 
         CalculateOfflineTime();
     }
@@ -130,6 +127,19 @@ public class GameManager : Singleton<GameManager>
     {
         TimeSpan timeOffline = logInTime.Subtract(logOutTime);
         EventSendOfflineTime?.Invoke(timeOffline);
+    }
+
+    private void EmptyInitEvent()
+    {
+        Action action;
+        List<Delegate> invocationList = EventInitData.GetInvocationList().ToList();
+        invocationList.Reverse();
+
+        foreach (var observer in invocationList)
+        {
+            action = (Action)observer;
+            EventInitData -= action;
+        }
     }
 
 
