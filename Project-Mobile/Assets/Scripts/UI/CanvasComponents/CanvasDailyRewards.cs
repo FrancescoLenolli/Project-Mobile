@@ -24,7 +24,10 @@ public class CanvasDailyRewards : MonoBehaviour
         rewardsManager = dailyRewardsManager;
         textButtonGetReward = buttonGetReward.GetComponentInChildren<TextMeshProUGUI>();
 
-        EventCollectReward += rewardsManager.CollectReward;
+        Observer.AddObserver(ref rewardsManager.EventSendCooldownTime, CheckCooldown);
+        Observer.AddObserver(ref rewardsManager.EventSendRewards, ResetRewards);
+        Observer.AddObserver(ref rewardsManager.EventRewardCollected, RewardCollected);
+        Observer.AddObserver(ref EventCollectReward, rewardsManager.CollectReward);
 
         SpawnRewards(rewards);
         rewardImages.GetRange(0, currentIndex).ForEach(image => RewardCollected(image));

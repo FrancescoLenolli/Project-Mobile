@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class CanvasMain : MonoBehaviour
 {
-    private Action EventShowOptionsPanel;
-    private Action EventPrestigeUp;
+    public Action EventShowOptionsPanel;
+    public Action EventPrestigeUp;
 
     private CurrencyManager currencyManager;
     private TextMeshProUGUI textPremiumCurrency;
@@ -17,25 +17,24 @@ public class CanvasMain : MonoBehaviour
     [SerializeField] private Button buttonPremiumCurrency = null;
     [SerializeField] private TapObject prefabTextMousePosition = null;
 
-    public void InitData()
+    public void InitData(CurrencyManager currencyManager)
     {
         CanvasSettings canvasOptions = FindObjectOfType<CanvasSettings>();
         ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
         GameManager gameManager = GameManager.Instance;
 
-        currencyManager = CurrencyManager.Instance;
+        this.currencyManager = currencyManager;
         textPremiumCurrency = buttonPremiumCurrency.GetComponentInChildren<TextMeshProUGUI>();
 
         buttonPremiumCurrency.image.sprite = currencyManager.data.premiumCurrencySprite;
 
-        SubscribeToEventShowOptionsPanel(canvasOptions.MoveToPosition);
-        SubscribeToEventPrestigeUp(PrestigeManager.Instance.PrestigeUp);
-
-        currencyManager.SubscribeToEventSendCurrency(UpdateCurrencyText);
-        currencyManager.SubscribeToEventSendPremiumCurrency(UpdatePremiumCurrencyText);
-        currencyManager.SubscribeToEventSendPassiveCurrencyGain(UpdatePassiveGainText);
-        currencyManager.SubscribeToEventSendActiveCurrencyGain(InstantiateTapObject);
-        currencyManager.SubscribeToEventSendDoubleGainTime(UpdateDoubleGainTime);
+        Observer.AddObserver(ref EventShowOptionsPanel, canvasOptions.MoveToPosition);
+        Observer.AddObserver(ref EventPrestigeUp, PrestigeManager.Instance.PrestigeUp);
+        Observer.AddObserver(ref currencyManager.EventSendCurrencyValue, UpdateCurrencyText);
+        Observer.AddObserver(ref currencyManager.EventSendPremiumCurrencyValue, UpdatePremiumCurrencyText);
+        Observer.AddObserver(ref currencyManager.EventSendPassiveCurrencyGainValue, UpdatePassiveGainText);
+        Observer.AddObserver(ref currencyManager.EventSendActiveCurrencyGainValue, InstantiateTapObject);
+        Observer.AddObserver(ref currencyManager.EventSendDoubleGainTime, UpdateDoubleGainTime);
     }
 
     public void ShowOptionsPanel()
@@ -73,16 +72,5 @@ public class CanvasMain : MonoBehaviour
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
         newTapObject.SetValues(value, currencyManager.data.currencySprite);
-    }
-
-
-    public void SubscribeToEventShowOptionsPanel(Action method)
-    {
-        EventShowOptionsPanel += method;
-    }
-
-    public void SubscribeToEventPrestigeUp(Action method)
-    {
-        EventPrestigeUp += method;
     }
 }

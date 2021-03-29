@@ -24,14 +24,15 @@ public class CanvasSettings : MonoBehaviour
 
     public void InitData()
     {
-        SubscribeToEventToggleVolumeSFX(StatusSFX);
-        SubscribeToEventToggleVolumeSFX(Settings.SetVolumeSFX);
-        SubscribeToEventToggleVolumeMusic(StatusMusic);
-        SubscribeToEventToggleVolumeMusic(Settings.SetVolumeMusic);
-        SubscribeToEventToggleVibration(StatusVibration);
-        SubscribeToEventToggleVibration(Settings.SetVibration);
-        SubscribeToEventTogglePerformanceMode(StatusPerformanceMode);
-        SubscribeToEventTogglePerformanceMode(Settings.SetPerformanceMode);
+        List<Action<bool>> actionsSFX = new List<Action<bool>> { StatusSFX, Settings.SetVolumeSFX};
+        List<Action<bool>> actionsMusic = new List<Action<bool>> { StatusMusic, Settings.SetVolumeMusic};
+        List<Action<bool>> actionsVibration = new List<Action<bool>> { StatusVibration, Settings.SetVibration};
+        List<Action<bool>> actionsPerformance = new List<Action<bool>> { StatusPerformanceMode, Settings.SetPerformanceMode};
+
+        Observer.AddObservers(ref EventToggleVolumeSFX, actionsSFX);
+        Observer.AddObservers(ref EventToggleVolumeMusic, actionsMusic);
+        Observer.AddObservers(ref EventToggleVibration, actionsVibration);
+        Observer.AddObservers(ref EventTogglePerformanceMode, actionsPerformance);
 
         isVolumeSFXOn = Settings.IsVolumeSFXOn;
         isVolumeMusicOn = Settings.IsVolumeMusicOn;
@@ -99,26 +100,5 @@ public class CanvasSettings : MonoBehaviour
         Sprite newSprite = isOn ? listSpritesToggle[1] : listSpritesToggle[0];
 
         return newSprite;
-    }
-
-
-    private void SubscribeToEventToggleVolumeSFX(Action<bool> method)
-    {
-        EventToggleVolumeSFX += method;
-    }
-
-    private void SubscribeToEventToggleVolumeMusic(Action<bool> method)
-    {
-        EventToggleVolumeMusic += method;
-    }
-
-    private void SubscribeToEventToggleVibration(Action<bool> method)
-    {
-        EventToggleVibration += method;
-    }
-
-    private void SubscribeToEventTogglePerformanceMode(Action<bool> method)
-    {
-        EventTogglePerformanceMode += method;
     }
 }

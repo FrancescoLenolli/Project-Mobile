@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-static class Formatter
+public static class Formatter
 {
     private static SuffixData suffixData;
     private static int mag;

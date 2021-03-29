@@ -29,9 +29,9 @@ public class ShipsManager : MonoBehaviour
         totalUpgrades = Resources.LoadAll<UpgradeData>("Upgrades").ToList();
         canvasBottom = FindObjectOfType<CanvasBottom>();
 
-        SubscribeToEventSendData(canvasBottom.InitData);
-        SubscribeToEventUnlockShip(canvasBottom.SpawnShip);
-        SubscribeToEventShipViewChanged(cameraBehaviour.ChangePosition);
+        Observer.AddObserver(ref EventSendData, canvasBottom.InitData);
+        Observer.AddObserver(ref EventUnlockShip, canvasBottom.SpawnShip);
+        Observer.AddObserver(ref EventShipViewChanged, cameraBehaviour.ChangePosition);
 
         // Handles first play and data resets.
         if (savedShipsInfo.Count == 0)
@@ -167,26 +167,5 @@ public class ShipsManager : MonoBehaviour
 
             savedShipsInfo[i] = shipInfo;
         }
-    }
-
-
-    public void SubscribeToEventSendData(Action<List<ShipInfo>, ShipsManager> method)
-    {
-        EventSendData += method;
-    }
-
-    public void UnsubscribeToEventSendData(Action<List<ShipInfo>, ShipsManager> method)
-    {
-        EventSendData -= method;
-    }
-
-    public void SubscribeToEventUnlockShip(Action<ShipInfo, ShipsManager> method)
-    {
-        EventUnlockShip += method;
-    }
-
-    public void SubscribeToEventShipViewChanged(Action<int> method)
-    {
-        EventShipViewChanged += method;
     }
 }

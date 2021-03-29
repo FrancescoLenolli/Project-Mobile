@@ -29,7 +29,7 @@ public class PanelExtra : MonoBehaviour
         uiManager = UIManager.Instance;
         this.canvasBottom = canvasBottom;
 
-        SubscribeToEventWatchAd(gameManager.adsManager.ShowAd);
+        Observer.AddObserver(ref EventWatchCurrencyAd, gameManager.adsManager.ShowAd);
     }
 
     public void SetUpPanel(AdsManager.AdType adType)
@@ -124,11 +124,5 @@ public class PanelExtra : MonoBehaviour
             buttonAd.onClick.AddListener(adAction);
         if (buyAction != null)
             buttonBuy.onClick.AddListener(buyAction);
-    }
-
-
-    private void SubscribeToEventWatchAd(Action<AdsManager.AdType> method)
-    {
-        EventWatchCurrencyAd += method;
     }
 }

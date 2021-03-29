@@ -7,12 +7,12 @@ using UnityEngine.EventSystems;
 
 public class CurrencyManager : Singleton<CurrencyManager>
 {
-    private Action<double> EventSendCurrencyValue;
-    private Action<double> EventSendPassiveCurrencyGainValue;
-    private Action<double> EventSendDoubleGainTime;
-    private Action<TimeSpan, double> EventGainedOfflineCurrency;
-    private Action<int> EventSendPremiumCurrencyValue;
-    private Action<double, Vector3> EventSendActiveCurrencyGainValue;
+    public Action<double> EventSendCurrencyValue;
+    public Action<double> EventSendPassiveCurrencyGainValue;
+    public Action<double> EventSendDoubleGainTime;
+    public Action<TimeSpan, double> EventGainedOfflineCurrency;
+    public Action<int> EventSendPremiumCurrencyValue;
+    public Action<double, Vector3> EventSendActiveCurrencyGainValue;
 
     private double secondsDoubleGain = 0;
     private List<Collectible> collectibles = new List<Collectible>();
@@ -36,14 +36,14 @@ public class CurrencyManager : Singleton<CurrencyManager>
         CanvasMain canvasMain = FindObjectOfType<CanvasMain>();
         CanvasOfflineEarning canvasOfflineEarning = FindObjectOfType<CanvasOfflineEarning>();
 
-        canvasMain.InitData();
+        canvasMain.InitData(this);
 
         secondsDoubleGain = SaveManager.PlayerData.secondsDoubleGain;
         AddCurrency(SaveManager.PlayerData.currency);
         AddPremiumCurrency(SaveManager.PlayerData.premiumCurrency);
         AddPassiveCurrency();
 
-        SubscribeToEventGainedPassiveCurrency(canvasOfflineEarning.ShowPanel);
+        Observer.AddObserver(ref EventGainedOfflineCurrency, canvasOfflineEarning.ShowPanel);
     }
 
     public void SaveData()
@@ -230,40 +230,5 @@ public class CurrencyManager : Singleton<CurrencyManager>
 
             yield return null;
         }
-    }
-
-
-    public void SubscribeToEventSendCurrency(Action<double> method)
-    {
-        EventSendCurrencyValue += method;
-    }
-    public void UnsubscribeToEventSendCurrency(Action<double> method)
-    {
-        EventSendCurrencyValue -= method;
-    }
-
-    public void SubscribeToEventSendPremiumCurrency(Action<int> method)
-    {
-        EventSendPremiumCurrencyValue += method;
-    }
-
-    public void SubscribeToEventSendPassiveCurrencyGain(Action<double> method)
-    {
-        EventSendPassiveCurrencyGainValue += method;
-    }
-
-    public void SubscribeToEventSendActiveCurrencyGain(Action<double, Vector3> method)
-    {
-        EventSendActiveCurrencyGainValue += method;
-    }
-
-    public void SubscribeToEventGainedPassiveCurrency(Action<TimeSpan, double> method)
-    {
-        EventGainedOfflineCurrency += method;
-    }
-
-    public void SubscribeToEventSendDoubleGainTime(Action<double> method)
-    {
-        EventSendDoubleGainTime += method;
     }
 }

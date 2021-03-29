@@ -8,10 +8,10 @@ using UnityEngine.UI;
 
 public class Ship : Collectible
 {
-    private Action<ShipData> EventUnlockNewShip;
-    private Action<ShipData> EventSpawnShipModel;
-    private Action<ShipData> EventShowInfo;
-    private Action<Ship> EventSpawnUpgrades;
+    public Action<ShipData> EventUnlockNewShip;
+    public Action<ShipData> EventSpawnShipModel;
+    public Action<ShipData> EventShowInfo;
+    public Action<Ship> EventSpawnUpgrades;
 
     private ShipsManager shipsManager;
     private bool isNextShipUnlocked;
@@ -33,6 +33,7 @@ public class Ship : Collectible
 
     public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom)
     {
+        this.shipsManager = shipsManager;
         shipData = shipInfo.shipData;
         Quantity = shipInfo.quantity;
         gameObject.name = shipData.name;
@@ -54,8 +55,8 @@ public class Ship : Collectible
         if (!IsQuantityEnough())
         {
             isNextShipUnlocked = false;
-            this.shipsManager = shipsManager;
-            SubscribeToEventSendData(shipsManager.UnlockNewShip);
+
+            Observer.AddObserver(ref EventUnlockNewShip, shipsManager.UnlockNewShip);
         }
         else
         {
@@ -64,19 +65,22 @@ public class Ship : Collectible
 
         if (Quantity > 0)
         {
-            SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+            Observer.AddObserver(ref EventSpawnShipModel, shipsManager.SpawnShipModel);
+
             EventSpawnShipModel?.Invoke(shipData);
-            UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
+
+            Observer.RemoveObserver(ref EventSpawnShipModel, shipsManager.SpawnShipModel);
         }
         else
         {
-            SubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
-            SubscribeToEventSpawnShip(shipSound.PlayShipUnlockedSound);
+            List<Action<ShipData>> actions = new List<Action<ShipData>> { shipsManager.SpawnShipModel, shipSound.PlayShipUnlockedSound };
+
+            Observer.AddObservers(ref EventUnlockNewShip, actions);
         }
 
-        SubscribeToEventSpawnUpgrades(canvasBottom.SpawnUpgrades);
-        SubscribeToEventShowInfo(canvasBottom.PanelInfo.ShowInfo);
-        CurrencyManager.Instance.SubscribeToEventSendCurrency(SetButtonBuyStatus);
+        Observer.AddObserver(ref EventSpawnUpgrades, canvasBottom.SpawnUpgrades);
+        Observer.AddObserver(ref EventShowInfo, canvasBottom.PanelInfo.ShowInfo);
+        Observer.AddObserver(ref CurrencyManager.Instance.EventSendCurrencyValue, SetButtonBuyStatus);
 
         canAutoBuy = false;
         StartCoroutine(AutoBuy());
@@ -95,8 +99,7 @@ public class Ship : Collectible
             if (Quantity > 0 && !isNextShipUnlocked)
             {
                 EventSpawnShipModel?.Invoke(shipData);
-                UnsubscribeToEventSpawnShip(shipsManager.SpawnShipModel);
-                UnsubscribeToEventSpawnShip(shipSound.PlayShipUnlockedSound);
+                Observer.RemoveAllObservers(ref EventSpawnShipModel);
             }
             if (Quantity == 1)
             {
@@ -110,7 +113,7 @@ public class Ship : Collectible
             if (!isNextShipUnlocked && IsQuantityEnough())
             {
                 EventUnlockNewShip?.Invoke(shipData);
-                UnsubscribeToEventSendData(shipsManager.UnlockNewShip);
+                Observer.RemoveAllObservers(ref EventUnlockNewShip);
                 isNextShipUnlocked = true;
                 canAutoBuy = false;
             }
@@ -250,36 +253,5 @@ public class Ship : Collectible
             canAutoBuy = true;
 
         yield return null;
-    }
-
-
-    private void SubscribeToEventSendData(Action<ShipData> method)
-    {
-        EventUnlockNewShip += method;
-    }
-
-    private void UnsubscribeToEventSendData(Action<ShipData> method)
-    {
-        EventUnlockNewShip -= method;
-    }
-
-    private void SubscribeToEventSpawnShip(Action<ShipData> method)
-    {
-        EventSpawnShipModel += method;
-    }
-
-    private void UnsubscribeToEventSpawnShip(Action<ShipData> method)
-    {
-        EventSpawnShipModel -= method;
-    }
-
-    private void SubscribeToEventSpawnUpgrades(Action<Ship> method)
-    {
-        EventSpawnUpgrades += method;
-    }
-
-    private void SubscribeToEventShowInfo(Action<ShipData> method)
-    {
-        EventShowInfo += method;
     }
 }

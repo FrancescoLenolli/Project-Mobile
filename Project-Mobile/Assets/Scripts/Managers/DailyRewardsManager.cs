@@ -7,9 +7,9 @@ using UnityEngine;
 
 public class DailyRewardsManager : MonoBehaviour
 {
-    private Action<int> EventSendCooldownTime;
-    private Action<int> EventRewardCollected;
-    private Action<List<DailyReward>> EventSendRewards;
+    public Action<int> EventSendCooldownTime;
+    public Action<int> EventRewardCollected;
+    public Action<List<DailyReward>> EventSendRewards;
 
     private const int rewardCooldownSeconds = 86400; // seconds in a day;
     private List<DailyReward> rewards = new List<DailyReward>();
@@ -24,6 +24,7 @@ public class DailyRewardsManager : MonoBehaviour
         rewardsIndexes = SaveManager.PlayerData.listRewardsIndexes;
         currentIndex = SaveManager.PlayerData.currentRewardIndex;
         currentCooldownSeconds = SaveManager.PlayerData.cooldownSeconds;
+        CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
 
         if (rewardsIndexes.Count == 0 || rewardsIndexes.Count == currentIndex)
         {
@@ -34,12 +35,7 @@ public class DailyRewardsManager : MonoBehaviour
             rewardsIndexes.ForEach(index => rewards.Add(GetReward(index)));
         }
 
-        CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
         canvasDailyRewards.InitRewards(rewards, currentIndex, this);
-
-        SubscribeToEventSendCooldownTime(canvasDailyRewards.CheckCooldown);
-        SubscribeToEventSendRewards(canvasDailyRewards.ResetRewards);
-        SubscribeToEventRewardCollected(canvasDailyRewards.RewardCollected);
 
         StartCoroutine(RewardsCooldown());
     }
@@ -137,23 +133,6 @@ public class DailyRewardsManager : MonoBehaviour
     {
         currentCooldownSeconds = rewardCooldownSeconds;
     }
-
-
-    private void SubscribeToEventSendCooldownTime(Action<int> method)
-    {
-        EventSendCooldownTime += method;
-    }
-
-    private void SubscribeToEventSendRewards(Action<List<DailyReward>> method)
-    {
-        EventSendRewards += method;
-    }
-
-    private void SubscribeToEventRewardCollected(Action<int> method)
-    {
-        EventRewardCollected += method;
-    }
-
 
     private IEnumerator RewardsCooldown()
     {

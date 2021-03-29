@@ -5,7 +5,7 @@ public class SwipeDetector : MonoBehaviour
 {
     public enum Swipe { Up, Down }
 
-    private Action<Swipe, Vector2> EventSwipe;
+    public Action<Swipe, Vector2> EventSwipe;
 
     private Action swipeDetection;
     private Vector2 startPosition;
@@ -98,11 +98,5 @@ public class SwipeDetector : MonoBehaviour
 #else
         return false;
 #endif
-    }
-
-
-    public void SubscribeToEventSwipe(Action<Swipe, Vector2> method)
-    {
-        EventSwipe += method;
     }
 }

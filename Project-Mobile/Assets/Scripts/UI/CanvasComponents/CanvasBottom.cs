@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class CanvasBottom : MonoBehaviour
 {
-    private Action<UIManager.Cycle> EventCycleShipsModel;
-    private Action EventShowDailyRewards;
+    public Action<UIManager.Cycle> EventCycleShipsModel;
+    public Action EventShowDailyRewards;
 
     private CurrencyManager currencyManager;
     private UIManager uiManager;
@@ -33,6 +33,8 @@ public class CanvasBottom : MonoBehaviour
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
         panelExtra.InitData(this);
+        CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
+        SwipeDetector swipeDetector = FindObjectOfType<SwipeDetector>();
 
         List<ScrollRect> list = containersParent.GetComponentsInChildren<ScrollRect>().ToList();
         list.ForEach(x => containers.Add(x.transform));
@@ -49,12 +51,9 @@ public class CanvasBottom : MonoBehaviour
             }
         }
 
-        CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
-        SwipeDetector swipeDetector = FindObjectOfType<SwipeDetector>();
-
-        SubscribeToEventCycleShipsModel(shipsManager.CycleModels);
-        SubscribeToEventShowDailyRewards(canvasDailyRewards.MoveToPosition);
-        swipeDetector.SubscribeToEventSwipe(ChangeBottomPanelVisibility);
+        Observer.AddObserver(ref EventCycleShipsModel, shipsManager.CycleModels);
+        Observer.AddObserver(ref EventShowDailyRewards, canvasDailyRewards.MoveToPosition);
+        Observer.AddObserver(ref swipeDetector.EventSwipe, ChangeBottomPanelVisibility);
     }
 
     public void CycleModelsLeft()
@@ -157,15 +156,5 @@ public class CanvasBottom : MonoBehaviour
             return true;
 
         return false;
-    }
-
-    public void SubscribeToEventCycleShipsModel(Action<UIManager.Cycle> method)
-    {
-        EventCycleShipsModel += method;
-    }
-
-    public void SubscribeToEventShowDailyRewards(Action method)
-    {
-        EventShowDailyRewards += method;
     }
 }

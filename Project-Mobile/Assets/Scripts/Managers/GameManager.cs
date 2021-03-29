@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class GameManager : Singleton<GameManager>
 {
     public Action EventSaveData;
-    public event Action EventInitData;
+    public Action EventInitData;
     public Action<TimeSpan> EventSendOfflineTime;
 
     private bool isFirstSession = true;
@@ -56,12 +56,12 @@ public class GameManager : Singleton<GameManager>
             currencyManager.CalculateOfflineGain, rewardsManager.CalculateOfflineTime
         };
 
-        EventInitData = Observer.AddObserversToSubject(EventInitData, actionsInitData);
-        EventSaveData = Observer.AddObserversToSubject(EventSaveData, actionsSaveData);
-        EventSendOfflineTime = Observer.AddObserversToSubject(EventSendOfflineTime, actionsOfflineTime);
+        Observer.AddObservers(ref EventInitData, actionsInitData);
+        Observer.AddObservers(ref EventSaveData, actionsSaveData);
+        Observer.AddObservers(ref EventSendOfflineTime , actionsOfflineTime);
 
         EventInitData?.Invoke();
-        EventInitData = Observer.RemoveAllObservers(EventInitData);
+        Observer.RemoveAllObservers(ref EventInitData);
 
         CalculateOfflineTime();
     }

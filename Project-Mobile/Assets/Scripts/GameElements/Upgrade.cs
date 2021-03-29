@@ -33,7 +33,7 @@ public class Upgrade : MonoBehaviour
         textCost.text = Formatter.FormatValue(cost);
         imageIcon.sprite = upgradeData.icon;
 
-        currencyManager.SubscribeToEventSendCurrency(SetButtonBuyStatus);
+        Observer.AddObserver(ref currencyManager.EventSendCurrencyValue, SetButtonBuyStatus);
     }
 
     public void Buy()
@@ -48,7 +48,7 @@ public class Upgrade : MonoBehaviour
 
             Vibration.VibrateSoft();
 
-            currencyManager.UnsubscribeToEventSendCurrency(SetButtonBuyStatus);
+            Observer.RemoveObserver(ref currencyManager.EventSendCurrencyValue, SetButtonBuyStatus);
             Destroy(gameObject);
         }
     }

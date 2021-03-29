@@ -7,10 +7,10 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
 {
     public enum AdType { BaseCurrency, PremiumCurrency, DoubleIdleEarnings, DoubleOfflineEarnings }
 
-    private Action EventAdBaseCurrency;
-    private Action EventAdDoubleOfflineEarnings;
-    private Action EventAdDoubleEarnings;
-    private Action EventAdPremiumCurrency;
+    public Action EventAdBaseCurrency;
+    public Action EventAdDoubleOfflineEarnings;
+    public Action EventAdDoubleEarnings;
+    public Action EventAdPremiumCurrency;
 
     private string placement = "rewardedVideo";
     private AdType adType;
@@ -25,10 +25,10 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
         CurrencyManager currencyManager = CurrencyManager.Instance;
         CanvasOfflineEarning canvasOfflineEarning = FindObjectOfType<CanvasOfflineEarning>();
 
-        SubscribeToEventAdBaseCurrency(currencyManager.AddCurrencyFixedValue);
-        SubscribeToEventAdPremiumCurrency(currencyManager.AddPremiumCurrencyFixedValue);
-        SubscribeToEventAdDoubleEarnings(currencyManager.AddDoubleGainTime);
-        SubscribeToEventAdDoubleOfflineEarnings(canvasOfflineEarning.CollectDoubleEarnings);
+        Observer.AddObserver(ref EventAdBaseCurrency, currencyManager.AddCurrencyFixedValue);
+        Observer.AddObserver(ref EventAdPremiumCurrency, currencyManager.AddPremiumCurrencyFixedValue);
+        Observer.AddObserver(ref EventAdDoubleEarnings, currencyManager.AddDoubleGainTime);
+        Observer.AddObserver(ref EventAdDoubleOfflineEarnings, canvasOfflineEarning.CollectDoubleEarnings);
     }
 
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
@@ -78,24 +78,6 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
         {
             yield return null;
         }
-    }
-
-
-    private void SubscribeToEventAdBaseCurrency(Action method)
-    {
-        EventAdBaseCurrency += method;
-    }
-    private void SubscribeToEventAdDoubleOfflineEarnings(Action method)
-    {
-        EventAdDoubleOfflineEarnings += method;
-    }
-    private void SubscribeToEventAdDoubleEarnings(Action method)
-    {
-        EventAdDoubleEarnings += method;
-    }
-    private void SubscribeToEventAdPremiumCurrency(Action method)
-    {
-        EventAdPremiumCurrency += method;
     }
 
     #region UNUSED ADS METHODS
