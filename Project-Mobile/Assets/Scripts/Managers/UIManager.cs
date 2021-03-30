@@ -322,6 +322,8 @@ public class UIManager : Singleton<UIManager>
         Vector3 originalPosition = animatedObject.localPosition;
         Vector3 endPosition = newPosition;
         CanvasGroup canvasGroup = animatedObject.GetComponent<CanvasGroup>();
+        if (!canvasGroup)
+            canvasGroup = animatedObject.gameObject.AddComponent<CanvasGroup>();
 
         while (duration < time)
         {

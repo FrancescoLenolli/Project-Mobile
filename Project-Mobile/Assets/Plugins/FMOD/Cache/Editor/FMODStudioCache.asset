@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: fmod/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 637526286754355748
+  lastModified: 637527133019618280
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -37,7 +37,7 @@ MonoBehaviour:
   - {fileID: 8084219699500132420}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
   - {fileID: 8230973523884258988}
   StringsBanks:
   - {fileID: 7064308621025847897}
-  stringsBankWriteTime: 637526286753757364
+  stringsBankWriteTime: 637527133019039833
   cacheVersion: 6
 --- !u!114 &3537627998227478518
 MonoBehaviour:
@@ -115,7 +115,7 @@ MonoBehaviour:
   - {fileID: 8084219699500132420}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
   - {fileID: 8084219699500132420}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   - {fileID: 8084219699500132420}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
@@ -181,7 +181,7 @@ MonoBehaviour:
   Path: fmod/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637526286753757364
+  lastModified: 637527133019039833
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -205,7 +205,7 @@ MonoBehaviour:
   - {fileID: 8084219699500132420}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
@@ -225,7 +225,7 @@ MonoBehaviour:
   Path: fmod/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 637526286754176236
+  lastModified: 637527133019428794
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -244,7 +244,7 @@ MonoBehaviour:
   Path: fmod/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637526286753727436
+  lastModified: 637527133019009915
   LoadResult: 0
   FileSizes: []
   Exists: 1

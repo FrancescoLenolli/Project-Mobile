@@ -24,8 +24,10 @@ public class CanvasSettings : MonoBehaviour
 
     public void InitData()
     {
-        List<Action<bool>> actionsSFX = new List<Action<bool>> { StatusSFX, Settings.SetVolumeSFX};
-        List<Action<bool>> actionsMusic = new List<Action<bool>> { StatusMusic, Settings.SetVolumeMusic};
+        SoundManager musicManager = FindObjectOfType<SoundManager>();
+
+        List<Action<bool>> actionsSFX = new List<Action<bool>> { StatusSFX, Settings.SetVolumeSFX, musicManager.SetSFXVolume};
+        List<Action<bool>> actionsMusic = new List<Action<bool>> { StatusMusic, Settings.SetVolumeMusic, musicManager.SetMusicVolume};
         List<Action<bool>> actionsVibration = new List<Action<bool>> { StatusVibration, Settings.SetVibration};
         List<Action<bool>> actionsPerformance = new List<Action<bool>> { StatusPerformanceMode, Settings.SetPerformanceMode};
 
