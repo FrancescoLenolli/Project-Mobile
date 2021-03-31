@@ -13,7 +13,6 @@ public class Ship : Collectible
     public Action<ShipData> EventShowInfo;
     public Action<Ship> EventSpawnUpgrades;
 
-    private ShipsManager shipsManager;
     private bool isNextShipUnlocked;
     private bool canAutoBuy;
     private bool isButtonHeld;
@@ -33,7 +32,6 @@ public class Ship : Collectible
 
     public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom)
     {
-        this.shipsManager = shipsManager;
         shipData = shipInfo.shipData;
         Quantity = shipInfo.quantity;
         gameObject.name = shipData.name;
@@ -99,6 +97,7 @@ public class Ship : Collectible
             if (Quantity > 0 && !isNextShipUnlocked)
             {
                 EventSpawnShipModel?.Invoke(shipData);
+                if(EventSpawnShipModel != null)
                 Observer.RemoveAllObservers(ref EventSpawnShipModel);
             }
             if (Quantity == 1)
@@ -113,7 +112,9 @@ public class Ship : Collectible
             if (!isNextShipUnlocked && IsQuantityEnough())
             {
                 EventUnlockNewShip?.Invoke(shipData);
+                if(EventUnlockNewShip != null)
                 Observer.RemoveAllObservers(ref EventUnlockNewShip);
+
                 isNextShipUnlocked = true;
                 canAutoBuy = false;
             }
