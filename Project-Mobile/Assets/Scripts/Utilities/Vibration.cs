@@ -72,7 +72,7 @@ public static class Vibration
             vibrator.Call("cancel");
     }
 
-    private static bool IsAndroid()
+    public static bool IsAndroid()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
 	return true;

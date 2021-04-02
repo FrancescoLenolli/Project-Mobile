@@ -25,7 +25,7 @@ public class SwipeDetector : MonoBehaviour
 
     private void ChooseSwipeDetectionMethod()
     {
-        if (IsAndroid())
+        if (Vibration.IsAndroid())
             swipeDetection = AndroidDetection;
         else
             swipeDetection = PCDetection;
@@ -89,14 +89,5 @@ public class SwipeDetector : MonoBehaviour
         {
             EventSwipe?.Invoke(Swipe.Up, startPosition);
         }
-    }
-
-    private bool IsAndroid()
-    {
-#if UNITY_ANDROID && !UNITY_EDITOR
-	return true;
-#else
-        return false;
-#endif
     }
 }

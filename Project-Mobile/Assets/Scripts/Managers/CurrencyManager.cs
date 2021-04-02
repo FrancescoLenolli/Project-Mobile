@@ -44,6 +44,8 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
         AddPassiveCurrency();
 
         Observer.AddObserver(ref EventGainedOfflineCurrency, canvasOfflineEarning.ShowPanel);
+
+        EventSendPassiveCurrencyGainValue?.Invoke(GetTotalPassiveCurrencyGain());
     }
 
     public void SaveData()
@@ -175,8 +177,11 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
     {
         double collectiblesGain = collectibles.Sum(x => x.TotalCurrencyGain);
         double prestigeBonusGainMultiplier = 1 + ((float)PrestigeManager.prestigeLevel / 10f);
+        double totalGain = collectiblesGain * prestigeBonusGainMultiplier;
+        if (secondsDoubleGain > 0)
+            totalGain *= 2;
 
-        return collectiblesGain * prestigeBonusGainMultiplier;
+        return totalGain;
     }
 
     private double GetActiveCurrencyGain()
@@ -217,10 +222,9 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
             yield return new WaitForSeconds(1f);
 
             double totalPassiveCurrency = GetTotalPassiveCurrencyGain();
-            if (secondsDoubleGain > 0)
+            if(secondsDoubleGain > 0)
             {
-                totalPassiveCurrency *= 2;
-                secondsDoubleGain = secondsDoubleGain < 0 ? 0 : --secondsDoubleGain;
+                --secondsDoubleGain;
             }
 
             AddCurrency(totalPassiveCurrency);
