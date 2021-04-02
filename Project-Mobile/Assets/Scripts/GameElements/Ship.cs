@@ -12,6 +12,7 @@ public class Ship : Collectible
     public Action<ShipData> EventSpawnShipModel;
     public Action<ShipData> EventShowInfo;
     public Action<Ship> EventSpawnUpgrades;
+    public Action EventIncreaseWeight;
 
     private bool isNextShipUnlocked;
     private bool canAutoBuy;
@@ -30,7 +31,7 @@ public class Ship : Collectible
     [HideInInspector] public ShipData shipData;
     [HideInInspector] public List<UpgradeInfo> UpgradesInfo { get => upgradesInfo; }
 
-    public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom)
+    public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom, PanelPrestige panelPrestige)
     {
         shipData = shipInfo.shipData;
         Quantity = shipInfo.quantity;
@@ -79,6 +80,7 @@ public class Ship : Collectible
         Observer.AddObserver(ref EventSpawnUpgrades, canvasBottom.SpawnUpgrades);
         Observer.AddObserver(ref EventShowInfo, canvasBottom.PanelInfo.ShowInfo);
         Observer.AddObserver(ref CurrencyManager.Instance.EventSendCurrencyValue, SetButtonBuyStatus);
+        Observer.AddObserver(ref EventIncreaseWeight, panelPrestige.SetData);
 
         canAutoBuy = false;
         StartCoroutine(AutoBuy());
@@ -94,6 +96,8 @@ public class Ship : Collectible
             shipSound.PlaySoundDefault();
 
             ++Quantity;
+            EventIncreaseWeight?.Invoke();
+
             if (Quantity > 0 && !isNextShipUnlocked)
             {
                 EventSpawnShipModel?.Invoke(shipData);

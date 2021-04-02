@@ -6,11 +6,18 @@ using TMPro;
 
 public class PanelPrestige : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI textDetails = null;
+    PrestigeManager prestigeManager;
+
+    [SerializeField] private TextMeshProUGUI textWeight = null;
     [SerializeField] private Button buttonPrestige = null;
 
     public PanelAnimator panelAnimator;
 
+
+    private void Start()
+    {
+        prestigeManager = PrestigeManager.Instance;
+    }
 
     public void MoveToPosition()
     {
@@ -19,17 +26,18 @@ public class PanelPrestige : MonoBehaviour
 
         if(!isVisible)
         {
-            InitPanel();
+            SetData();
         }
     }
 
-    private void InitPanel()
+    public void SetData()
     {
-        PrestigeManager prestigeManager = PrestigeManager.Instance;
         int currentWeight = prestigeManager.GetCollectiblesWeight();
         int requiredWeight = prestigeManager.requiredWeight;
+        bool isWeightEnough = currentWeight >= requiredWeight;
 
-        textDetails.text = $"Weight Required\n{currentWeight}/{requiredWeight}";
-        buttonPrestige.interactable = currentWeight >= requiredWeight;
+        textWeight.text = $"{currentWeight}/{requiredWeight}";
+        textWeight.color = isWeightEnough ? Color.green : Color.red;
+        buttonPrestige.interactable = isWeightEnough;
     }
 }

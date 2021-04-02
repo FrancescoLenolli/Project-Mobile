@@ -11,6 +11,7 @@ public class CanvasBottom : MonoBehaviour
 
     private CurrencyManager currencyManager;
     private UIManager uiManager;
+    private PanelPrestige panelPrestige;
     private List<Transform> containers = new List<Transform>();
     private List<Ship> ships = new List<Ship>();
 
@@ -32,6 +33,7 @@ public class CanvasBottom : MonoBehaviour
     {
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
+        panelPrestige = FindObjectOfType<PanelPrestige>();
         panelExtra.InitData(this);
         CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
         SwipeDetector swipeDetector = FindObjectOfType<SwipeDetector>();
@@ -74,7 +76,7 @@ public class CanvasBottom : MonoBehaviour
     public void SpawnShip(ShipInfo shipInfo, ShipsManager shipsManager)
     {
         Ship ship = Instantiate(prefabShip, containerShips, false);
-        ship.InitData(shipInfo, shipsManager, this);
+        ship.InitData(shipInfo, shipsManager, this, panelPrestige);
         if (ship.Quantity > 0)
             SpawnUpgrades(ship);
 

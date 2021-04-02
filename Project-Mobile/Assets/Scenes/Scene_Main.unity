@@ -5660,6 +5660,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1739395387}
+    - target: {fileID: 7511645687194850508, guid: 1b3bde4c4f80a4942bdc1f882b6521bc,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511645687194850508, guid: 1b3bde4c4f80a4942bdc1f882b6521bc,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511645687194850508, guid: 1b3bde4c4f80a4942bdc1f882b6521bc,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511645687194850508, guid: 1b3bde4c4f80a4942bdc1f882b6521bc,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9002031855784361321, guid: 1b3bde4c4f80a4942bdc1f882b6521bc,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -12,10 +12,10 @@ public class PanelExtra : MonoBehaviour
     private CurrencyManager currencyManager;
     private UIManager uiManager;
     private CanvasBottom canvasBottom;
-    string title;
-    string description;
-    UnityAction adAction;
-    UnityAction buyAction;
+    private string title;
+    private string description;
+    private UnityAction adAction;
+    private UnityAction buyAction;
 
     [SerializeField] private TextMeshProUGUI textTitle = null;
     [SerializeField] private TextMeshProUGUI textDescription = null;
@@ -88,7 +88,7 @@ public class PanelExtra : MonoBehaviour
         adAction = WatchAdExtraCurrency;
         buyAction = BuyExtraCurrency;
 
-        PanelSetup(true, title, description, buyAction, adAction);
+        PanelSetup(title, description, buyAction, adAction);
     }
 
     private void SetUpExtraDoubleIdleEarnings()
@@ -98,7 +98,7 @@ public class PanelExtra : MonoBehaviour
         adAction = WatchAdDoubleEarnings;
         buyAction = BuyDoubleEarnings;
 
-        PanelSetup(true, title, description, buyAction, adAction);
+        PanelSetup(title, description, buyAction, adAction);
     }
 
     private void SetUpExtraGetCurrencyPremium()
@@ -107,12 +107,12 @@ public class PanelExtra : MonoBehaviour
         description = $"Gain {currencyManager.data.adPremiumCurrencyGain} premium currency";
         adAction = WatchAdGetPremiumCurrency;
 
-        PanelSetup(false, title, description, null, adAction);
+        PanelSetup(title, description, null, adAction, false);
     }
 
-    private void PanelSetup(bool isButtonVisible, string title, string description, UnityAction buyAction, UnityAction adAction)
+    private void PanelSetup(string title, string description, UnityAction buyAction, UnityAction adAction, bool isButtonBuyVisible = true)
     {
-        uiManager.ChangeVisibility(buttonBuy.transform, isButtonVisible);
+        uiManager.ChangeVisibility(buttonBuy.transform, isButtonBuyVisible);
 
         textTitle.text = title;
         textDescription.text = description;
