@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ShipsManager : MonoBehaviour
+public class ShipsManager : MonoBehaviour, IDataHandler
 {
     private Action<List<ShipInfo>, ShipsManager> EventSendData;
     private Action<ShipInfo, ShipsManager> EventUnlockShip;
@@ -59,7 +59,21 @@ public class ShipsManager : MonoBehaviour
             }
         }
         EventSendData?.Invoke(savedShipsInfo, this);
+    }
 
+    public void SaveData()
+    {
+        List<Ship> ships = canvasBottom.Ships;
+        List<ShipInfo> shipsInfo = new List<ShipInfo>();
+        ShipInfo shipInfo;
+
+        for (int i = 0; i < ships.Count; ++i)
+        {
+            shipInfo = new ShipInfo(ships[i].shipData.index, ships[i].shipData, ships[i].Quantity, ships[i].UpgradesInfo);
+            shipsInfo.Add(shipInfo);
+        }
+
+        SaveManager.PlayerData.ships = shipsInfo;
     }
 
     public void UnlockNewShip(ShipData shipData)
@@ -114,21 +128,6 @@ public class ShipsManager : MonoBehaviour
         shipModel.transform.rotation = shipsParent.rotation;
 
         EventShipViewChanged?.Invoke(currentModelIndex);
-    }
-
-    public void SaveData()
-    {
-        List<Ship> ships = canvasBottom.Ships;
-        List<ShipInfo> shipsInfo = new List<ShipInfo>();
-        ShipInfo shipInfo;
-
-        for (int i = 0; i < ships.Count; ++i)
-        {
-            shipInfo = new ShipInfo(ships[i].shipData.index, ships[i].shipData, ships[i].Quantity, ships[i].UpgradesInfo);
-            shipsInfo.Add(shipInfo);
-        }
-
-        SaveManager.PlayerData.ships = shipsInfo;
     }
 
     private void GetShipsData()

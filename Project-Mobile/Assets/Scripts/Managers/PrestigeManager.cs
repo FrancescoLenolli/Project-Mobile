@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PrestigeManager : Singleton<PrestigeManager>
+public class PrestigeManager : Singleton<PrestigeManager>, IDataHandler
 {
     public static int prestigeLevel;
     public int baseWeight;

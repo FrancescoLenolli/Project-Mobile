@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-public class DailyRewardsManager : MonoBehaviour
+public class DailyRewardsManager : MonoBehaviour, IDataHandler
 {
     public Action<int> EventSendCooldownTime;
     public Action<int> EventRewardCollected;
@@ -146,5 +146,4 @@ public class DailyRewardsManager : MonoBehaviour
             yield return null;
         }
     }
-
 }

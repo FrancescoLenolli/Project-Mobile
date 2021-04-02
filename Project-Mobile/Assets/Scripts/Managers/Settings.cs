@@ -24,6 +24,14 @@ public static class Settings
         UnityEngine.Object.FindObjectOfType<CanvasSettings>().InitData();
     }
 
+    public static void SaveData()
+    {
+        SaveManager.PlayerData.isVolumeSFXOn = isVolumeSFXOn;
+        SaveManager.PlayerData.isVolumeMusicOn = isVolumeMusicOn;
+        SaveManager.PlayerData.isVibrationOn = isVibrationOn;
+        SaveManager.PlayerData.isPerformanceModeOn = isPerformanceModeOn;
+    }
+
     public static void SetVolumeSFX(bool isOn)
     {
         isVolumeSFXOn = isOn;
@@ -49,13 +57,5 @@ public static class Settings
         isPerformanceModeOn = isOn;
 
         Application.targetFrameRate = isPerformanceModeOn ? 60 : 30;
-    }
-
-    public static void SaveData()
-    {
-        SaveManager.PlayerData.isVolumeSFXOn = isVolumeSFXOn;
-        SaveManager.PlayerData.isVolumeMusicOn = isVolumeMusicOn;
-        SaveManager.PlayerData.isVibrationOn = isVibrationOn;
-        SaveManager.PlayerData.isPerformanceModeOn = isPerformanceModeOn;
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : Singleton<GameManager>, IDataHandler
 {
     public Action EventSaveData;
     public Action EventInitData;
@@ -34,27 +34,25 @@ public class GameManager : Singleton<GameManager>
             SaveManager.ResetData();
         }
 
-        PrestigeManager prestigeManager = PrestigeManager.Instance;
         CurrencyManager currencyManager = CurrencyManager.Instance;
-        ShipsManager shipsManager = FindObjectOfType<ShipsManager>();
         DailyRewardsManager rewardsManager = FindObjectOfType<DailyRewardsManager>();
-
-        List<Action> actionsInitData = new List<Action>
-        {
-            InitData, prestigeManager.InitData, shipsManager.InitData,
-            currencyManager.InitData, Settings.InitData, rewardsManager.InitData
-        };
-
-        List<Action> actionsSaveData = new List<Action>
-        {
-            SaveData, prestigeManager.SaveData, shipsManager.SaveData,
-            currencyManager.SaveData, Settings.SaveData, rewardsManager.SaveData
-        };
-
+        List<Action> actionsInitData = new List<Action>();
+        List<Action> actionsSaveData = new List<Action>();
         List<Action<TimeSpan>> actionsOfflineTime = new List<Action<TimeSpan>>
         {
             currencyManager.CalculateOfflineGain, rewardsManager.CalculateOfflineTime
         };
+
+        IDataHandler[] dataHandlers = FindObjectsOfType<MonoBehaviour>().OfType<IDataHandler>().ToArray();
+
+        foreach(IDataHandler dataHandler in dataHandlers)
+        {
+            actionsInitData.Add(dataHandler.InitData);
+            actionsSaveData.Add(dataHandler.SaveData);
+        }
+
+        actionsInitData.Add(Settings.InitData);
+        actionsSaveData.Add(Settings.SaveData);
 
         Observer.AddObservers(ref EventInitData, actionsInitData);
         Observer.AddObservers(ref EventSaveData, actionsSaveData);
@@ -93,6 +91,19 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void InitData()
+    {
+        string lastLogOut = SaveManager.PlayerData.lastLogOutTime;
+
+        logOutTime = lastLogOut != "" ? Convert.ToDateTime(lastLogOut) : logInTime;
+    }
+
+    public void SaveData()
+    {
+        SaveManager.PlayerData.lastLogOutTime = logOutTime.ToString();
+    }
+
+
     public bool IsFirstSession()
     {
         return isFirstSession;
@@ -102,18 +113,6 @@ public class GameManager : Singleton<GameManager>
     {
         EventSaveData?.Invoke();
         SaveManager.Save();
-    }
-
-    private void InitData()
-    {
-        string lastLogOut = SaveManager.PlayerData.lastLogOutTime;
-
-        logOutTime = lastLogOut != "" ? Convert.ToDateTime(lastLogOut) : logInTime;
-    }
-
-    private void SaveData()
-    {
-        SaveManager.PlayerData.lastLogOutTime = logOutTime.ToString();
     }
 
     private void LogIn()

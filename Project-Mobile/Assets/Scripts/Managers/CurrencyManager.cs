@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CurrencyManager : Singleton<CurrencyManager>
+public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
 {
     public Action<double> EventSendCurrencyValue;
     public Action<double> EventSendPassiveCurrencyGainValue;
