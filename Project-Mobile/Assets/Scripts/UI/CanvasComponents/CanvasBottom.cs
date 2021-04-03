@@ -129,7 +129,7 @@ public class CanvasBottom : MonoBehaviour
         foreach (UpgradeInfo info in ship.UpgradesInfo.Where(x => !x.isOwned))
         {
             Upgrade upgrade = Instantiate(prefabUpgrade, containerUpgrades, false);
-            upgrade.InitData(info.upgradeData, ship, containerUpgrades);
+            upgrade.InitData(info.upgradeData, ship, containerUpgrades, panelShipInfo);
 
             upgrade.transform.SetAsFirstSibling();
             uiManager.ResizeContainer(upgrade.transform, containerUpgrades, UIManager.Resize.Add);

@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d29799469370c24f9e057ba9bd2fb1e, type: 3}
-  m_Name: Scanners
+  m_Name: 8_Improved Stealth Plating
   m_EditorClassIdentifier: 
-  index: 0
-  icon: {fileID: 21300020, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  name: Scanners
-  description: 'These are scanners
-
-'
+  index: 8
+  icon: {fileID: 21300004, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  name: Improved Stealth Plating
+  description: Research in stealth technology produced a plating capable of absorbing
+    99.9% of a ship's heat. Just, don't cook your crew to death please.
   costIncreaseMultiplier: 0
-  upgradePercentage: 45
+  upgradePercentage: 20

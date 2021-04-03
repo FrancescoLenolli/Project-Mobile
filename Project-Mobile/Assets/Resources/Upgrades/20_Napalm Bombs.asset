@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d29799469370c24f9e057ba9bd2fb1e, type: 3}
-  m_Name: Thrusters
+  m_Name: 20_Napalm Bombs
   m_EditorClassIdentifier: 
-  index: 2
-  icon: {fileID: 21300044, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  name: Thrusters
-  description: "These are thrusters\n\t"
+  index: 20
+  icon: {fileID: 21300004, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  name: Napalm Bombs
+  description: '"Of course ants are vulnerable to fire, why didn''t we thought of
+    this before?"'
   costIncreaseMultiplier: 0
-  upgradePercentage: 20
+  upgradePercentage: 10

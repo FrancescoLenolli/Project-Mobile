@@ -5,20 +5,23 @@ using UnityEngine.UI;
 
 public class Upgrade : MonoBehaviour
 {
+    private Action<CollectibleData> EventShowInfo;
+
     private CurrencyManager currencyManager;
     private UIManager uiManager;
     private UpgradeData upgradeData;
     private Ship ship;
     private Transform container;
     private double cost;
+    private PanelShipInfo panelShipInfo;
 
     public TextMeshProUGUI textName = null;
-    public TextMeshProUGUI textDescription = null;
+    public TextMeshProUGUI textEffect = null;
     public TextMeshProUGUI textCost = null;
     public Image imageIcon = null;
     public Button buttonBuy = null;
 
-    public void InitData(UpgradeData upgradeData, Ship ship, Transform container)
+    public void InitData(UpgradeData upgradeData, Ship ship, Transform container, PanelShipInfo panelShipInfo)
     {
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
@@ -26,14 +29,16 @@ public class Upgrade : MonoBehaviour
         this.upgradeData = upgradeData;
         this.container = container;
         this.ship = ship;
+        this.panelShipInfo = panelShipInfo;
         SetCost(ship);
 
         textName.text = upgradeData.name;
-        textDescription.text = $"Increase {ship.name} currency gain by {upgradeData.upgradePercentage}%";
+        textEffect.text = $"Increase {ship.name} currency gain by {upgradeData.upgradePercentage}%";
         textCost.text = Formatter.FormatValue(cost);
         imageIcon.sprite = upgradeData.icon;
 
         Observer.AddObserver(ref currencyManager.EventSendCurrencyValue, SetButtonBuyStatus);
+        Observer.AddObserver(ref EventShowInfo, panelShipInfo.ShowInfo);
     }
 
     public void Buy()
@@ -49,8 +54,14 @@ public class Upgrade : MonoBehaviour
             Vibration.VibrateSoft();
 
             Observer.RemoveObserver(ref currencyManager.EventSendCurrencyValue, SetButtonBuyStatus);
+            Observer.RemoveObserver(ref EventShowInfo, panelShipInfo.ShowInfo);
             Destroy(gameObject);
         }
+    }
+
+    public void ShowInfo()
+    {
+        EventShowInfo?.Invoke(upgradeData);
     }
 
     private bool CanBuy()

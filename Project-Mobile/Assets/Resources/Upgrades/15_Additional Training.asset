@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d29799469370c24f9e057ba9bd2fb1e, type: 3}
-  m_Name: Weapons
+  m_Name: 15_Additional Training
   m_EditorClassIdentifier: 
-  index: 3
-  icon: {fileID: 21300010, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  name: Weapons
-  description: These are weapons
+  index: 15
+  icon: {fileID: 21300004, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
+  name: Additional Training
+  description: '"A ship is only as good as the crew manning it."'
   costIncreaseMultiplier: 0
-  upgradePercentage: 20
+  upgradePercentage: 60

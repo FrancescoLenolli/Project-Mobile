@@ -21,5 +21,5 @@ MonoBehaviour:
   model: {fileID: 1261967083292032, guid: 8473f9776d8295943a5758049686e69c, type: 3}
   qtForNextShip: 3
   upgrades:
-  - {fileID: 11400000, guid: c9df488a91e9e224f901ae2dd86ae393, type: 2}
   - {fileID: 11400000, guid: 7165b4e0e0f38ba4ea85ca6200e326fe, type: 2}
+  - {fileID: 11400000, guid: 670a05db78e000a4baec3258aee739c4, type: 2}

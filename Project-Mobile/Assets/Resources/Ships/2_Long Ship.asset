@@ -20,4 +20,7 @@ MonoBehaviour:
   costIncreaseMultiplier: 1.08
   model: {fileID: 1578151531806032, guid: 8247a213e30c0734a98bcb0af9f4d340, type: 3}
   qtForNextShip: 3
-  upgrades: []
+  upgrades:
+  - {fileID: 11400000, guid: 8608c596db1dc704dba469a03f911455, type: 2}
+  - {fileID: 11400000, guid: 42f22c5a75229484aa54d9b6a8d9086f, type: 2}
+  - {fileID: 11400000, guid: 8f0106a7b058006469bd751a8c50abb0, type: 2}

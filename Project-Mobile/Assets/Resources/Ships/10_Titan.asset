@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73797c0201dbcdb478c30548607b29d8, type: 3}
-  m_Name: 10_Death Star
+  m_Name: 10_Titan
   m_EditorClassIdentifier: 
   index: 10
   icon: {fileID: 21300056, guid: 148a7416d4c344a42bb28cb23ee31708, type: 3}
-  name: Death Star
-  description: Space equivalent of a battleship, its biggest weapons can destroy
-    almost anything, and the sheer amount of point defense weapons keep enemies from
-    coming too close.
+  name: Titan
+  description: '"We can''t use it in open battles, but so far no enemy ship as ever
+    entered a system where a TItan was docked. No need to explain why."'
   costIncreaseMultiplier: 1.14
   model: {fileID: 1044101965864496, guid: c7bd5c71ab13c41359305dc1af814468, type: 3}
-  qtForNextShip: 3
-  upgrades: []
+  qtForNextShip: 2
+  upgrades:
+  - {fileID: 11400000, guid: 3abb22ac1d8b21b48972645ee8a2db1e, type: 2}
+  - {fileID: 11400000, guid: 8ba6f0847464f0f49bd5b852dbc5fbf5, type: 2}
