@@ -11,7 +11,7 @@ public class DailyRewardsManager : MonoBehaviour, IDataHandler
     public Action<int> EventRewardCollected;
     public Action<List<DailyReward>> EventSendRewards;
 
-    private const int rewardCooldownSeconds = 86400; // seconds in a day;
+    private const int rewardCooldownSeconds = 86400; // seconds in 24 hours;
     private List<DailyReward> rewards = new List<DailyReward>();
     private List<int> rewardsIndexes = new List<int>();
     public int currentIndex = 0;
@@ -101,15 +101,10 @@ public class DailyRewardsManager : MonoBehaviour, IDataHandler
 
     private int GetRewardsCount()
     {
-        int count = 0;
+        Type[] rewardTypes = Assembly.GetAssembly(typeof(DailyReward)).GetTypes().Where
+            (myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(DailyReward))).ToArray();
 
-        foreach (Type type in Assembly.GetAssembly(typeof(DailyReward)).GetTypes().Where
-            (myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(DailyReward))))
-        {
-            ++count;
-        }
-
-        return count;
+        return rewardTypes.Count();
     }
 
     private void SetRewards()

@@ -43,6 +43,7 @@ public static class Formatter
     {
         if(suffixData == null)
         {
+            // Get the first list of suffixes. Option to change/add suffixes?
             suffixData = Resources.LoadAll<SuffixData>("Suffixes").ToList()[0];
         }
 

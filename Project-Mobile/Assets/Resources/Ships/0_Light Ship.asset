@@ -19,7 +19,7 @@ MonoBehaviour:
     to mass produce.
   costIncreaseMultiplier: 1.07
   model: {fileID: 1993769037395402, guid: 1e0e09158ccbc064a9a4f4413946f881, type: 3}
-  qtForNextShip: 3
+  qtForNextShip: 30
   upgrades:
   - {fileID: 11400000, guid: c9df488a91e9e224f901ae2dd86ae393, type: 2}
   - {fileID: 11400000, guid: 7165b4e0e0f38ba4ea85ca6200e326fe, type: 2}

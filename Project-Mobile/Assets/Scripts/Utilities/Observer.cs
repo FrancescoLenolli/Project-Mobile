@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Helper class used to Subscribe/Unsubscribe from Actions.
+/// </summary>
 public static class Observer
 {
     /// <summary>
@@ -56,7 +57,7 @@ public static class Observer
     /// </summary>
     /// <param name="subject"></param>
     /// <param name="observers">list of methods to subscribe to the given Event.</param>
-    public static Action AddObservers(ref Action subject, List<Action> observers)
+    public static Action AddObservers(ref Action subject, IEnumerable<Action> observers)
     {
         foreach (var observer in observers)
         {
@@ -65,16 +66,7 @@ public static class Observer
 
         return subject;
     }
-    public static Action<T> AddObservers<T>(ref Action<T> subject, List<Action<T>> observers)
-    {
-        foreach(var observer in observers)
-        {
-            subject += observer;
-        }
-
-        return subject;
-    }
-    public static Action<T1, T2> AddObservers<T1, T2>(ref Action<T1, T2> subject, List<Action<T1, T2>> observers)
+    public static Action<T> AddObservers<T>(ref Action<T> subject, IEnumerable<Action<T>> observers)
     {
         foreach (var observer in observers)
         {
@@ -83,7 +75,16 @@ public static class Observer
 
         return subject;
     }
-    public static Action<T1, T2, T3> AddObservers<T1, T2, T3>(ref Action<T1, T2, T3> subject, List<Action<T1, T2, T3>> observers)
+    public static Action<T1, T2> AddObservers<T1, T2>(ref Action<T1, T2> subject, IEnumerable<Action<T1, T2>> observers)
+    {
+        foreach (var observer in observers)
+        {
+            subject += observer;
+        }
+
+        return subject;
+    }
+    public static Action<T1, T2, T3> AddObservers<T1, T2, T3>(ref Action<T1, T2, T3> subject, IEnumerable<Action<T1, T2, T3>> observers)
     {
         foreach (var observer in observers)
         {

@@ -20,7 +20,7 @@ MonoBehaviour:
     off retreating forces.
   costIncreaseMultiplier: 1.085
   model: {fileID: 1542112843390278, guid: b47bece6812c64d44b8a3f159e732957, type: 3}
-  qtForNextShip: 3
+  qtForNextShip: 25
   upgrades:
   - {fileID: 11400000, guid: 8fd9174d9f8272046b17f8d7e3d33618, type: 2}
   - {fileID: 11400000, guid: dbe22f23b197f0d41afa149f345ff6c5, type: 2}

@@ -19,7 +19,8 @@ MonoBehaviour:
     a lot of damage. Not very fast, but it can mount upgraded thrusters.
   costIncreaseMultiplier: 1.075
   model: {fileID: 1261967083292032, guid: 8473f9776d8295943a5758049686e69c, type: 3}
-  qtForNextShip: 3
+  qtForNextShip: 25
   upgrades:
   - {fileID: 11400000, guid: 7165b4e0e0f38ba4ea85ca6200e326fe, type: 2}
   - {fileID: 11400000, guid: 670a05db78e000a4baec3258aee739c4, type: 2}
+  - {fileID: 11400000, guid: a1dc07bbd839b2446b7046022103da05, type: 2}

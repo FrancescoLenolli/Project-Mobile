@@ -150,13 +150,4 @@ public class CanvasBottom : MonoBehaviour
                 break;
         }
     }
-
-    private bool FindPoint(Vector2 bottomLeft, Vector2 topRight, Vector2 point)
-    {
-        if (point.x > bottomLeft.x && point.x < topRight.x &&
-            point.y > bottomLeft.y && point.y < topRight.y)
-            return true;
-
-        return false;
-    }
 }
