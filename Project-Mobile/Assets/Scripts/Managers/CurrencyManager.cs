@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
 {
@@ -14,18 +13,20 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
     public Action<int> EventSendPremiumCurrencyValue;
     public Action<double, Vector3> EventSendActiveCurrencyGainValue;
 
-    private double secondsDoubleGain = 0;
-    private List<Collectible> collectibles = new List<Collectible>();
-
     public double currency;
     public int premiumCurrency;
     public CurrencyData data;
 
+    private IPassiveGainHandler passiveGainCalculator;
+    private double secondsDoubleGain = 0;
+    private List<Collectible> collectibles = new List<Collectible>();
+
     public List<Collectible> Collectibles { get => collectibles; }
+    public double SecondsDoubleGain { get => secondsDoubleGain; set => secondsDoubleGain = value; }
 
     public void Update()
     {
-        if (IsPlayerTapping())
+        if (Utils.IsPlayerTapping())
         {
             TapBehaviour();
         }
@@ -33,6 +34,8 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
 
     public void InitData()
     {
+        passiveGainCalculator = new PassiveGainCalculator();
+
         CanvasMain canvasMain = FindObjectOfType<CanvasMain>();
         CanvasOfflineEarning canvasOfflineEarning = FindObjectOfType<CanvasOfflineEarning>();
 
@@ -119,6 +122,7 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
         double value = MathUtils.Pct(data.adPctGain, currency);
         AddCurrency(value);
     }
+
     public bool BuyCurrencyFixedValue()
     {
         if (premiumCurrency >= data.extrasPremiumCost)
@@ -161,11 +165,6 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
         StartCoroutine(PassiveCurrencyGain());
     }
 
-    private bool IsPlayerTapping()
-    {
-        return Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began || Input.GetMouseButtonDown(0);
-    }
-
     private int GetOfflineBonusPct()
     {
         int totalPct = data.prestigeOfflineBonusPct * PrestigeManager.prestigeLevel;
@@ -175,13 +174,7 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
 
     private double GetTotalPassiveCurrencyGain()
     {
-        double collectiblesGain = collectibles.Sum(x => x.TotalCurrencyGain);
-        double prestigeBonusGainMultiplier = 1 + ((float)PrestigeManager.prestigeLevel / 10f);
-        double totalGain = collectiblesGain * prestigeBonusGainMultiplier;
-        if (secondsDoubleGain > 0)
-            totalGain *= 2;
-
-        return totalGain;
+        return passiveGainCalculator.GetTotalPassiveGain(this);
     }
 
     private double GetActiveCurrencyGain()
@@ -201,18 +194,14 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
     private void TapBehaviour()
     {
         // passing a value of 0 makes it work on mobile but not on pc, so I have to use both
-        if (EventSystem.current.IsPointerOverGameObject(0) || EventSystem.current.IsPointerOverGameObject())
-        {
+        if (UIManager.Instance.IsPointerOverUI())
             return;
-        }
-        else
-        {
-            double activeGain = GetActiveCurrencyGain();
-            AddCurrency(activeGain);
-            EventSendActiveCurrencyGainValue?.Invoke(activeGain, Input.mousePosition);
 
-            Vibration.VibrateSoft();
-        }
+        double activeGain = GetActiveCurrencyGain();
+        AddCurrency(activeGain);
+        EventSendActiveCurrencyGainValue?.Invoke(activeGain, Input.mousePosition);
+
+        Vibration.VibrateSoft();
     }
 
     private IEnumerator PassiveCurrencyGain()
@@ -222,7 +211,7 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
             yield return new WaitForSeconds(1f);
 
             double totalPassiveCurrency = GetTotalPassiveCurrencyGain();
-            if(secondsDoubleGain > 0)
+            if (secondsDoubleGain > 0)
             {
                 --secondsDoubleGain;
             }

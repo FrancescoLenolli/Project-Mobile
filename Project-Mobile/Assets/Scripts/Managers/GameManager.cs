@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityEngine;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class GameManager : Singleton<GameManager>, IDataHandler
 {
@@ -20,6 +20,8 @@ public class GameManager : Singleton<GameManager>, IDataHandler
     [Space(10)]
     public AdsManager adsManager = null;
 
+    public bool IsFirstSession { get => isFirstSession; set => isFirstSession = value; }
+
     private new void Awake()
     {
         base.Awake();
@@ -29,39 +31,7 @@ public class GameManager : Singleton<GameManager>, IDataHandler
 
     private void Start()
     {
-        if (canResetData)
-        {
-            SaveManager.ResetData();
-        }
-
-        CurrencyManager currencyManager = CurrencyManager.Instance;
-        DailyRewardsManager rewardsManager = FindObjectOfType<DailyRewardsManager>();
-        List<Action> actionsInitData = new List<Action>();
-        List<Action> actionsSaveData = new List<Action>();
-        List<Action<TimeSpan>> actionsOfflineTime = new List<Action<TimeSpan>>
-        {
-            currencyManager.CalculateOfflineGain, rewardsManager.CalculateOfflineTime
-        };
-
-        IDataHandler[] dataHandlers = FindObjectsOfType<MonoBehaviour>().OfType<IDataHandler>().ToArray();
-
-        foreach(IDataHandler dataHandler in dataHandlers)
-        {
-            actionsInitData.Add(dataHandler.InitData);
-            actionsSaveData.Add(dataHandler.SaveData);
-        }
-
-        actionsInitData.Add(Settings.InitData);
-        actionsSaveData.Add(Settings.SaveData);
-
-        Observer.AddObservers(ref EventInitData, actionsInitData);
-        Observer.AddObservers(ref EventSaveData, actionsSaveData);
-        Observer.AddObservers(ref EventSendOfflineTime , actionsOfflineTime);
-
-        EventInitData?.Invoke();
-        Observer.RemoveAllObservers(ref EventInitData);
-
-        CalculateOfflineTime();
+        SetUpGame();
     }
 
     // pause == TRUE: the app is in the background.
@@ -103,16 +73,47 @@ public class GameManager : Singleton<GameManager>, IDataHandler
         SaveManager.PlayerData.lastLogOutTime = logOutTime.ToString();
     }
 
-
-    public bool IsFirstSession()
-    {
-        return isFirstSession;
-    }
-
     public void Save()
     {
         EventSaveData?.Invoke();
         SaveManager.Save();
+    }
+
+    private void SetUpGame()
+    {
+        if (canResetData)
+        {
+            SaveManager.ResetData();
+        }
+
+        CurrencyManager currencyManager = CurrencyManager.Instance;
+        DailyRewardsManager rewardsManager = FindObjectOfType<DailyRewardsManager>();
+        List<Action> actionsInitData = new List<Action>();
+        List<Action> actionsSaveData = new List<Action>();
+        List<Action<TimeSpan>> actionsOfflineTime = new List<Action<TimeSpan>>
+        {
+            currencyManager.CalculateOfflineGain, rewardsManager.CalculateOfflineTime
+        };
+
+        IDataHandler[] dataHandlers = FindObjectsOfType<MonoBehaviour>().OfType<IDataHandler>().ToArray();
+
+        foreach (IDataHandler dataHandler in dataHandlers)
+        {
+            actionsInitData.Add(dataHandler.InitData);
+            actionsSaveData.Add(dataHandler.SaveData);
+        }
+
+        actionsInitData.Add(Settings.InitData);
+        actionsSaveData.Add(Settings.SaveData);
+
+        Observer.AddObservers(ref EventInitData, actionsInitData);
+        Observer.AddObservers(ref EventSaveData, actionsSaveData);
+        Observer.AddObservers(ref EventSendOfflineTime, actionsOfflineTime);
+
+        EventInitData?.Invoke();
+        Observer.RemoveAllObservers(ref EventInitData);
+
+        CalculateOfflineTime();
     }
 
     private void LogIn()

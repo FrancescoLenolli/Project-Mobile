@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -155,6 +156,12 @@ public class UIManager : Singleton<UIManager>
         slider.minValue = minValue;
         slider.maxValue = maxValue;
         slider.value = startValue != float.MinValue ? startValue : maxValue;
+    }
+
+    public bool IsPointerOverUI()
+    {
+        // passing a value of 0 makes it work on mobile but not on pc, so I have to use both
+        return EventSystem.current.IsPointerOverGameObject(0) || EventSystem.current.IsPointerOverGameObject();
     }
 
     private int CycleListIndex(int currentIndex, int maxValue, Cycle cycleType, bool isClosed)

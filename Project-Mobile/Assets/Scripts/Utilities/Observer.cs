@@ -57,41 +57,33 @@ public static class Observer
     /// </summary>
     /// <param name="subject"></param>
     /// <param name="observers">list of methods to subscribe to the given Event.</param>
-    public static Action AddObservers(ref Action subject, IEnumerable<Action> observers)
+    public static void AddObservers(ref Action subject, IEnumerable<Action> observers)
     {
         foreach (var observer in observers)
         {
             subject += observer;
         }
-
-        return subject;
     }
-    public static Action<T> AddObservers<T>(ref Action<T> subject, IEnumerable<Action<T>> observers)
+    public static void AddObservers<T>(ref Action<T> subject, IEnumerable<Action<T>> observers)
     {
         foreach (var observer in observers)
         {
             subject += observer;
         }
-
-        return subject;
     }
-    public static Action<T1, T2> AddObservers<T1, T2>(ref Action<T1, T2> subject, IEnumerable<Action<T1, T2>> observers)
+    public static void AddObservers<T1, T2>(ref Action<T1, T2> subject, IEnumerable<Action<T1, T2>> observers)
     {
         foreach (var observer in observers)
         {
             subject += observer;
         }
-
-        return subject;
     }
-    public static Action<T1, T2, T3> AddObservers<T1, T2, T3>(ref Action<T1, T2, T3> subject, IEnumerable<Action<T1, T2, T3>> observers)
+    public static void AddObservers<T1, T2, T3>(ref Action<T1, T2, T3> subject, IEnumerable<Action<T1, T2, T3>> observers)
     {
         foreach (var observer in observers)
         {
             subject += observer;
         }
-
-        return subject;
     }
 
 
@@ -99,7 +91,7 @@ public static class Observer
     /// Remove all methods subscribed to a given Event.
     /// </summary>
     /// <param name="subject"></param>
-    public static Action RemoveAllObservers(ref Action subject)
+    public static void RemoveAllObservers(ref Action subject)
     {
         var observers = subject.GetInvocationList();
 
@@ -107,10 +99,8 @@ public static class Observer
         {
             subject -= (Action)observer;
         }
-
-        return subject;
     }
-    public static Action<T> RemoveAllObservers<T>(ref Action<T> subject)
+    public static void RemoveAllObservers<T>(ref Action<T> subject)
     {
         var observers = subject.GetInvocationList();
 
@@ -118,10 +108,8 @@ public static class Observer
         {
             subject -= (Action<T>)observer;
         }
-
-        return subject;
     }
-    public static Action<T1, T2> RemoveAllObservers<T1, T2>(ref Action<T1, T2> subject)
+    public static void RemoveAllObservers<T1, T2>(ref Action<T1, T2> subject)
     {
         var observers = subject.GetInvocationList();
 
@@ -129,10 +117,9 @@ public static class Observer
         {
             subject -= (Action<T1, T2>)observer;
         }
-
-        return subject;
     }
-    public static Action<T1, T2, T3> RemoveAllObservers<T1, T2, T3>(ref Action<T1, T2, T3> subject)
+
+    public static void RemoveAllObservers<T1, T2, T3>(ref Action<T1, T2, T3> subject)
     {
         var observers = subject.GetInvocationList();
 
@@ -140,7 +127,5 @@ public static class Observer
         {
             subject -= (Action<T1, T2, T3>)observer;
         }
-
-        return subject;
     }
 }
