@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class DailyRewardsManager : MonoBehaviour, IDataHandler
 {
+    public int currentCooldownSeconds = 0;
+    public int rewardsCount;
+
     public Action<int> EventSendCooldownTime;
     public Action<int> EventRewardCollected;
     public Action<List<DailyReward>> EventSendRewards;
@@ -15,9 +18,6 @@ public class DailyRewardsManager : MonoBehaviour, IDataHandler
     private List<DailyReward> rewards = new List<DailyReward>();
     private List<int> rewardsIndexes = new List<int>();
     public int currentIndex = 0;
-
-    public int currentCooldownSeconds = 0;
-    public int rewardsCount;
 
     public void InitData()
     {

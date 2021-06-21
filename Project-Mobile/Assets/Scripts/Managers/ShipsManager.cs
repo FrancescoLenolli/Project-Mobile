@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class ShipsManager : MonoBehaviour, IDataHandler
 {
-    private Action<List<ShipInfo>, ShipsManager> EventSendData;
-    private Action<ShipInfo, ShipsManager> EventUnlockShip;
-    private Action<int> EventShipViewChanged;
+    [SerializeField] private Transform shipsParent = null;
 
     private UIManager uiManager;
     private CanvasBottom canvasBottom;
@@ -18,7 +16,9 @@ public class ShipsManager : MonoBehaviour, IDataHandler
     private Vector3 shipsStartingPosition = new Vector3(0f, 0f, -500f);
     private int currentModelIndex = 0;
 
-    [SerializeField] private Transform shipsParent = null;
+    private Action<List<ShipInfo>, ShipsManager> EventSendData;
+    private Action<ShipInfo, ShipsManager> EventUnlockShip;
+    private Action<int> EventShipViewChanged;
 
     public void InitData()
     {

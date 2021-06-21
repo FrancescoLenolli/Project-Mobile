@@ -7,11 +7,12 @@ public class SwipeDetector : MonoBehaviour
 
     public Action<Swipe, Vector2> EventSwipe;
 
-    private Action swipeDetection;
+    [SerializeField] private float minimumDistance = 10f;
+
     private Vector2 startPosition;
     private Vector2 endPosition;
 
-    [SerializeField] private float minimumDistance = 10f;
+    private Action swipeDetection;
 
     private void Start()
     {
@@ -25,7 +26,7 @@ public class SwipeDetector : MonoBehaviour
 
     private void ChooseSwipeDetectionMethod()
     {
-        if (Vibration.IsAndroid())
+        if (Vibration.IsAndroid)
             swipeDetection = AndroidDetection;
         else
             swipeDetection = PCDetection;

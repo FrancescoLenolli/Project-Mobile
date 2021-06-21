@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class FPSDisplay : MonoBehaviour
 {
-    float deltaTime = 0.0f;
+    public bool canDisplayFPS = false;
+
+    private float deltaTime = 0.0f;
 
     void Update()
     {
@@ -13,6 +15,9 @@ public class FPSDisplay : MonoBehaviour
 
     void OnGUI()
     {
+        if (!canDisplayFPS)
+            return;
+
         int w = Screen.width, h = Screen.height;
 
         GUIStyle style = new GUIStyle();

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public static class Vibration
 {
@@ -14,23 +13,26 @@ public static class Vibration
     public static AndroidJavaObject vibrator;
 #endif
 
+    private static bool isAndroid;
+
+    public static bool IsAndroid { get => IsDeviceAndroid(); }
+
     public static void Vibrate()
     {
         if (Settings.IsVibrationOn)
         {
-            if (IsAndroid())
+            if (IsDeviceAndroid())
                 vibrator.Call("vibrate");
             else
                 Handheld.Vibrate();
         }
     }
 
-
     public static void Vibrate(long milliseconds)
     {
         if (Settings.IsVibrationOn)
         {
-            if (IsAndroid())
+            if (IsDeviceAndroid())
                 vibrator.Call("vibrate", milliseconds);
             else
                 Handheld.Vibrate();
@@ -43,7 +45,7 @@ public static class Vibration
         {
             long milliseconds = 20;
 
-            if (IsAndroid())
+            if (IsDeviceAndroid())
                 vibrator.Call("vibrate", milliseconds);
             else
                 Handheld.Vibrate();
@@ -54,25 +56,20 @@ public static class Vibration
     {
         if (Settings.IsVibrationOn)
         {
-            if (IsAndroid())
+            if (IsDeviceAndroid())
                 vibrator.Call("vibrate", pattern, repeat);
             else
                 Handheld.Vibrate();
         }
     }
 
-    public static bool HasVibrator()
-    {
-        return IsAndroid();
-    }
-
     public static void Cancel()
     {
-        if (IsAndroid())
+        if (IsDeviceAndroid())
             vibrator.Call("cancel");
     }
 
-    public static bool IsAndroid()
+    private static bool IsDeviceAndroid()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
 	return true;

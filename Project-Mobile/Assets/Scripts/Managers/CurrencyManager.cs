@@ -6,13 +6,6 @@ using UnityEngine;
 
 public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
 {
-    public Action<double> EventSendCurrencyValue;
-    public Action<double> EventSendPassiveCurrencyGainValue;
-    public Action<double> EventSendDoubleGainTime;
-    public Action<TimeSpan, double> EventGainedOfflineCurrency;
-    public Action<int> EventSendPremiumCurrencyValue;
-    public Action<double, Vector3> EventSendActiveCurrencyGainValue;
-
     public double currency;
     public int premiumCurrency;
     public CurrencyData data;
@@ -20,6 +13,13 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
     private IPassiveGainHandler passiveGainCalculator;
     private double secondsDoubleGain = 0;
     private List<Collectible> collectibles = new List<Collectible>();
+
+    public Action<double> EventSendCurrencyValue;
+    public Action<double> EventSendPassiveCurrencyGainValue;
+    public Action<double> EventSendDoubleGainTime;
+    public Action<TimeSpan, double> EventGainedOfflineCurrency;
+    public Action<int> EventSendPremiumCurrencyValue;
+    public Action<double, Vector3> EventSendActiveCurrencyGainValue;
 
     public List<Collectible> Collectibles { get => collectibles; }
     public double SecondsDoubleGain { get => secondsDoubleGain; set => secondsDoubleGain = value; }

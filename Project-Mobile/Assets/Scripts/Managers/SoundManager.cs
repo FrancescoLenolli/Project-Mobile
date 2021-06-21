@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
+    [EventRef]
+    public List<string> tracks = new List<string>();
+
     private Bus musicBus;
     private Bus sfxBus;
     private StudioEventEmitter musicEmitter;
     private int trackIndex = 0;
-
-    [EventRef]
-    public List<string> tracks = new List<string>();
-
 
     private void Start()
     {

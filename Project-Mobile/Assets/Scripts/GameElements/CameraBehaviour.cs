@@ -1,16 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraBehaviour : MonoBehaviour
 {
-    private Vector3 originalPosition;
-
     [SerializeField] private Transform targetLookAt = null;
+
+    private Vector3 originalPosition;
+    private Vector3 direction;
 
     private void Awake()
     {
-        originalPosition = transform.localPosition;
+        originalPosition = transform.position;
+
+        // direction pointing at the camera's back
+        direction = transform.position - transform.forward;
     }
 
     private void LateUpdate()
@@ -20,6 +22,6 @@ public class CameraBehaviour : MonoBehaviour
 
     public void ChangePosition(int offset)
     {
-        transform.localPosition = new Vector3(originalPosition.x, originalPosition.y, originalPosition.z - offset);
+        transform.position = originalPosition + (direction * (offset * 0.5f));
     }
 }

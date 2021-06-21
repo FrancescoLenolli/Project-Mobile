@@ -5,20 +5,20 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>, IDataHandler
 {
-    public Action EventSaveData;
-    public Action EventInitData;
-    public Action<TimeSpan> EventSendOfflineTime;
-
-    private bool isFirstSession = true;
-    private DateTime logInTime;
-    private DateTime logOutTime;
-
     [Tooltip("If TRUE, you can buy ships at no cost.")]
     public bool isTesting = false;
     [Tooltip("If TRUE, reset data every time you start the game.")]
     public bool canResetData = false;
     [Space(10)]
     public AdsManager adsManager = null;
+
+    private bool isFirstSession = true;
+    private DateTime logInTime;
+    private DateTime logOutTime;
+
+    private Action EventSaveData;
+    private Action EventInitData;
+    private Action<TimeSpan> EventSendOfflineTime;
 
     public bool IsFirstSession { get => isFirstSession; set => isFirstSession = value; }
 

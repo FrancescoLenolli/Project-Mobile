@@ -6,18 +6,18 @@ using UnityEngine.UI;
 
 public class CanvasDailyRewards : MonoBehaviour
 {
-    private Action EventCollectReward;
-
-    private DailyRewardsManager rewardsManager;
-    private TextMeshProUGUI textButtonGetReward;
-    private List<Image> rewardImages = new List<Image>();
-
     [SerializeField] private Transform rewardsContainer = null;
     [SerializeField] private Image imagePrefab = null;
     [SerializeField] private TextMeshProUGUI textCooldownTime = null;
     [SerializeField] private Button buttonGetReward = null;
     [SerializeField] private PanelAnimator panelAnimator = null;
     [SerializeField] private Color colorCollectedReward = Color.white;
+
+    private DailyRewardsManager rewardsManager;
+    private TextMeshProUGUI textButtonGetReward;
+    private List<Image> rewardImages = new List<Image>();
+
+    private Action EventCollectReward;
 
     public void InitRewards(List<DailyReward> rewards, int currentIndex, DailyRewardsManager dailyRewardsManager)
     {
