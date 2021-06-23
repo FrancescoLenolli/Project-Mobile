@@ -14,11 +14,6 @@ public class Ship : Collectible
     public Action<Ship> EventSpawnUpgrades;
     public Action EventIncreaseWeight;
 
-    private bool isNextShipUnlocked;
-    private bool canAutoBuy;
-    private bool isButtonHeld;
-    private List<UpgradeInfo> upgradesInfo = new List<UpgradeInfo>();
-
     [SerializeField] private ShipButtonSound shipSound = null;
     [SerializeField] private TextMeshProUGUI textShipName = null;
     [SerializeField] private TextMeshProUGUI textShipCost = null;
@@ -28,8 +23,14 @@ public class Ship : Collectible
     [SerializeField] private Image imageShipIcon = null;
     [SerializeField] private Button buttonBuy = null;
 
-    [HideInInspector] public ShipData shipData;
-    [HideInInspector] public List<UpgradeInfo> UpgradesInfo { get => upgradesInfo; }
+    private bool isNextShipUnlocked;
+    private bool canAutoBuy;
+    private bool isButtonHeld;
+    private ShipData shipData;
+    private List<UpgradeInfo> upgradesInfo = new List<UpgradeInfo>();
+
+    public ShipData ShipData { get => shipData; }
+    public List<UpgradeInfo> UpgradesInfo { get => upgradesInfo; }
 
     public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom, PanelPrestige panelPrestige)
     {
@@ -47,33 +48,27 @@ public class Ship : Collectible
         textShipUnitCurrencyGain.text = $"+ {Formatter.FormatValue(GetUnitCurrencyGain())}/s";
         textShipTotalCurrencyGain.text = $"+ {Formatter.FormatValue(TotalCurrencyGain)}/s";
         imageShipIcon.sprite = shipData.icon;
-
         SetTextQuantity();
 
-        // No need to subscribe to EventUnlockNewShip if new ship is already unlocked.
-        if (!IsQuantityEnough())
+        if(Quantity == 0)
         {
-            isNextShipUnlocked = false;
-
-            Observer.AddObserver(ref EventUnlockNewShip, shipsManager.UnlockNewShip);
+            Observer.AddObserver(ref EventSpawnShipModel, shipsManager.SpawnShipModel);
         }
-        else
+        else if(Quantity > 0)
+        {
+            Observer.AddObserver(ref EventSpawnShipModel, shipsManager.SpawnShipModel);
+            EventSpawnShipModel?.Invoke(shipData);
+            Observer.RemoveObserver(ref EventSpawnShipModel, shipsManager.SpawnShipModel);
+        }
+
+        if(IsQuantityEnough())
         {
             isNextShipUnlocked = true;
         }
-
-        if (Quantity > 0)
-        {
-            Observer.AddObserver(ref EventSpawnShipModel, shipsManager.SpawnShipModel);
-
-            EventSpawnShipModel?.Invoke(shipData);
-
-            Observer.RemoveObserver(ref EventSpawnShipModel, shipsManager.SpawnShipModel);
-        }
         else
         {
-            List<Action<ShipData>> actions = new List<Action<ShipData>> { shipsManager.SpawnShipModel, shipSound.PlayShipUnlockedSound };
-
+            isNextShipUnlocked = false;
+            List<Action<ShipData>> actions = new List<Action<ShipData>> { shipsManager.UnlockNewShip, shipSound.PlayShipUnlockedSound };
             Observer.AddObservers(ref EventUnlockNewShip, actions);
         }
 
@@ -101,8 +96,8 @@ public class Ship : Collectible
             if (Quantity > 0 && !isNextShipUnlocked)
             {
                 EventSpawnShipModel?.Invoke(shipData);
-                if(EventSpawnShipModel != null)
-                Observer.RemoveAllObservers(ref EventSpawnShipModel);
+                if (EventSpawnShipModel != null)
+                    Observer.RemoveAllObservers(ref EventSpawnShipModel);
             }
             if (Quantity == 1)
             {
@@ -116,8 +111,8 @@ public class Ship : Collectible
             if (!isNextShipUnlocked && IsQuantityEnough())
             {
                 EventUnlockNewShip?.Invoke(shipData);
-                if(EventUnlockNewShip != null)
-                Observer.RemoveAllObservers(ref EventUnlockNewShip);
+                if (EventUnlockNewShip != null)
+                    Observer.RemoveAllObservers(ref EventUnlockNewShip);
 
                 isNextShipUnlocked = true;
                 canAutoBuy = false;
@@ -205,6 +200,7 @@ public class Ship : Collectible
     {
         double multiplier = Math.Pow(shipData.costIncreaseMultiplier, Quantity);
         cost = (baseCost * multiplier) / 1.1;
+
         SetTextCost();
     }
 
@@ -232,7 +228,7 @@ public class Ship : Collectible
 
     private void SetButtonBuyStatus(double totalCurrency)
     {
-        buttonBuy.interactable = cost <= totalCurrency;
+        buttonBuy.interactable = cost <= totalCurrency || GameManager.Instance.isTesting;
     }
 
     private IEnumerator AutoBuy()

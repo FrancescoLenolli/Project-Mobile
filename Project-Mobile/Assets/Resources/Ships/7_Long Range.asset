@@ -20,7 +20,7 @@ MonoBehaviour:
     the rest of the allied forces.
   costIncreaseMultiplier: 1.11
   model: {fileID: 1578151531806032, guid: 7049a336c6ee74a32984d27e6d9faeca, type: 3}
-  qtForNextShip: 25
+  qtForNextShip: 2
   upgrades:
   - {fileID: 11400000, guid: 8608c596db1dc704dba469a03f911455, type: 2}
   - {fileID: 11400000, guid: e13872364c2e9f94fb98aa135fe644a5, type: 2}

@@ -20,7 +20,7 @@ MonoBehaviour:
     coming too close.
   costIncreaseMultiplier: 1.13
   model: {fileID: 1044101965864496, guid: c7bd5c71ab13c41359305dc1af814468, type: 3}
-  qtForNextShip: 5
+  qtForNextShip: 2
   upgrades:
   - {fileID: 11400000, guid: 6ffe254d844807b4186b9cae0cf3684a, type: 2}
   - {fileID: 11400000, guid: 8ba6f0847464f0f49bd5b852dbc5fbf5, type: 2}

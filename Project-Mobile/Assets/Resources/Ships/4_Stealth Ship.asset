@@ -20,7 +20,7 @@ MonoBehaviour:
     at all costs.
   costIncreaseMultiplier: 1.9
   model: {fileID: 1044101965864496, guid: a825e414d2854204e98190cc7a58404e, type: 3}
-  qtForNextShip: 25
+  qtForNextShip: 2
   upgrades:
   - {fileID: 11400000, guid: 715528bf8a9960e47827195418b91faf, type: 2}
   - {fileID: 11400000, guid: dbe22f23b197f0d41afa149f345ff6c5, type: 2}

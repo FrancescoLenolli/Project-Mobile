@@ -5,9 +5,10 @@ using FMODUnity;
 
 public class ShipButtonSound : ButtonSound
 {
-    private StudioEventEmitter shipEmitter = null;
     [EventRef]
     [SerializeField] protected string shipUnlockedSound = null;
+
+    private StudioEventEmitter shipEmitter = null;
 
     private new void Awake()
     {

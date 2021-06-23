@@ -5,9 +5,10 @@ using FMODUnity;
 
 public class ButtonSound : MonoBehaviour
 {
-    protected StudioEventEmitter defaultEmitter = null;
     [EventRef]
     [SerializeField] protected string defaultSound = null;
+
+    protected StudioEventEmitter defaultEmitter = null;
 
     protected void Awake()
     {

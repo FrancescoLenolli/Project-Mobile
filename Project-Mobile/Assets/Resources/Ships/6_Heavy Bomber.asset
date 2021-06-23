@@ -19,7 +19,7 @@ MonoBehaviour:
     to completely destroy planets too entrenched by enemy forces.
   costIncreaseMultiplier: 1.1
   model: {fileID: 1261967083292032, guid: 445ae37f24e704de890bbfda1fa7a39c, type: 3}
-  qtForNextShip: 25
+  qtForNextShip: 2
   upgrades:
   - {fileID: 11400000, guid: 448fc108c5bce61419bc17b4383deaa2, type: 2}
   - {fileID: 11400000, guid: cf92aa010618e904286c70975658ae4c, type: 2}

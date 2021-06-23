@@ -427,12 +427,12 @@ PrefabInstance:
     - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
       propertyPath: isTesting
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1756084651835812187, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
       propertyPath: canResetData
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1756084651835812196, guid: 233070f8bc3d08f48a069039ee5c077c,
         type: 3}
@@ -1072,6 +1072,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetLookAt: {fileID: 321318246}
+  positionOffset: 2
 --- !u!1 &1712718465
 GameObject:
   m_ObjectHideFlags: 0
@@ -1945,6 +1946,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1465896277472654269, guid: b0922280dabbfc449bea27b7eba787af,
+        type: 3}
+      propertyPath: minimumDistance
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 1465896277472654270, guid: b0922280dabbfc449bea27b7eba787af,
         type: 3}

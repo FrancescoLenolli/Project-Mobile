@@ -71,7 +71,7 @@ public class Upgrade : MonoBehaviour
 
     private void SetCost(Ship ship)
     {
-        double multiplier = Math.Pow(ship.shipData.index + 1, ship.shipData.index + 1) * 3;
+        double multiplier = Math.Pow(ship.ShipData.index + 1, ship.ShipData.index + 1) * 3;
         cost = ship.BaseCost * multiplier;
     }
 

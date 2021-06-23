@@ -9,12 +9,6 @@ public class CanvasBottom : MonoBehaviour
     public Action<UIManager.Cycle> EventCycleShipsModel;
     public Action EventShowDailyRewards;
 
-    private CurrencyManager currencyManager;
-    private UIManager uiManager;
-    private PanelPrestige panelPrestige;
-    private List<Transform> containers = new List<Transform>();
-    private List<Ship> ships = new List<Ship>();
-
     [SerializeField] private Ship prefabShip = null;
     [SerializeField] private Upgrade prefabUpgrade = null;
     [SerializeField] private Transform containersParent = null;
@@ -26,6 +20,12 @@ public class CanvasBottom : MonoBehaviour
     [SerializeField] private PanelAnimator panelBottomAnimator = null;
     [SerializeField] private PanelShipInfo panelShipInfo = null;
 
+    private CurrencyManager currencyManager;
+    private UIManager uiManager;
+    private PanelPrestige panelPrestige;
+    private List<Transform> containers = new List<Transform>();
+    private List<Ship> ships = new List<Ship>();
+
     public List<Ship> Ships { get => ships; }
     public PanelShipInfo PanelInfo { get => panelShipInfo; }
 
@@ -34,12 +34,12 @@ public class CanvasBottom : MonoBehaviour
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
         panelPrestige = FindObjectOfType<PanelPrestige>();
-        panelExtra.InitData(this);
         CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
         SwipeDetector swipeDetector = FindObjectOfType<SwipeDetector>();
 
-        List<ScrollRect> list = containersParent.GetComponentsInChildren<ScrollRect>().ToList();
-        list.ForEach(x => containers.Add(x.transform));
+        panelExtra.InitData(this);
+
+        containersParent.GetComponentsInChildren<ScrollRect>().ToList().ForEach(container => containers.Add(container.transform));
 
         OpenPanel(0);
 

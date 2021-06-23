@@ -24,10 +24,10 @@ public class ShipsManager : MonoBehaviour, IDataHandler
     {
         CameraBehaviour cameraBehaviour = Camera.main.GetComponent<CameraBehaviour>();
         uiManager = UIManager.Instance;
-        savedShipsInfo = SaveManager.PlayerData.ships;
-        totalShips = Resources.LoadAll<ShipData>("Ships").ToList();
-        totalUpgrades = Resources.LoadAll<UpgradeData>("Upgrades").ToList();
         canvasBottom = FindObjectOfType<CanvasBottom>();
+        savedShipsInfo = SaveManager.PlayerData.ships;
+        totalShips = Resources.LoadAll<ShipData>("Ships").OrderBy(data => data.index).ToList();
+        totalUpgrades = Resources.LoadAll<UpgradeData>("Upgrades").OrderBy(data => data.index).ToList();
 
         Observer.AddObserver(ref EventSendData, canvasBottom.InitData);
         Observer.AddObserver(ref EventUnlockShip, canvasBottom.SpawnShip);
@@ -69,7 +69,7 @@ public class ShipsManager : MonoBehaviour, IDataHandler
 
         for (int i = 0; i < ships.Count; ++i)
         {
-            shipInfo = new ShipInfo(ships[i].shipData.index, ships[i].shipData, ships[i].Quantity, ships[i].UpgradesInfo);
+            shipInfo = new ShipInfo(ships[i].ShipData.index, ships[i].ShipData, ships[i].Quantity, ships[i].UpgradesInfo);
             shipsInfo.Add(shipInfo);
         }
 

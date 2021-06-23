@@ -16,7 +16,7 @@ public class Collectible : MonoBehaviour
 
     public virtual void Buy()
     {
-        // what happens when buying a unit of this collectible.
+        //
     }
 
     protected virtual void SetBaseCost()
@@ -31,7 +31,6 @@ public class Collectible : MonoBehaviour
 
     protected virtual double GetUnitCurrencyGain()
     {
-        // calculate how much currency is gained by one unit of this collectible.
         return double.MaxValue;
     }
 
@@ -42,7 +41,7 @@ public class Collectible : MonoBehaviour
 
     protected virtual void SetTotalCurrencyGain()
     {
-        // calculate the total currency gained by the owned quantity of this collectible.
+        //
     }
 
     protected void SetWeight(int value)
