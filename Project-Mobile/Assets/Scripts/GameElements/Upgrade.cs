@@ -11,9 +11,10 @@ public class Upgrade : MonoBehaviour
     private UIManager uiManager;
     private UpgradeData upgradeData;
     private Ship ship;
-    private Transform container;
-    private double cost;
+    private Transform parent;
     private PanelShipInfo panelShipInfo;
+    private ShipsPool shipsPool;
+    private double cost;
 
     public TextMeshProUGUI textName = null;
     public TextMeshProUGUI textEffect = null;
@@ -21,15 +22,18 @@ public class Upgrade : MonoBehaviour
     public Image imageIcon = null;
     public Button buttonBuy = null;
 
-    public void InitData(UpgradeData upgradeData, Ship ship, Transform container, PanelShipInfo panelShipInfo)
+    public void InitData(UpgradeData upgradeData, Ship ship, Transform parent, PanelShipInfo panelShipInfo)
     {
         currencyManager = CurrencyManager.Instance;
         uiManager = UIManager.Instance;
 
+        shipsPool = ship.ShipsPool;
         this.upgradeData = upgradeData;
-        this.container = container;
+        this.parent = parent;
         this.ship = ship;
         this.panelShipInfo = panelShipInfo;
+
+        transform.SetParent(parent);
         SetCost(ship);
 
         textName.text = upgradeData.name;
@@ -49,13 +53,14 @@ public class Upgrade : MonoBehaviour
                 currencyManager.RemoveCurrency(cost);
 
             ship.UpgradeBought(upgradeData);
-            uiManager.ResizeContainer(transform, container, UIManager.Resize.Subtract);
+            uiManager.ResizeContainer(transform, parent, UIManager.Resize.Subtract);
 
             Vibration.VibrateSoft();
 
             Observer.RemoveObserver(ref currencyManager.EventSendCurrencyValue, SetButtonBuyStatus);
             Observer.RemoveObserver(ref EventShowInfo, panelShipInfo.ShowInfo);
-            Destroy(gameObject);
+
+            shipsPool.CollectUpgrade(this);
         }
     }
 
@@ -78,6 +83,6 @@ public class Upgrade : MonoBehaviour
     private void SetButtonBuyStatus(double totalCurrency)
     {
         if(buttonBuy)
-        buttonBuy.interactable = cost <= totalCurrency;
+        buttonBuy.interactable = cost <= totalCurrency || GameManager.Instance.isTesting;
     }
 }

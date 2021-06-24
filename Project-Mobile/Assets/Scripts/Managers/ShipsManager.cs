@@ -9,6 +9,7 @@ public class ShipsManager : MonoBehaviour, IDataHandler
 
     private UIManager uiManager;
     private CanvasBottom canvasBottom;
+    private ShipsPool shipsPool;
     private List<ShipInfo> savedShipsInfo;
     private List<ShipData> totalShips = new List<ShipData>();
     private List<UpgradeData> totalUpgrades = new List<UpgradeData>();
@@ -20,14 +21,19 @@ public class ShipsManager : MonoBehaviour, IDataHandler
     private Action<ShipInfo, ShipsManager> EventUnlockShip;
     private Action<int> EventShipViewChanged;
 
+    public ShipsPool ShipsPool { get => shipsPool; }
+
     public void InitData()
     {
         CameraBehaviour cameraBehaviour = Camera.main.GetComponent<CameraBehaviour>();
         uiManager = UIManager.Instance;
+        shipsPool = GetComponent<ShipsPool>();
         canvasBottom = FindObjectOfType<CanvasBottom>();
         savedShipsInfo = SaveManager.PlayerData.ships;
         totalShips = Resources.LoadAll<ShipData>("Ships").OrderBy(data => data.index).ToList();
         totalUpgrades = Resources.LoadAll<UpgradeData>("Upgrades").OrderBy(data => data.index).ToList();
+
+        shipsPool.InitPool(totalShips);
 
         Observer.AddObserver(ref EventSendData, canvasBottom.InitData);
         Observer.AddObserver(ref EventUnlockShip, canvasBottom.SpawnShip);

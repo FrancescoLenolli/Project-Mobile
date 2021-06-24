@@ -2039,6 +2039,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1870319838810682590}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1870319838810682592 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1870319838092509280, guid: 61cceedf003cd6e4caeadad493133931,
+    type: 3}
+  m_PrefabInstance: {fileID: 1870319838810682590}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1870319838810682593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870319838810682592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4132abbdb33294847957d96efab2af39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shipPrefab: {fileID: 4318612673560804211, guid: 989d9b9a60b90e14a9f02262c73bed1b,
+    type: 3}
+  upgradePrefab: {fileID: 8604413655369569002, guid: c773dad50e036044d83f71e357c59475,
+    type: 3}
 --- !u!1001 &2895393474546877427
 PrefabInstance:
   m_ObjectHideFlags: 0

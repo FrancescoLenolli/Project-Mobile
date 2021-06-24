@@ -9,8 +9,6 @@ public class CanvasBottom : MonoBehaviour
     public Action<UIManager.Cycle> EventCycleShipsModel;
     public Action EventShowDailyRewards;
 
-    [SerializeField] private Ship prefabShip = null;
-    [SerializeField] private Upgrade prefabUpgrade = null;
     [SerializeField] private Transform containersParent = null;
     [SerializeField] private Transform containerShips = null;
     [SerializeField] private Transform containerUpgrades = null;
@@ -75,16 +73,28 @@ public class CanvasBottom : MonoBehaviour
 
     public void SpawnShip(ShipInfo shipInfo, ShipsManager shipsManager)
     {
-        Ship ship = Instantiate(prefabShip, containerShips, false);
-        ship.InitData(shipInfo, shipsManager, this, panelPrestige);
+        Ship ship = shipsManager.ShipsPool.GetShip();
+        ship.InitData(shipInfo, shipsManager, this, panelPrestige, containerShips);
         if (ship.Quantity > 0)
-            SpawnUpgrades(ship);
+            SpawnUpgrades(ship, shipsManager.ShipsPool);
 
         currencyManager.AddCollectible(ship);
         ships.Add(ship);
 
         ship.transform.SetAsFirstSibling();
         uiManager.ResizeContainer(ship.transform, containerShips, UIManager.Resize.Add);
+    }
+
+    public void SpawnUpgrades(Ship ship, ShipsPool shipsPool)
+    {
+        foreach (UpgradeInfo info in ship.UpgradesInfo.Where(x => !x.isOwned))
+        {
+            Upgrade upgrade = shipsPool.GetUpgrade();
+            upgrade.InitData(info.upgradeData, ship, containerUpgrades, panelShipInfo);
+
+            upgrade.transform.SetAsFirstSibling();
+            uiManager.ResizeContainer(upgrade.transform, containerUpgrades, UIManager.Resize.Add);
+        }
     }
 
     public void OpenPanel(int index)
@@ -122,18 +132,6 @@ public class CanvasBottom : MonoBehaviour
             panelExtraAnimator.HidePanel();
         else
             panelExtraAnimator.ShowPanel();
-    }
-
-    public void SpawnUpgrades(Ship ship)
-    {
-        foreach (UpgradeInfo info in ship.UpgradesInfo.Where(x => !x.isOwned))
-        {
-            Upgrade upgrade = Instantiate(prefabUpgrade, containerUpgrades, false);
-            upgrade.InitData(info.upgradeData, ship, containerUpgrades, panelShipInfo);
-
-            upgrade.transform.SetAsFirstSibling();
-            uiManager.ResizeContainer(upgrade.transform, containerUpgrades, UIManager.Resize.Add);
-        }
     }
 
     private void ChangeBottomPanelVisibility(SwipeDetector.Swipe swipe, Vector2 startPosition)

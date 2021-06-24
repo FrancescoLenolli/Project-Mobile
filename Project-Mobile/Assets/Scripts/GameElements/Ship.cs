@@ -11,7 +11,7 @@ public class Ship : Collectible
     public Action<ShipData> EventUnlockNewShip;
     public Action<ShipData> EventSpawnShipModel;
     public Action<ShipData> EventShowInfo;
-    public Action<Ship> EventSpawnUpgrades;
+    public Action<Ship, ShipsPool> EventSpawnUpgrades;
     public Action EventIncreaseWeight;
 
     [SerializeField] private ShipButtonSound shipSound = null;
@@ -23,6 +23,7 @@ public class Ship : Collectible
     [SerializeField] private Image imageShipIcon = null;
     [SerializeField] private Button buttonBuy = null;
 
+    private ShipsPool shipsPool;
     private bool isNextShipUnlocked;
     private bool canAutoBuy;
     private bool isButtonHeld;
@@ -31,9 +32,13 @@ public class Ship : Collectible
 
     public ShipData ShipData { get => shipData; }
     public List<UpgradeInfo> UpgradesInfo { get => upgradesInfo; }
+    public ShipsPool ShipsPool { get => shipsPool; }
 
-    public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom, PanelPrestige panelPrestige)
+    public void InitData(ShipInfo shipInfo, ShipsManager shipsManager, CanvasBottom canvasBottom, PanelPrestige panelPrestige, Transform parent)
     {
+        transform.SetParent(parent);
+
+        this.shipsPool = shipsManager.ShipsPool;
         shipData = shipInfo.shipData;
         Quantity = shipInfo.quantity;
         gameObject.name = shipData.name;
@@ -101,7 +106,7 @@ public class Ship : Collectible
             }
             if (Quantity == 1)
             {
-                EventSpawnUpgrades?.Invoke(this);
+                EventSpawnUpgrades?.Invoke(this, shipsPool);
             }
 
             SetCost();
