@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,7 +7,10 @@ public class PrestigeManager : Singleton<PrestigeManager>, IDataHandler
 {
     public static int prestigeLevel;
     public int baseWeight;
+
     [HideInInspector] public int requiredWeight;
+
+    private CurrencyManager currencyManager;
 
     private new void Awake()
     {
@@ -18,6 +20,7 @@ public class PrestigeManager : Singleton<PrestigeManager>, IDataHandler
     public void InitData()
     {
         prestigeLevel = SaveManager.PlayerData.prestigeLevel;
+        currencyManager = CurrencyManager.Instance;
         CalculateRequiredWeight();
     }
 
@@ -28,28 +31,25 @@ public class PrestigeManager : Singleton<PrestigeManager>, IDataHandler
 
     public void PrestigeUp()
     {
+        if (GetCollectiblesWeight() < requiredWeight)
+            return;
 
-        if (GetCollectiblesWeight() >= requiredWeight)
+        int premiumReward = currencyManager.data.extrasPremiumCost * 3;
+        ++prestigeLevel;
+
+        PlayerData newData = new PlayerData
         {
-            int premiumReward = CurrencyManager.Instance.data.extrasPremiumCost * 3;
-            ++prestigeLevel;
+            prestigeLevel = prestigeLevel,
+            premiumCurrency = SaveManager.PlayerData.premiumCurrency + premiumReward
+        };
 
-            PlayerData newData = new PlayerData
-            {
-                prestigeLevel = prestigeLevel,
-                premiumCurrency = SaveManager.PlayerData.premiumCurrency + premiumReward
-            };
-
-            SaveManager.Save(newData);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
-        }
+        SaveManager.Save(newData);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
 
     public int GetCollectiblesWeight()
     {
-        List<Collectible> collectibles = CurrencyManager.Instance.Collectibles;
-
-        return collectibles.Sum(collectible => (collectible.Weight * collectible.Quantity));
+        return currencyManager.Collectibles.Sum(collectible => (collectible.Weight * collectible.Quantity));
     }
 
     private void CalculateRequiredWeight()

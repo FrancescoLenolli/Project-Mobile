@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
@@ -88,6 +89,7 @@ public class GameManager : Singleton<GameManager>, IDataHandler
 
         CurrencyManager currencyManager = CurrencyManager.Instance;
         DailyRewardsManager rewardsManager = FindObjectOfType<DailyRewardsManager>();
+
         List<Action> actionsInitData = new List<Action>();
         List<Action> actionsSaveData = new List<Action>();
         List<Action<TimeSpan>> actionsOfflineTime = new List<Action<TimeSpan>>

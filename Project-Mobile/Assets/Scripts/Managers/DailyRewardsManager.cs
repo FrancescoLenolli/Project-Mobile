@@ -94,7 +94,7 @@ public class DailyRewardsManager : MonoBehaviour, IDataHandler
 
         if (reward == null)
         {
-            Debug.LogWarning("Some reward has value NULL");
+            Debug.LogWarning($"Reward of index {index} has value null");
         }
         return reward;
     }
