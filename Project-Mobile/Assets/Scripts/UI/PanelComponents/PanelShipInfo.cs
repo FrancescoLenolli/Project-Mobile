@@ -47,7 +47,7 @@ public class PanelShipInfo : MonoBehaviour
 
     private void ChangeVisibility(bool canShowPanel)
     {
-        uiManager.ChangeVisibility(transform, canShowPanel);
+        UtilsUI.ChangeVisibility(transform, canShowPanel);
     }
 
     private bool IsPanelVisible()

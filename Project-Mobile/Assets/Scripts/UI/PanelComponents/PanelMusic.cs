@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PanelMusic : MonoBehaviour
 {
-    private Action<UIManager.Cycle> EventCycleMusic;
+    private Action<UtilsUI.Cycle> EventCycleMusic;
 
     private void Start()
     {
@@ -16,11 +16,11 @@ public class PanelMusic : MonoBehaviour
 
     public void CycleLeft()
     {
-        EventCycleMusic?.Invoke(UIManager.Cycle.Left);
+        EventCycleMusic?.Invoke(UtilsUI.Cycle.Left);
     }
 
     public void CycleRight()
     {
-        EventCycleMusic?.Invoke(UIManager.Cycle.Right);
+        EventCycleMusic?.Invoke(UtilsUI.Cycle.Right);
     }
 }

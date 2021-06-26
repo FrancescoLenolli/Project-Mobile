@@ -112,7 +112,7 @@ public class PanelExtra : MonoBehaviour
 
     private void PanelSetup(string title, string description, UnityAction buyAction, UnityAction adAction, bool isButtonBuyVisible = true)
     {
-        uiManager.ChangeVisibility(buttonBuy.transform, isButtonBuyVisible);
+        UtilsUI.ChangeVisibility(buttonBuy.transform, isButtonBuyVisible);
 
         textTitle.text = title;
         textDescription.text = description;

@@ -53,7 +53,7 @@ public class Upgrade : MonoBehaviour
                 currencyManager.RemoveCurrency(cost);
 
             ship.UpgradeBought(upgradeData);
-            uiManager.ResizeContainer(transform, parent, UIManager.Resize.Subtract);
+            UtilsUI.ResizeContainer(transform, parent, UtilsUI.Resize.Subtract);
 
             Vibration.VibrateSoft();
 

@@ -102,16 +102,16 @@ public class ShipsManager : MonoBehaviour, IDataHandler
 
         GameObject shipModel = Instantiate(shipData.model, shipsStartingPosition, Quaternion.identity);
         shipsModel.Add(shipModel);
-        CycleModels(UIManager.Cycle.Right);
+        CycleModels(UtilsUI.Cycle.Right);
     }
 
-    public void CycleModels(UIManager.Cycle cycleType)
+    public void CycleModels(UtilsUI.Cycle cycleType)
     {
         if (shipsModel.Count > 0)
         {
             HideShip();
 
-            currentModelIndex = uiManager.CycleListIndexOpen(currentModelIndex, shipsModel.Count, cycleType);
+            currentModelIndex = UtilsUI.CycleListIndexOpen(currentModelIndex, shipsModel.Count, cycleType);
 
             ViewShip();
         }

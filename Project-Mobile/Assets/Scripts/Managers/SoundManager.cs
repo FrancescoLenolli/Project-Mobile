@@ -36,9 +36,9 @@ public class SoundManager : MonoBehaviour
         sfxBus.setMute(!isOn);
     }
 
-    public void SwitchTrack(UIManager.Cycle cycle)
+    public void SwitchTrack(UtilsUI.Cycle cycle)
     {
-        trackIndex = UIManager.Instance.CycleListIndexOpen(trackIndex, tracks.Count, cycle);
+        trackIndex = UtilsUI.CycleListIndexOpen(trackIndex, tracks.Count, cycle);
         musicEmitter.Stop();
         musicEmitter.Event = tracks[trackIndex];
         musicEmitter.Play();

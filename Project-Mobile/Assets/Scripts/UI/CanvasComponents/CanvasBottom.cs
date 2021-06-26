@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class CanvasBottom : MonoBehaviour
 {
-    public Action<UIManager.Cycle> EventCycleShipsModel;
+    public Action<UtilsUI.Cycle> EventCycleShipsModel;
     public Action EventShowDailyRewards;
 
     [SerializeField] private Transform containersParent = null;
@@ -58,17 +58,17 @@ public class CanvasBottom : MonoBehaviour
 
     public void CycleModelsLeft()
     {
-        EventCycleShipsModel?.Invoke(UIManager.Cycle.Left);
+        EventCycleShipsModel?.Invoke(UtilsUI.Cycle.Left);
     }
 
     public void CycleModelsRight()
     {
-        EventCycleShipsModel?.Invoke(UIManager.Cycle.Right);
+        EventCycleShipsModel?.Invoke(UtilsUI.Cycle.Right);
     }
 
     public void ShowCycleButtons()
     {
-        UIManager.Instance.ChangeVisibility(cycleButtons, true);
+        UtilsUI.ChangeVisibility(cycleButtons, true);
     }
 
     public void SpawnShip(ShipInfo shipInfo, ShipsManager shipsManager)
@@ -82,7 +82,7 @@ public class CanvasBottom : MonoBehaviour
         ships.Add(ship);
 
         ship.transform.SetAsFirstSibling();
-        uiManager.ResizeContainer(ship.transform, containerShips, UIManager.Resize.Add);
+        UtilsUI.ResizeContainer(ship.transform, containerShips, UtilsUI.Resize.Add);
     }
 
     public void SpawnUpgrades(Ship ship, ShipsPool shipsPool)
@@ -93,13 +93,13 @@ public class CanvasBottom : MonoBehaviour
             upgrade.InitData(info.upgradeData, ship, containerUpgrades, panelShipInfo);
 
             upgrade.transform.SetAsFirstSibling();
-            uiManager.ResizeContainer(upgrade.transform, containerUpgrades, UIManager.Resize.Add);
+            UtilsUI.ResizeContainer(upgrade.transform, containerUpgrades, UtilsUI.Resize.Add);
         }
     }
 
     public void OpenPanel(int index)
     {
-        uiManager.ChangeVisibility(containers, index);
+        UtilsUI.ChangeVisibility(containers, index);
         panelBottomAnimator.MoveToView();
     }
 

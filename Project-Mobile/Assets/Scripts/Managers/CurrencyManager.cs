@@ -194,7 +194,7 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
     private void TapBehaviour()
     {
         // passing a value of 0 makes it work on mobile but not on pc, so I have to use both
-        if (UIManager.Instance.IsPointerOverUI())
+        if (UtilsUI.IsPointerOverUI())
             return;
 
         double activeGain = GetActiveCurrencyGain();
