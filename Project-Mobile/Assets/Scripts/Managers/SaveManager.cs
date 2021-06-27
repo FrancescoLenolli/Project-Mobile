@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class SaveManager
 {
-    private static string fileName = "PlayerData.json";
+    private static readonly string fileName = "PlayerData.json";
     private static PlayerData playerData;
 
     public static PlayerData PlayerData { get => playerData; set => playerData = value; }

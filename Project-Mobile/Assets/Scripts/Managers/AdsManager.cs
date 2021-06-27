@@ -12,7 +12,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     public Action EventAdDoubleEarnings;
     public Action EventAdPremiumCurrency;
 
-    private string placement = "rewardedVideo";
+    private readonly string placement = "rewardedVideo";
     private AdType adType;
 
     [Tooltip("Time in HOURS where idle currency gain is doubled.")]

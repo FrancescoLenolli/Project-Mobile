@@ -18,7 +18,7 @@ MonoBehaviour:
   description: '"We can''t use it in open battles, but so far no enemy ship as ever
     entered a system where a TItan was docked. No need to explain why."'
   costIncreaseMultiplier: 1.14
-  model: {fileID: 1044101965864496, guid: c7bd5c71ab13c41359305dc1af814468, type: 3}
+  model: {fileID: 1044101965864496, guid: 5fdf7e02b73c77049b9fe2eb2c66eca6, type: 3}
   qtForNextShip: 2
   upgrades:
   - {fileID: 11400000, guid: 3abb22ac1d8b21b48972645ee8a2db1e, type: 2}

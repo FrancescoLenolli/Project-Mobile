@@ -101,10 +101,8 @@ public static class UtilsUI
     {
         CanvasGroup canvasGroup = uiElement.GetComponent<CanvasGroup>();
 
-        if (canvasGroup == null)
-        {
+        if (!canvasGroup)
             canvasGroup = uiElement.gameObject.AddComponent<CanvasGroup>();
-        }
 
         return canvasGroup;
     }
@@ -125,32 +123,18 @@ public static class UtilsUI
     {
         int index = currentIndex;
 
-        switch (cycleType)
+        if (cycleType == Cycle.Left)
         {
-            case Cycle.Left:
-                --index;
-                if (index < 0)
-                {
-                    if (isClosed)
-                        index = 0;
-                    else
-                        index = maxValue - 1;
-                }
-                break;
+            --index;
+            index = index < 0 ? (isClosed ? 0 : maxValue - 1) : index;
+            return index;
+        }
 
-            case Cycle.Right:
-                ++index;
-                if (index > maxValue - 1)
-                {
-                    if (isClosed)
-                        index = maxValue - 1;
-                    else
-                        index = 0;
-                }
-                break;
-
-            default:
-                break;
+        if (cycleType == Cycle.Right)
+        {
+            ++index;
+            index = index > maxValue - 1 ? isClosed ? maxValue - 1 : 0 : index;
+            return index;
         }
 
         return index;

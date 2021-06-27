@@ -10,7 +10,6 @@ public class PanelExtra : MonoBehaviour
 
     private GameManager gameManager;
     private CurrencyManager currencyManager;
-    private UIManager uiManager;
     private CanvasBottom canvasBottom;
     private string title;
     private string description;
@@ -26,7 +25,6 @@ public class PanelExtra : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         currencyManager = CurrencyManager.Instance;
-        uiManager = UIManager.Instance;
         this.canvasBottom = canvasBottom;
 
         Observer.AddObserver(ref EventWatchCurrencyAd, gameManager.adsManager.ShowAd);

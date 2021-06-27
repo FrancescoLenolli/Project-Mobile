@@ -32,7 +32,7 @@ public class TapObject : MonoBehaviour
         // While the object is visible, move up and progressively fade away.
         while (canvasGroup.alpha > 0)
         {
-            transform.Translate(Vector3.up * Time.deltaTime * (movementSpeed * 10), Space.Self);
+            transform.Translate((movementSpeed * 10) * Time.deltaTime * Vector3.up, Space.Self);
 
             canvasGroup.alpha -= Time.deltaTime;
 
