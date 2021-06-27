@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class PanelShipInfo : MonoBehaviour
 {
-    private UIManager uiManager;
     private CollectibleData currentData;
     private CanvasGroup canvasGroup;
 
@@ -14,7 +13,6 @@ public class PanelShipInfo : MonoBehaviour
 
     private void Start()
     {
-        uiManager = UIManager.Instance;
         canvasGroup = GetComponent<CanvasGroup>();
     }
 

@@ -7,7 +7,6 @@ public class ShipsManager : MonoBehaviour, IDataHandler
 {
     [SerializeField] private Transform shipsParent = null;
 
-    private UIManager uiManager;
     private CanvasBottom canvasBottom;
     private ShipsPool shipsPool;
     private List<ShipInfo> savedShipsInfo;
@@ -26,7 +25,6 @@ public class ShipsManager : MonoBehaviour, IDataHandler
     public void InitData()
     {
         CameraBehaviour cameraBehaviour = Camera.main.GetComponent<CameraBehaviour>();
-        uiManager = UIManager.Instance;
         shipsPool = GetComponent<ShipsPool>();
         canvasBottom = FindObjectOfType<CanvasBottom>();
         savedShipsInfo = SaveManager.PlayerData.ships;

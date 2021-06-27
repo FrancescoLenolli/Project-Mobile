@@ -19,7 +19,6 @@ public class CanvasBottom : MonoBehaviour
     [SerializeField] private PanelShipInfo panelShipInfo = null;
 
     private CurrencyManager currencyManager;
-    private UIManager uiManager;
     private PanelPrestige panelPrestige;
     private List<Transform> containers = new List<Transform>();
     private List<Ship> ships = new List<Ship>();
@@ -30,7 +29,6 @@ public class CanvasBottom : MonoBehaviour
     public void InitData(List<ShipInfo> shipsInfo, ShipsManager shipsManager)
     {
         currencyManager = CurrencyManager.Instance;
-        uiManager = UIManager.Instance;
         panelPrestige = FindObjectOfType<PanelPrestige>();
         CanvasDailyRewards canvasDailyRewards = FindObjectOfType<CanvasDailyRewards>();
         SwipeDetector swipeDetector = FindObjectOfType<SwipeDetector>();

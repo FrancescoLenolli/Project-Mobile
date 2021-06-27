@@ -13,8 +13,6 @@ public static class Vibration
     public static AndroidJavaObject vibrator;
 #endif
 
-    private static bool isAndroid;
-
     public static bool IsAndroid { get => IsDeviceAndroid(); }
 
     public static void Vibrate()

@@ -71,6 +71,6 @@ public class CanvasMain : MonoBehaviour
     public void InstantiateTapObject(double value, Vector3 mousePosition)
     {
         TapObject newTapObject = Instantiate(prefabTextMousePosition, mousePosition, prefabTextMousePosition.transform.rotation, transform);
-        newTapObject.SetValues(value, currencyManager.data.currencySprite);
+        newTapObject.Init(value, currencyManager.data.currencySprite);
     }
 }

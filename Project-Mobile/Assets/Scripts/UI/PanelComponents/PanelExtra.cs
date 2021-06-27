@@ -8,6 +8,11 @@ public class PanelExtra : MonoBehaviour
 {
     private Action<AdsManager.AdType> EventWatchCurrencyAd;
 
+    [SerializeField] private TextMeshProUGUI textTitle = null;
+    [SerializeField] private TextMeshProUGUI textDescription = null;
+    [SerializeField] private Button buttonAd = null;
+    [SerializeField] private Button buttonBuy = null;
+
     private GameManager gameManager;
     private CurrencyManager currencyManager;
     private CanvasBottom canvasBottom;
@@ -15,11 +20,6 @@ public class PanelExtra : MonoBehaviour
     private string description;
     private UnityAction adAction;
     private UnityAction buyAction;
-
-    [SerializeField] private TextMeshProUGUI textTitle = null;
-    [SerializeField] private TextMeshProUGUI textDescription = null;
-    [SerializeField] private Button buttonAd = null;
-    [SerializeField] private Button buttonBuy = null;
 
     public void InitData(CanvasBottom canvasBottom)
     {

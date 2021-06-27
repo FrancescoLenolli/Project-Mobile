@@ -5,31 +5,25 @@ using UnityEngine.UI;
 
 public class TapObject : MonoBehaviour
 {
-    private CanvasGroup canvasGroup = null;
-
     public TextMeshProUGUI textCurrency = null;
     public Image imageCurrency = null;
     [Min(0)]
     public float movementSpeed = 1;
 
-    void Start()
+    private CanvasGroup canvasGroup = null;
+
+    public void Init(double value, Sprite currencySprite)
     {
         canvasGroup = GetComponent<CanvasGroup>();
+
+        textCurrency.text = "+" + Formatter.FormatValue(value);
+        imageCurrency.sprite = currencySprite;
+
         StartCoroutine(Animation());
     }
 
-    // Print how much currency is gained by tapping on screen.
-    public void SetValues(double value, Sprite currencySprite)
-    {
-        textCurrency.text = "+" + Formatter.FormatValue(value);
-        imageCurrency.sprite = currencySprite;
-    }
-
-    // After instantiating the object, start a little animation.
-    // The object moves, fades out and then get destroyed.
     private IEnumerator Animation()
     {
-        // While the object is visible, move up and progressively fade away.
         while (canvasGroup.alpha > 0)
         {
             transform.Translate((movementSpeed * 10) * Time.deltaTime * Vector3.up, Space.Self);
@@ -39,7 +33,6 @@ public class TapObject : MonoBehaviour
             yield return null;
         }
 
-        // Destroy as soon as the object becomes invisible.
         Destroy(gameObject);
         yield return null;
     }

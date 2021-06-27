@@ -8,7 +8,6 @@ public class Upgrade : MonoBehaviour
     private Action<CollectibleData> EventShowInfo;
 
     private CurrencyManager currencyManager;
-    private UIManager uiManager;
     private UpgradeData upgradeData;
     private Ship ship;
     private Transform parent;
@@ -25,7 +24,6 @@ public class Upgrade : MonoBehaviour
     public void InitData(UpgradeData upgradeData, Ship ship, Transform parent, PanelShipInfo panelShipInfo)
     {
         currencyManager = CurrencyManager.Instance;
-        uiManager = UIManager.Instance;
 
         shipsPool = ship.ShipsPool;
         this.upgradeData = upgradeData;

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "CustomData/Ship", fileName = "New Ship")]
@@ -9,6 +8,6 @@ public class ShipData : CollectibleData
     public GameObject model;
     [Space]
     [Tooltip("How much quantity of this Collectible is needed to unlock the next one.")]
-    public int qtForNextShip; //TODO: Fix horrendous name.
+    public int qtForNextShip;
     public List<UpgradeData> upgrades;
 }
