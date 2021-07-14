@@ -6,14 +6,16 @@ using UnityEngine;
 public static class UtilsPerformanceTimer
 {
     private static Stopwatch stopwatch = new Stopwatch();
+    private static string operation = "";
 
-    private static void Start()
+    public static void Start(string newOperation)
     {
+        operation = newOperation;
         stopwatch.Reset();
         stopwatch.Start();
     }
 
-    private static void Stop(string operation)
+    public static void Stop()
     {
         stopwatch.Stop();
         UnityEngine.Debug.Log($"{operation} time in ms: {stopwatch.ElapsedMilliseconds}");

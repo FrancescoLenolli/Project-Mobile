@@ -80,7 +80,7 @@ public class CanvasBottom : MonoBehaviour
         ships.Add(ship);
 
         ship.transform.SetAsFirstSibling();
-        UtilsUI.ResizeContainer(ship.transform, containerShips, UtilsUI.Resize.Add);
+        UtilsUI.ResizeContainer(containerShips, ship.transform, UtilsUI.Resize.Add);
     }
 
     public void SpawnUpgrades(Ship ship, ShipsPool shipsPool)
@@ -91,7 +91,7 @@ public class CanvasBottom : MonoBehaviour
             upgrade.InitData(info.upgradeData, ship, containerUpgrades, panelShipInfo);
 
             upgrade.transform.SetAsFirstSibling();
-            UtilsUI.ResizeContainer(upgrade.transform, containerUpgrades, UtilsUI.Resize.Add);
+            UtilsUI.ResizeContainer(containerUpgrades, upgrade.transform, UtilsUI.Resize.Add);
         }
     }
 

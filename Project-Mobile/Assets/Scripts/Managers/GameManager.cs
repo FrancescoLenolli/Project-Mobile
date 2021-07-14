@@ -11,6 +11,8 @@ public class GameManager : Singleton<GameManager>, IDataHandler
     public bool canResetData = false;
     [Space(10)]
     public AdsManager adsManager = null;
+    public DailyRewardsManager dailyRewardsManager = null;
+    public List<MonoBehaviour> dataHandlers = new List<MonoBehaviour>();
 
     private bool isFirstSession = true;
     private DateTime logInTime;
@@ -86,17 +88,12 @@ public class GameManager : Singleton<GameManager>, IDataHandler
             SaveManager.ResetData();
         }
 
-        CurrencyManager currencyManager = CurrencyManager.Instance;
-        DailyRewardsManager rewardsManager = FindObjectOfType<DailyRewardsManager>();
-
         List<Action> actionsInitData = new List<Action>();
         List<Action> actionsSaveData = new List<Action>();
-        List<Action<TimeSpan>> actionsOfflineTime = new List<Action<TimeSpan>>
-        {
-            currencyManager.CalculateOfflineGain, rewardsManager.CalculateOfflineTime
-        };
+        List<Action<TimeSpan>> actionsOfflineTime = new List<Action<TimeSpan>>();
 
-        IDataHandler[] dataHandlers = FindObjectsOfType<MonoBehaviour>().OfType<IDataHandler>().ToArray();
+        actionsOfflineTime.Add(CurrencyManager.Instance.CalculateOfflineGain);
+        actionsOfflineTime.Add(dailyRewardsManager.CalculateOfflineTime);
 
         foreach (IDataHandler dataHandler in dataHandlers)
         {

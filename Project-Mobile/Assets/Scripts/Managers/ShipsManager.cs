@@ -158,9 +158,7 @@ public class ShipsManager : MonoBehaviour, IDataHandler
             for (int j = 0; j < shipInfo.upgradesInfo.Count; ++j)
             {
                 upgradeInfo = shipInfo.upgradesInfo[j];
-
                 upgradeData = totalUpgrades[upgradeInfo.index];
-
                 upgradeInfo = new UpgradeInfo(upgradeInfo.index, upgradeData, upgradeInfo.isOwned);
 
                 upgrades.Add(upgradeInfo);

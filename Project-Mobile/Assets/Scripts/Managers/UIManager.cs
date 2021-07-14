@@ -152,7 +152,7 @@ public class UIManager : Singleton<UIManager>
             yield return null;
         }
         animatedObject.localPosition = endPosition;
-        UtilsUI.ChangeStatus(canvasGroup, fadeType == Fade.In);
+        UtilsUI.ChangeVisibility(canvasGroup, fadeType == Fade.In);
 
         canAnimate = true;
 
@@ -179,7 +179,7 @@ public class UIManager : Singleton<UIManager>
             yield return null;
         }
         animatedObject.localPosition = endPosition;
-        UtilsUI.ChangeStatus(canvasGroup, fadeType == Fade.In);
+        UtilsUI.ChangeVisibility(canvasGroup, fadeType == Fade.In);
 
         canAnimate = true;
 
@@ -200,7 +200,7 @@ public class UIManager : Singleton<UIManager>
             yield return null;
         }
         if (element != null)
-            UtilsUI.ChangeStatus(element, fadeType == Fade.In);
+            UtilsUI.ChangeVisibility(element, fadeType == Fade.In);
 
         yield return null;
     }

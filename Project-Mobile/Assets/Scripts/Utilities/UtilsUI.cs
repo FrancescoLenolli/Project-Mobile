@@ -49,12 +49,34 @@ public static class UtilsUI
     /// <summary>
     /// Increase or Decrease size of a container by additional element.
     /// </summary>
-    public static void ResizeContainer(Transform transform, Transform container, Resize resizeType)
+    public static void ResizeContainer(Transform container, Transform additionalElement, Resize resizeType)
     {
         RectTransform rectTransform = container as RectTransform;
-        rectTransform.sizeDelta = ResizeContainer(container, transform, 0, resizeType);
+        rectTransform.sizeDelta = ResizeContainer(container, additionalElement, 0, resizeType);
     }
 
+    /// <summary>
+    /// Set a UI Element visible/hidden using a CanvasGroup Component. If missing, it will be added first.
+    /// </summary>
+    public static void ChangeVisibility(Transform uiElement, bool isVisible)
+    {
+        ChangeStatus(GetCanvasGroup(uiElement), isVisible);
+    }
+
+    /// <summary>
+    /// Set a UI Element visible/hidden using a CanvasGroup Component.
+    /// </summary>
+    public static void ChangeVisibility(CanvasGroup uiElement, bool isVisible)
+    {
+        ChangeStatus(uiElement, isVisible);
+    }
+
+    /// <summary>
+    /// Set a specified UI Element from a List visible, while hiding the others, Using a CanvasGroup component.
+    /// If missing, it will be added first.
+    /// </summary>
+    /// <param name="uiElements"></param>
+    /// <param name="visibleElementIndex"></param>
     public static void ChangeVisibility(List<Transform> uiElements, int visibleElementIndex)
     {
         for (int i = 0; i < uiElements.Count; ++i)
@@ -67,13 +89,24 @@ public static class UtilsUI
     }
 
     /// <summary>
-    /// Set a UI Element visible/hidden using a CanvasGroup Component. If missing, it will be added first.
+    /// Set a specified UI Element from a List visible, while hiding the others, Using a CanvasGroup component.
     /// </summary>
-    public static void ChangeVisibility(Transform uiElement, bool isVisible)
+    /// <param name="uiElements"></param>
+    /// <param name="visibleElementIndex"></param>
+    public static void ChangeVisibility(List<CanvasGroup> uiElements, int visibleElementIndex)
     {
-        ChangeStatus(GetCanvasGroup(uiElement), isVisible);
+        for (int i = 0; i < uiElements.Count; ++i)
+        {
+            if (i == visibleElementIndex)
+                ChangeStatus(uiElements[i], true);
+            else
+                ChangeStatus(uiElements[i], false);
+        }
     }
 
+    /// <summary>
+    /// Set UI Elements visible/hidden using a CanvasGroup Component. If missing, it will be added first.
+    /// </summary>
     public static void ChangeVisibility(List<Transform> uiElements, bool isVisible)
     {
         foreach (Transform element in uiElements)
@@ -82,13 +115,28 @@ public static class UtilsUI
         }
     }
 
+    /// <summary>
+    /// Set UI Elements visible/hidden using a CanvasGroup Component.
+    /// </summary>
+    public static void ChangeVisibility(List<CanvasGroup> uiElements, bool isVisible)
+    {
+        foreach (CanvasGroup element in uiElements)
+        {
+            ChangeStatus(element, isVisible);
+        }
+    }
+
+    /// <summary>
+    /// Return TRUE if the pointer is currently over a Canvas Object, like Buttons, Panels etc.
+    /// </summary>
+    /// <returns></returns>
     public static bool IsPointerOverUI()
     {
         // passing a value of 0 makes it work on mobile but not on pc, so I have to use both
         return EventSystem.current.IsPointerOverGameObject(0) || EventSystem.current.IsPointerOverGameObject();
     }
 
-    public static void ChangeStatus(CanvasGroup canvasGroup, bool isVisible)
+    private static void ChangeStatus(CanvasGroup canvasGroup, bool isVisible)
     {
         int newAlphaValue = isVisible ? 1 : 0;
 
@@ -97,7 +145,7 @@ public static class UtilsUI
         canvasGroup.blocksRaycasts = isVisible;
     }
 
-    public static CanvasGroup GetCanvasGroup(Transform uiElement)
+    private static CanvasGroup GetCanvasGroup(Transform uiElement)
     {
         CanvasGroup canvasGroup = uiElement.GetComponent<CanvasGroup>();
 

@@ -174,6 +174,9 @@ public class CurrencyManager : Singleton<CurrencyManager>, IDataHandler
 
     private double GetTotalPassiveCurrencyGain()
     {
+        if (passiveGainCalculator == null)
+            passiveGainCalculator = new PassiveGainCalculator();
+
         return passiveGainCalculator.GetTotalPassiveGain(this);
     }
 
