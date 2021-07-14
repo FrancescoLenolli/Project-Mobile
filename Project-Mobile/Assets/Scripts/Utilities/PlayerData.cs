@@ -15,7 +15,7 @@ public class PlayerData
     public bool isVolumeSFXOn = true;
     public bool isVolumeMusicOn = true;
     public bool isVibrationOn = true;
-    public bool isPerformanceModeOn = true;
+    public bool isPerformanceModeOn = false;
 
     ////********** DAILY REWARDS **********
     public List<int> listRewardsIndexes = new List<int>();

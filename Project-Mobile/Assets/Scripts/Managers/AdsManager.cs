@@ -61,7 +61,28 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     public void ShowAd(AdType adType)
     {
         SetCurrentAdType(adType);
-        Advertisement.Show(placement);
+
+        switch (adType)
+        {
+            case AdType.BaseCurrency:
+                EventAdBaseCurrency?.Invoke();
+                break;
+
+            case AdType.DoubleIdleEarnings:
+                EventAdDoubleEarnings?.Invoke();
+                break;
+
+            case AdType.DoubleOfflineEarnings:
+                EventAdDoubleOfflineEarnings?.Invoke();
+                break;
+            case AdType.PremiumCurrency:
+                EventAdPremiumCurrency?.Invoke();
+                break;
+            default:
+                Debug.Log("Something went wrong with Ad rewards.");
+                break;
+        }
+        //Advertisement.Show(placement);
     }
 
     private void SetCurrentAdType(AdType newType)
