@@ -34,34 +34,27 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
         if (showResult == ShowResult.Finished)
-        {
-            switch (adType)
-            {
-                case AdType.BaseCurrency:
-                    EventAdBaseCurrency?.Invoke();
-                    break;
-
-                case AdType.DoubleIdleEarnings:
-                    EventAdDoubleEarnings?.Invoke();
-                    break;
-
-                case AdType.DoubleOfflineEarnings:
-                    EventAdDoubleOfflineEarnings?.Invoke();
-                    break;
-                case AdType.PremiumCurrency:
-                    EventAdPremiumCurrency?.Invoke();
-                    break;
-                default:
-                    Debug.Log("Something went wrong with Ad rewards.");
-                    break;
-            }
-        }
+            SelectAd(adType);
     }
 
     public void ShowAd(AdType adType)
     {
-        SetCurrentAdType(adType);
+        bool showAds = true;
 
+        SetCurrentAdType(adType);
+        if (showAds)
+            Advertisement.Show(placement);
+        else
+            SelectAd(this.adType);
+    }
+
+    private void SetCurrentAdType(AdType newType)
+    {
+        adType = newType;
+    }
+
+    private void SelectAd(AdType adType)
+    {
         switch (adType)
         {
             case AdType.BaseCurrency:
@@ -82,12 +75,6 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
                 Debug.Log("Something went wrong with Ad rewards.");
                 break;
         }
-        //Advertisement.Show(placement);
-    }
-
-    private void SetCurrentAdType(AdType newType)
-    {
-        adType = newType;
     }
 
     private IEnumerator InitAd()
