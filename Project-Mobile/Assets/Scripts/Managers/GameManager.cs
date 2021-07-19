@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>, IDataHandler
@@ -50,6 +49,7 @@ public class GameManager : Singleton<GameManager>, IDataHandler
             else
             {
                 LogIn();
+                CalculateOfflineTime();
             }
         }
     }
