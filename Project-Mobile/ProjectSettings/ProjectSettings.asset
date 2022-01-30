@@ -688,8 +688,8 @@ PlayerSettings:
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
   allowUnsafeCode: 0
-  additionalIl2CppArgs: --additional-cpp="C:/Users/user/Desktop/GitHub/Project-Mobile/Project-NotBoringAtAll/Project-Mobile/Assets/../Temp/fmod_register_static_plugins.cpp"
-    --additional-cpp="C:/Users/user/Desktop/GitHub/Project-Mobile/Project-NotBoringAtAll/Project-Mobile/Assets/Plugins/FMOD/src/Runtime/fmod_static_plugin_support.h"
+  additionalIl2CppArgs: --additional-cpp="D:/Unity/Project-Mobile/Project-Mobile/Assets/../Temp/fmod_register_static_plugins.cpp"
+    --additional-cpp="D:/Unity/Project-Mobile/Project-Mobile/Assets/Plugins/FMOD/src/Runtime/fmod_static_plugin_support.h"
   scriptingRuntimeVersion: 1
   gcIncremental: 0
   assemblyVersionValidation: 1
